@@ -1,0 +1,140 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55272326086252,
+              38.1057448214293
+            ],
+            [
+              -75.55176164099068,
+              38.1057448214293
+            ],
+            [
+              -75.55176164099068,
+              38.106147359980305
+            ],
+            [
+              -75.55272326086252,
+              38.106147359980305
+            ],
+            [
+              -75.55272326086252,
+              38.1057448214293
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "grain silo",
+        "confidence": 0.0118,
+        "detector": "yolo-world",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "tile": "site_03.tif",
+        "bbox_px": [
+          957,
+          739,
+          1000,
+          757
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76780694347029,
+              38.65035803175285
+            ],
+            [
+              -75.76762667725505,
+              38.65035803175285
+            ],
+            [
+              -75.76762667725505,
+              38.65074109746025
+            ],
+            [
+              -75.76780694347029,
+              38.65074109746025
+            ],
+            [
+              -75.76780694347029,
+              38.65035803175285
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "grain silo",
+        "confidence": 0.0168,
+        "detector": "yolo-world",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "tile": "site_04.tif",
+        "bbox_px": [
+          573,
+          880,
+          581,
+          897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58292494515372,
+              38.1551101023894
+            ],
+            [
+              -75.58265644299267,
+              38.1551101023894
+            ],
+            [
+              -75.58265644299267,
+              38.15537860455045
+            ],
+            [
+              -75.58292494515372,
+              38.15537860455045
+            ],
+            [
+              -75.58292494515372,
+              38.1551101023894
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "grain silo",
+        "confidence": 0.0116,
+        "detector": "yolo-world",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "tile": "site_08.tif",
+        "bbox_px": [
+          469,
+          278,
+          481,
+          290
+        ]
+      }
+    }
+  ]
+}
