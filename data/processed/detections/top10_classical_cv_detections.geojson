@@ -1,0 +1,4841 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55188256413771,
+              38.18176517678725
+            ],
+            [
+              -75.55365300080041,
+              38.18304533884998
+            ],
+            [
+              -75.5533635416425,
+              38.18344565525903
+            ],
+            [
+              -75.55159310497982,
+              38.1821654931963
+            ],
+            [
+              -75.55188256413771,
+              38.18176517678725
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 1304.5,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5514227410877,
+              38.18217417529036
+            ],
+            [
+              -75.55312198567216,
+              38.18337909253785
+            ],
+            [
+              -75.55288073987423,
+              38.18371930928913
+            ],
+            [
+              -75.55118149528977,
+              38.18251439204165
+            ],
+            [
+              -75.5514227410877,
+              38.18217417529036
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 776.5,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.54841367061913,
+              38.18709066315648
+            ],
+            [
+              -75.5486605459776,
+              38.18729955811101
+            ],
+            [
+              -75.54734773792943,
+              38.18885105952531
+            ],
+            [
+              -75.54710086257096,
+              38.188642164570794
+            ],
+            [
+              -75.54841367061913,
+              38.18709066315648
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 475.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.54887099999245,
+              38.187102180526786
+            ],
+            [
+              -75.54940897282025,
+              38.18754380042017
+            ],
+            [
+              -75.5480005442271,
+              38.18925952103395
+            ],
+            [
+              -75.5474625713993,
+              38.18881790114056
+            ],
+            [
+              -75.54887099999245,
+              38.187102180526786
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 1395.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5494732919156,
+              38.18764625432248
+            ],
+            [
+              -75.54965949919466,
+              38.187805860561674
+            ],
+            [
+              -75.54835104175832,
+              38.18933239514834
+            ],
+            [
+              -75.54816483447927,
+              38.189172788909154
+            ],
+            [
+              -75.5494732919156,
+              38.18764625432248
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 553.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5497517652321,
+              38.1877375625148
+            ],
+            [
+              -75.55012467169357,
+              38.18803811545956
+            ],
+            [
+              -75.54881422478147,
+              38.18966403911741
+            ],
+            [
+              -75.54844131832,
+              38.189363486172645
+            ],
+            [
+              -75.5497517652321,
+              38.1877375625148
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 940.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55228896785069,
+              38.1891798285926
+            ],
+            [
+              -75.55261134217447,
+              38.18943056402594
+            ],
+            [
+              -75.55127087412784,
+              38.19115402391903
+            ],
+            [
+              -75.55094849980405,
+              38.19090328848569
+            ],
+            [
+              -75.55228896785069,
+              38.1891798285926
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 840.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.54957863438368,
+              38.189398106603456
+            ],
+            [
+              -75.5499039109372,
+              38.189596100433256
+            ],
+            [
+              -75.5488819489411,
+              38.19127503760789
+            ],
+            [
+              -75.54855667238758,
+              38.19107704377809
+            ],
+            [
+              -75.54957863438368,
+              38.189398106603456
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 717.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55014898401647,
+              38.18962611610219
+            ],
+            [
+              -75.55037153748725,
+              38.18979220180157
+            ],
+            [
+              -75.54918811914881,
+              38.19137798204714
+            ],
+            [
+              -75.54896556567803,
+              38.19121189634776
+            ],
+            [
+              -75.55014898401647,
+              38.18962611610219
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 596.5,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55250333932914,
+              38.189426897296414
+            ],
+            [
+              -75.5531486809935,
+              38.18986690210715
+            ],
+            [
+              -75.55199869978506,
+              38.19155354166834
+            ],
+            [
+              -75.55135335812068,
+              38.191113536857614
+            ],
+            [
+              -75.55250333932914,
+              38.189426897296414
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 1394.5,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55050506601708,
+              38.18983473709387
+            ],
+            [
+              -75.55073754773707,
+              38.1899897249072
+            ],
+            [
+              -75.54966641180309,
+              38.19159642744178
+            ],
+            [
+              -75.5494339300831,
+              38.19144143962845
+            ],
+            [
+              -75.55050506601708,
+              38.18983473709387
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 433.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5533301837636,
+              38.18989109487021
+            ],
+            [
+              -75.55351093638112,
+              38.19002457420971
+            ],
+            [
+              -75.5523382647644,
+              38.19161256802034
+            ],
+            [
+              -75.5521575121469,
+              38.19147908868084
+            ],
+            [
+              -75.5533301837636,
+              38.18989109487021
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 476.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55088102227928,
+              38.18992276388094
+            ],
+            [
+              -75.55122486203535,
+              38.19019332711835
+            ],
+            [
+              -75.54999939484237,
+              38.191750691747266
+            ],
+            [
+              -75.5496555557695,
+              38.19148012850986
+            ],
+            [
+              -75.55088102227928,
+              38.18992276388094
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 685.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55358762547925,
+              38.190003373858666
+            ],
+            [
+              -75.55377837466587,
+              38.190128723128964
+            ],
+            [
+              -75.55267048262071,
+              38.191814645331114
+            ],
+            [
+              -75.55247973343408,
+              38.191689296060815
+            ],
+            [
+              -75.55358762547925,
+              38.190003373858666
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 426.0,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55131241468226,
+              38.19144693596515
+            ],
+            [
+              -75.55198709291567,
+              38.19175360764099
+            ],
+            [
+              -75.55190812466536,
+              38.19192733697182
+            ],
+            [
+              -75.55123344643195,
+              38.191620665295986
+            ],
+            [
+              -75.55131241468226,
+              38.19144693596515
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Minh Vinh",
+        "county": "Worcester",
+        "headcount": 595000,
+        "area_px": 200.5,
+        "tile": "site_00.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.57194623043863,
+              37.99496378846327
+            ],
+            [
+              -75.57197149611154,
+              37.99523088194103
+            ],
+            [
+              -75.57010932319773,
+              37.995407034261724
+            ],
+            [
+              -75.5700840575248,
+              37.99513994078396
+            ],
+            [
+              -75.57194623043863,
+              37.99496378846327
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 650.5,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56875828028545,
+              38.001084574576474
+            ],
+            [
+              -75.57124015730881,
+              38.00118944272529
+            ],
+            [
+              -75.57122960984105,
+              38.00143904363974
+            ],
+            [
+              -75.56874773349918,
+              38.00133417549092
+            ],
+            [
+              -75.56875828028545,
+              38.001084574576474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 700.5,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56983267586904,
+              38.001559280819585
+            ],
+            [
+              -75.57121775049919,
+              38.00163918996735
+            ],
+            [
+              -75.57120619374024,
+              38.00183950257926
+            ],
+            [
+              -75.56982111911009,
+              38.00175959343149
+            ],
+            [
+              -75.56983267586904,
+              38.001559280819585
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 383.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56854167590096,
+              38.001881012320254
+            ],
+            [
+              -75.56921326003106,
+              38.001918322701144
+            ],
+            [
+              -75.56919903590835,
+              38.00217434055405
+            ],
+            [
+              -75.56852745177825,
+              38.00213703017316
+            ],
+            [
+              -75.56854167590096,
+              38.001881012320254
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 162.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56933752892371,
+              38.00194448794488
+            ],
+            [
+              -75.57119484347368,
+              38.00200440208689
+            ],
+            [
+              -75.57118648632454,
+              38.002263462124716
+            ],
+            [
+              -75.56932917245608,
+              38.00220354798271
+            ],
+            [
+              -75.56933752892371,
+              38.00194448794488
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 685.5,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56817875359803,
+              38.00265771811459
+            ],
+            [
+              -75.57025994883365,
+              38.002841353228845
+            ],
+            [
+              -75.57022426313216,
+              38.00324578663576
+            ],
+            [
+              -75.56814306789654,
+              38.003062151521505
+            ],
+            [
+              -75.56817875359803,
+              38.00265771811459
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 875.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56811149841302,
+              38.003163291903405
+            ],
+            [
+              -75.57019541007989,
+              38.00330221834834
+            ],
+            [
+              -75.5701823676661,
+              38.00349786409591
+            ],
+            [
+              -75.56809845599923,
+              38.00335893765098
+            ],
+            [
+              -75.56811149841302,
+              38.003163291903405
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 459.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56802221328401,
+              38.00399824627076
+            ],
+            [
+              -75.57005955853154,
+              38.00415298062823
+            ],
+            [
+              -75.57004773326433,
+              38.004308682705805
+            ],
+            [
+              -75.5680103880168,
+              38.00415394834834
+            ],
+            [
+              -75.56802221328401,
+              38.00399824627076
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 411.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56817376779496,
+              38.0030563956313
+            ],
+            [
+              -75.57046283203731,
+              38.003685258325774
+            ],
+            [
+              -75.57024863604921,
+              38.00446493542976
+            ],
+            [
+              -75.56795957180687,
+              38.00383607273528
+            ],
+            [
+              -75.56817376779496,
+              38.0030563956313
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 1037.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5681072022809,
+              38.00438544335574
+            ],
+            [
+              -75.570167693758,
+              38.004489771762074
+            ],
+            [
+              -75.57015738685728,
+              38.00469333918473
+            ],
+            [
+              -75.56809689538018,
+              38.004589010778396
+            ],
+            [
+              -75.5681072022809,
+              38.00438544335574
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 449.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56833493135775,
+              38.00465156502443
+            ],
+            [
+              -75.5703954582725,
+              38.00482534302338
+            ],
+            [
+              -75.57038094792271,
+              38.00499738730403
+            ],
+            [
+              -75.56832042100797,
+              38.004823609305085
+            ],
+            [
+              -75.56833493135775,
+              38.00465156502443
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+        "county": "Worcester",
+        "headcount": 400000,
+        "area_px": 437.0,
+        "tile": "site_01.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.84030916422333,
+              39.08254950001958
+            ],
+            [
+              -75.84214431115046,
+              39.083440087696886
+            ],
+            [
+              -75.8418532111307,
+              39.084039929574864
+            ],
+            [
+              -75.84001806420356,
+              39.08314934189756
+            ],
+            [
+              -75.84030916422333,
+              39.08254950001958
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 1435.0,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.8535155580499,
+              39.083755028412824
+            ],
+            [
+              -75.85426367162376,
+              39.083755028412824
+            ],
+            [
+              -75.85426367162376,
+              39.08395905938751
+            ],
+            [
+              -75.8535155580499,
+              39.08395905938751
+            ],
+            [
+              -75.8535155580499,
+              39.083755028412824
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 167.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.8414973358149,
+              39.084212719966956
+            ],
+            [
+              -75.84154451355005,
+              39.084495789145144
+            ],
+            [
+              -75.8408019152992,
+              39.08461955598151
+            ],
+            [
+              -75.84075473756405,
+              39.08433648680332
+            ],
+            [
+              -75.8414973358149,
+              39.084212719966956
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 226.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.83918804960554,
+              39.08593135880944
+            ],
+            [
+              -75.8394600909051,
+              39.08593135880944
+            ],
+            [
+              -75.8394600909051,
+              39.086702142491575
+            ],
+            [
+              -75.83918804960554,
+              39.086702142491575
+            ],
+            [
+              -75.83918804960554,
+              39.08593135880944
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 219.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.84856974682425,
+              39.08745662926602
+            ],
+            [
+              -75.85135293847502,
+              39.0880425652243
+            ],
+            [
+              -75.8511554619622,
+              39.08898057969799
+            ],
+            [
+              -75.84837227031142,
+              39.08839464373972
+            ],
+            [
+              -75.84856974682425,
+              39.08745662926602
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 2192.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.85609546037506,
+              39.09038674837375
+            ],
+            [
+              -75.8567074121644,
+              39.09241384127033
+            ],
+            [
+              -75.85633931347601,
+              39.092524965481
+            ],
+            [
+              -75.85572736168666,
+              39.09049787258442
+            ],
+            [
+              -75.85609546037506,
+              39.09038674837375
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 1174.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.85643617823837,
+              39.0901127298046
+            ],
+            [
+              -75.85747528113808,
+              39.093537045235266
+            ],
+            [
+              -75.85674901507859,
+              39.09375742984825
+            ],
+            [
+              -75.85570991217887,
+              39.09033311441759
+            ],
+            [
+              -75.85643617823837,
+              39.0901127298046
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 2596.0,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.84978397852446,
+              39.094834848053694
+            ],
+            [
+              -75.85013692875424,
+              39.09498611263556
+            ],
+            [
+              -75.8485820725887,
+              39.09861411173883
+            ],
+            [
+              -75.8482291223589,
+              39.098462847156966
+            ],
+            [
+              -75.84978397852446,
+              39.094834848053694
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 1449.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.84983576942739,
+              39.09820434026073
+            ],
+            [
+              -75.85012005900569,
+              39.0984144677013
+            ],
+            [
+              -75.84958154707645,
+              39.099143043457964
+            ],
+            [
+              -75.84929725749815,
+              39.09893291601739
+            ],
+            [
+              -75.84983576942739,
+              39.09820434026073
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Alan C. Eck Farm",
+        "county": "Queen Anne's",
+        "headcount": 370500,
+        "area_px": 407.5,
+        "tile": "site_02.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56065353593563,
+              38.100648463508236
+            ],
+            [
+              -75.56155971175657,
+              38.10142137978486
+            ],
+            [
+              -75.56146358416599,
+              38.10153408053315
+            ],
+            [
+              -75.56055740834505,
+              38.10076116425653
+            ],
+            [
+              -75.56065353593563,
+              38.100648463508236
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 197.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56033273709384,
+              38.10083090746739
+            ],
+            [
+              -75.56181909081985,
+              38.101918484429795
+            ],
+            [
+              -75.56169770083405,
+              38.10208438526002
+            ],
+            [
+              -75.56021134710804,
+              38.10099680829762
+            ],
+            [
+              -75.56033273709384,
+              38.10083090746739
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 360.0,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55969247432613,
+              38.101490912794254
+            ],
+            [
+              -75.56123278977317,
+              38.1026272128202
+            ],
+            [
+              -75.56111352091132,
+              38.10278888778185
+            ],
+            [
+              -75.55957320546428,
+              38.1016525877559
+            ],
+            [
+              -75.55969247432613,
+              38.101490912794254
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 340.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5594134318705,
+              38.10170666276735
+            ],
+            [
+              -75.56098959895323,
+              38.10286940723058
+            ],
+            [
+              -75.56087593455402,
+              38.1030234876403
+            ],
+            [
+              -75.5592997674713,
+              38.10186074317707
+            ],
+            [
+              -75.5594134318705,
+              38.10170666276735
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 342.0,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5565585546287,
+              38.10486147021247
+            ],
+            [
+              -75.55683809528912,
+              38.10514101087289
+            ],
+            [
+              -75.55613365282485,
+              38.10584545333716
+            ],
+            [
+              -75.55585411216443,
+              38.10556591267673
+            ],
+            [
+              -75.5565585546287,
+              38.10486147021247
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 311.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.57394855480415,
+              38.105403508834655
+            ],
+            [
+              -75.57407686864222,
+              38.105557485508584
+            ],
+            [
+              -75.57286045424685,
+              38.10657116436866
+            ],
+            [
+              -75.57273214040879,
+              38.10641718769473
+            ],
+            [
+              -75.57394855480415,
+              38.105403508834655
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 306.0,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.57407907587499,
+              38.106470260836815
+            ],
+            [
+              -75.57421871056383,
+              38.10664480449645
+            ],
+            [
+              -75.5734032691813,
+              38.107297157943705
+            ],
+            [
+              -75.57326363449246,
+              38.10712261428408
+            ],
+            [
+              -75.57407907587499,
+              38.106470260836815
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 240.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56282870692223,
+              38.10997548505727
+            ],
+            [
+              -75.56290465790129,
+              38.11011219518162
+            ],
+            [
+              -75.56201223594492,
+              38.11060798401993
+            ],
+            [
+              -75.56193628496587,
+              38.11047127389558
+            ],
+            [
+              -75.56282870692223,
+              38.10997548505727
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 170.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56334460071248,
+              38.1101000348899
+            ],
+            [
+              -75.56340196660544,
+              38.110222587808536
+            ],
+            [
+              -75.56217838110022,
+              38.110795329495254
+            ],
+            [
+              -75.56212101520728,
+              38.110672776576614
+            ],
+            [
+              -75.56334460071248,
+              38.1101000348899
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 200.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56384984247484,
+              38.11055676037782
+            ],
+            [
+              -75.56394696920489,
+              38.11074474601217
+            ],
+            [
+              -75.56250779820242,
+              38.11148831870912
+            ],
+            [
+              -75.56241067147236,
+              38.11130033307476
+            ],
+            [
+              -75.56384984247484,
+              38.11055676037782
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 331.0,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56483773070612,
+              38.11094971019279
+            ],
+            [
+              -75.56499925279397,
+              38.11135856434261
+            ],
+            [
+              -75.5630411960426,
+              38.11213211804837
+            ],
+            [
+              -75.56287967395475,
+              38.11172326389856
+            ],
+            [
+              -75.56483773070612,
+              38.11094971019279
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 395.0,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56512659462084,
+              38.11131296427238
+            ],
+            [
+              -75.56523764515107,
+              38.111557275711874
+            ],
+            [
+              -75.56333370572445,
+              38.112422702475804
+            ],
+            [
+              -75.56322265519421,
+              38.11217839103631
+            ],
+            [
+              -75.56512659462084,
+              38.11131296427238
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 352.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.56550020453534,
+              38.11163148365662
+            ],
+            [
+              -75.56576136348642,
+              38.11219732827812
+            ],
+            [
+              -75.56376034373785,
+              38.11312087574938
+            ],
+            [
+              -75.56349918478678,
+              38.11255503112789
+            ],
+            [
+              -75.56550020453534,
+              38.11163148365662
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 784.0,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55695420020932,
+              38.11288931084532
+            ],
+            [
+              -75.55782829164177,
+              38.11345747177785
+            ],
+            [
+              -75.55764435443318,
+              38.113740452098746
+            ],
+            [
+              -75.55677026300074,
+              38.113172291166215
+            ],
+            [
+              -75.55695420020932,
+              38.11288931084532
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 360.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.55790621087097,
+              38.114980442873474
+            ],
+            [
+              -75.55919491788453,
+              38.115438649326315
+            ],
+            [
+              -75.55902957941149,
+              38.11590366002814
+            ],
+            [
+              -75.55774087239793,
+              38.1154454535753
+            ],
+            [
+              -75.55790621087097,
+              38.114980442873474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Newton Bui/Vina Cao",
+        "county": "Worcester",
+        "headcount": 354500,
+        "area_px": 680.5,
+        "tile": "site_03.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76817404581435,
+              38.64801707679148
+            ],
+            [
+              -75.77022519565834,
+              38.64869010990425
+            ],
+            [
+              -75.77004924520378,
+              38.64922633973005
+            ],
+            [
+              -75.76799809535977,
+              38.64855330661728
+            ],
+            [
+              -75.76817404581435,
+              38.64801707679148
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "area_px": 802.0,
+        "tile": "site_04.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76224080460135,
+              38.653303933132264
+            ],
+            [
+              -75.7622481708264,
+              38.65380485844035
+            ],
+            [
+              -75.76028621061907,
+              38.65383370994687
+            ],
+            [
+              -75.76027884439402,
+              38.65333278463879
+            ],
+            [
+              -75.76224080460135,
+              38.653303933132264
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "area_px": 808.5,
+        "tile": "site_04.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76904920038548,
+              38.662499033966654
+            ],
+            [
+              -75.77058388446959,
+              38.66253740132663
+            ],
+            [
+              -75.77057828209512,
+              38.662761467424055
+            ],
+            [
+              -75.76904359732335,
+              38.66272310006408
+            ],
+            [
+              -75.76904920038548,
+              38.662499033966654
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "area_px": 303.0,
+        "tile": "site_04.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76023235713251,
+              38.66373216905817
+            ],
+            [
+              -75.76478280551922,
+              38.66503229677571
+            ],
+            [
+              -75.76449625166325,
+              38.666035239397615
+            ],
+            [
+              -75.75994580327652,
+              38.66473511168007
+            ],
+            [
+              -75.76023235713251,
+              38.66373216905817
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "area_px": 3202.5,
+        "tile": "site_04.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76250025360984,
+              38.665034559180526
+            ],
+            [
+              -75.76468626753669,
+              38.66541145794373
+            ],
+            [
+              -75.7646212175531,
+              38.66578874729841
+            ],
+            [
+              -75.76243520362625,
+              38.6654118485352
+            ],
+            [
+              -75.76250025360984,
+              38.665034559180526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "area_px": 1004.5,
+        "tile": "site_04.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.76634917083503,
+              38.66800674124568
+            ],
+            [
+              -75.77187311963628,
+              38.66815022068984
+            ],
+            [
+              -75.77184158006276,
+              38.66936444235216
+            ],
+            [
+              -75.76631763194916,
+              38.66922096290799
+            ],
+            [
+              -75.76634917083503,
+              38.66800674124568
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "manure_lagoon",
+        "detector": "classical_cv",
+        "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+        "county": "Dorchester",
+        "headcount": 352000,
+        "area_px": 9488.5,
+        "tile": "site_04.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5062655017895,
+              38.054128418489775
+            ],
+            [
+              -75.50721048461948,
+              38.05480340603061
+            ],
+            [
+              -75.50695679787131,
+              38.05515856556836
+            ],
+            [
+              -75.50601181504135,
+              38.05448357802753
+            ],
+            [
+              -75.5062655017895,
+              38.054128418489775
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 486.0,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50508448979443,
+              38.05670001459743
+            ],
+            [
+              -75.50513978551494,
+              38.05682442928656
+            ],
+            [
+              -75.50390600810577,
+              38.05737277601423
+            ],
+            [
+              -75.50385071238526,
+              38.0572483613251
+            ],
+            [
+              -75.50508448979443,
+              38.05670001459743
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 267.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50335908817082,
+              38.05988463233759
+            ],
+            [
+              -75.50474858377423,
+              38.06022428539376
+            ],
+            [
+              -75.5047048237957,
+              38.06040330286773
+            ],
+            [
+              -75.5033153281923,
+              38.060063649811575
+            ],
+            [
+              -75.50335908817082,
+              38.05988463233759
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 325.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50510159289254,
+              38.06034136151226
+            ],
+            [
+              -75.50598414876646,
+              38.060593519164186
+            ],
+            [
+              -75.50594451230076,
+              38.060732248158196
+            ],
+            [
+              -75.50506195642684,
+              38.06048009050626
+            ],
+            [
+              -75.50510159289254,
+              38.06034136151226
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 192.0,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50318809538291,
+              38.06028499910731
+            ],
+            [
+              -75.50579045346919,
+              38.060985633452056
+            ],
+            [
+              -75.50574103951755,
+              38.06116916864833
+            ],
+            [
+              -75.50313868143128,
+              38.06046853430358
+            ],
+            [
+              -75.50318809538291,
+              38.06028499910731
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 557.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50178274819413,
+              38.06054331952172
+            ],
+            [
+              -75.50196243405094,
+              38.060644880974344
+            ],
+            [
+              -75.50158199600185,
+              38.06131796157805
+            ],
+            [
+              -75.50140231014504,
+              38.061216400125424
+            ],
+            [
+              -75.50178274819413,
+              38.06054331952172
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 166.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50252950641014,
+              38.06050319472734
+            ],
+            [
+              -75.50518262203393,
+              38.061226772335665
+            ],
+            [
+              -75.50514703542254,
+              38.06135725430401
+            ],
+            [
+              -75.50249391979875,
+              38.06063367669569
+            ],
+            [
+              -75.50252950641014,
+              38.06050319472734
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 526.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50231121257876,
+              38.060956466043905
+            ],
+            [
+              -75.50498064765591,
+              38.06172649489468
+            ],
+            [
+              -75.50494276399007,
+              38.0618578253
+            ],
+            [
+              -75.50227332891292,
+              38.06108779644923
+            ],
+            [
+              -75.50231121257876,
+              38.060956466043905
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 531.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50019142825782,
+              38.061008811331654
+            ],
+            [
+              -75.50113666070833,
+              38.06179650458572
+            ],
+            [
+              -75.50101209597406,
+              38.06194598226683
+            ],
+            [
+              -75.50006686352357,
+              38.06115828901276
+            ],
+            [
+              -75.50019142825782,
+              38.061008811331654
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 224.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.49975310961993,
+              38.06110939612692
+            ],
+            [
+              -75.50067556522053,
+              38.06192935726703
+            ],
+            [
+              -75.50052760163115,
+              38.06209581460005
+            ],
+            [
+              -75.49960514603055,
+              38.06127585345993
+            ],
+            [
+              -75.49975310961993,
+              38.06110939612692
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 207.0,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50221266157695,
+              38.06208127795558
+            ],
+            [
+              -75.50374329917278,
+              38.06272575723046
+            ],
+            [
+              -75.5036738882982,
+              38.06289061044469
+            ],
+            [
+              -75.50214325070236,
+              38.0622461311698
+            ],
+            [
+              -75.50221266157695,
+              38.06208127795558
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 362.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.4985701661349,
+              38.06191553401893
+            ],
+            [
+              -75.50026586428004,
+              38.06246057975386
+            ],
+            [
+              -75.50011053483907,
+              38.062943825994154
+            ],
+            [
+              -75.49841483669394,
+              38.06239878025922
+            ],
+            [
+              -75.4985701661349,
+              38.06191553401893
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 819.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50202579674296,
+              38.062338556238394
+            ],
+            [
+              -75.50355502118653,
+              38.062986532928726
+            ],
+            [
+              -75.50347460245598,
+              38.06317632091455
+            ],
+            [
+              -75.50194537801242,
+              38.06252834422422
+            ],
+            [
+              -75.50202579674296,
+              38.062338556238394
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 379.0,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.49830831147578,
+              38.062493735634234
+            ],
+            [
+              -75.50005989733765,
+              38.0630950264661
+            ],
+            [
+              -75.49999095842318,
+              38.06329584686072
+            ],
+            [
+              -75.49823937256132,
+              38.062694556028845
+            ],
+            [
+              -75.49830831147578,
+              38.062493735634234
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 598.0,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50052844870407,
+              38.06269128777323
+            ],
+            [
+              -75.50227834042008,
+              38.06327458410253
+            ],
+            [
+              -75.50220012053263,
+              38.063509243764855
+            ],
+            [
+              -75.50045022881663,
+              38.06292594743555
+            ],
+            [
+              -75.50052844870407,
+              38.06269128777323
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 597.5,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.50038134855616,
+              38.062988392124225
+            ],
+            [
+              -75.50207187150855,
+              38.063527398542895
+            ],
+            [
+              -75.5019847853183,
+              38.06380052772907
+            ],
+            [
+              -75.50029426236591,
+              38.063261521310395
+            ],
+            [
+              -75.50038134855616,
+              38.062988392124225
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+        "county": "Worcester",
+        "headcount": 346000,
+        "area_px": 575.0,
+        "tile": "site_05.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58099058271915,
+              38.04002218999592
+            ],
+            [
+              -75.5811326093629,
+              38.04027468150395
+            ],
+            [
+              -75.57956673486123,
+              38.04115548727496
+            ],
+            [
+              -75.57942470821749,
+              38.04090299576694
+            ],
+            [
+              -75.58099058271915,
+              38.04002218999592
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 537.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58746149693384,
+              38.04250326472527
+            ],
+            [
+              -75.5883313831911,
+              38.04412957331091
+            ],
+            [
+              -75.58780571153909,
+              38.044410746187104
+            ],
+            [
+              -75.58693582528183,
+              38.04278443760146
+            ],
+            [
+              -75.58746149693384,
+              38.04250326472527
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 1416.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58684781248714,
+              38.042792973820355
+            ],
+            [
+              -75.58756192331927,
+              38.04428070352729
+            ],
+            [
+              -75.5872938698164,
+              38.04440937008152
+            ],
+            [
+              -75.58657975898427,
+              38.04292164037458
+            ],
+            [
+              -75.58684781248714,
+              38.042792973820355
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 523.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58434858925726,
+              38.0436771305244
+            ],
+            [
+              -75.58504169095312,
+              38.04486117868657
+            ],
+            [
+              -75.58485862390373,
+              38.04496834035191
+            ],
+            [
+              -75.58416552220787,
+              38.04378429218974
+            ],
+            [
+              -75.58434858925726,
+              38.0436771305244
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 321.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58419766838895,
+              38.04740869108442
+            ],
+            [
+              -75.58430835283004,
+              38.04749818022629
+            ],
+            [
+              -75.58329025700071,
+              38.04875740275904
+            ],
+            [
+              -75.58317957255963,
+              38.048667913617166
+            ],
+            [
+              -75.58419766838895,
+              38.04740869108442
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 225.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.57090480756261,
+              38.05157653235044
+            ],
+            [
+              -75.57194377409937,
+              38.053276661022366
+            ],
+            [
+              -75.57146021687,
+              38.053572167763484
+            ],
+            [
+              -75.57042125033324,
+              38.05187203909155
+            ],
+            [
+              -75.57090480756261,
+              38.05157653235044
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 848.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.57046769969305,
+              38.05201214068769
+            ],
+            [
+              -75.57133541541312,
+              38.05342217975566
+            ],
+            [
+              -75.57118954822099,
+              38.05351194439141
+            ],
+            [
+              -75.57032183250092,
+              38.05210190532344
+            ],
+            [
+              -75.57046769969305,
+              38.05201214068769
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 409.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58418314631533,
+              38.052451237023
+            ],
+            [
+              -75.58468249534508,
+              38.053540723955415
+            ],
+            [
+              -75.58450245327309,
+              38.05362324392033
+            ],
+            [
+              -75.58400310424334,
+              38.05253375698791
+            ],
+            [
+              -75.58418314631533,
+              38.052451237023
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 286.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.57019091562537,
+              38.05210440727161
+            ],
+            [
+              -75.57103400328332,
+              38.05352893295358
+            ],
+            [
+              -75.5708563588264,
+              38.05363406932973
+            ],
+            [
+              -75.57001327116846,
+              38.052209543647756
+            ],
+            [
+              -75.57019091562537,
+              38.05210440727161
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 489.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58373660346219,
+              38.05247370682239
+            ],
+            [
+              -75.58440695372754,
+              38.05394847740615
+            ],
+            [
+              -75.58421334835518,
+              38.05403647997211
+            ],
+            [
+              -75.58354299808984,
+              38.05256170938835
+            ],
+            [
+              -75.58373660346219,
+              38.05247370682239
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 531.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58337463995892,
+              38.05257710635962
+            ],
+            [
+              -75.58405125566438,
+              38.054059217082404
+            ],
+            [
+              -75.58385388202667,
+              38.05414932267593
+            ],
+            [
+              -75.58317726632123,
+              38.05266721195315
+            ],
+            [
+              -75.58337463995892,
+              38.05257710635962
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 536.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58299414199092,
+              38.052724483994716
+            ],
+            [
+              -75.58364845905778,
+              38.0541818275446
+            ],
+            [
+              -75.58345794139906,
+              38.054267365667755
+            ],
+            [
+              -75.5828036243322,
+              38.05281002211787
+            ],
+            [
+              -75.58299414199092,
+              38.052724483994716
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 490.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58261874338743,
+              38.05282002581903
+            ],
+            [
+              -75.58329634514277,
+              38.05426763025099
+            ],
+            [
+              -75.58310564473068,
+              38.05435689436072
+            ],
+            [
+              -75.58242804297534,
+              38.05290928992876
+            ],
+            [
+              -75.58261874338743,
+              38.05282002581903
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 478.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58224148997364,
+              38.052917929798824
+            ],
+            [
+              -75.58293459848866,
+              38.05437015761823
+            ],
+            [
+              -75.58274185096607,
+              38.05446215075401
+            ],
+            [
+              -75.58204874245105,
+              38.053009922934606
+            ],
+            [
+              -75.58224148997364,
+              38.052917929798824
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 434.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58185848187449,
+              38.05303194539739
+            ],
+            [
+              -75.58253894494749,
+              38.05449007996932
+            ],
+            [
+              -75.58234811497144,
+              38.054579134049064
+            ],
+            [
+              -75.58166765189844,
+              38.05312099947714
+            ],
+            [
+              -75.58185848187449,
+              38.05303194539739
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 493.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58150837756462,
+              38.05313104818473
+            ],
+            [
+              -75.58216571824504,
+              38.054577198772726
+            ],
+            [
+              -75.58197042854127,
+              38.05466596644794
+            ],
+            [
+              -75.58131308786085,
+              38.05321981585994
+            ],
+            [
+              -75.58150837756462,
+              38.05313104818473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 453.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.581117088283,
+              38.05325612854506
+            ],
+            [
+              -75.58181665726596,
+              38.054705235918895
+            ],
+            [
+              -75.5816379408378,
+              38.05479151323851
+            ],
+            [
+              -75.58093837185483,
+              38.053342405864676
+            ],
+            [
+              -75.581117088283,
+              38.05325612854506
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 414.5,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58072372461424,
+              38.05337589132791
+            ],
+            [
+              -75.58137914774814,
+              38.05481278013887
+            ],
+            [
+              -75.58122014277096,
+              38.0548853086771
+            ],
+            [
+              -75.58056471963707,
+              38.05344841986614
+            ],
+            [
+              -75.58072372461424,
+              38.05337589132791
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 385.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58040617768054,
+              38.05346589531602
+            ],
+            [
+              -75.58099485355626,
+              38.05493758364148
+            ],
+            [
+              -75.5807829605726,
+              38.05502234028941
+            ],
+            [
+              -75.58019428469689,
+              38.05355065196395
+            ],
+            [
+              -75.58040617768054,
+              38.05346589531602
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Chinh Nguyen/A, B, C Farms",
+        "county": "Worcester",
+        "headcount": 333000,
+        "area_px": 386.0,
+        "tile": "site_06.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.32148838757614,
+              38.31577325457895
+            ],
+            [
+              -75.32181635445319,
+              38.31638446501706
+            ],
+            [
+              -75.31969601615603,
+              38.317522208653195
+            ],
+            [
+              -75.31936804927898,
+              38.316910998215086
+            ],
+            [
+              -75.32148838757614,
+              38.31577325457895
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 651.0,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31494603175348,
+              38.32026344949367
+            ],
+            [
+              -75.31696928472559,
+              38.32098603974307
+            ],
+            [
+              -75.31689824351093,
+              38.32118495514411
+            ],
+            [
+              -75.31487499053883,
+              38.320462364894716
+            ],
+            [
+              -75.31494603175348,
+              38.32026344949367
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 638.0,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31469289395199,
+              38.32056456732277
+            ],
+            [
+              -75.31685811504681,
+              38.321267562544776
+            ],
+            [
+              -75.31676169571175,
+              38.32156453248139
+            ],
+            [
+              -75.31459647393247,
+              38.32086153725939
+            ],
+            [
+              -75.31469289395199,
+              38.32056456732277
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 692.5,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31435102136807,
+              38.320830024228044
+            ],
+            [
+              -75.31639652237602,
+              38.32151185835368
+            ],
+            [
+              -75.31633820684075,
+              38.32168680359057
+            ],
+            [
+              -75.31429270583278,
+              38.32100496946494
+            ],
+            [
+              -75.31435102136807,
+              38.320830024228044
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 640.0,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31264419372795,
+              38.321756330756024
+            ],
+            [
+              -75.31324976960319,
+              38.321756330756024
+            ],
+            [
+              -75.31324976960319,
+              38.32193576064499
+            ],
+            [
+              -75.31264419372795,
+              38.32193576064499
+            ],
+            [
+              -75.31264419372795,
+              38.321756330756024
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 165.0,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31418605160725,
+              38.32114292179801
+            ],
+            [
+              -75.31624739879655,
+              38.32179652013805
+            ],
+            [
+              -75.31618514413235,
+              38.32199286192923
+            ],
+            [
+              -75.31412379762753,
+              38.321339263589195
+            ],
+            [
+              -75.31418605160725,
+              38.32114292179801
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 638.5,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31269474325859,
+              38.32201554939528
+            ],
+            [
+              -75.31291319071572,
+              38.32202803140309
+            ],
+            [
+              -75.31281530045311,
+              38.32374111921229
+            ],
+            [
+              -75.31259685299598,
+              38.32372863720449
+            ],
+            [
+              -75.31269474325859,
+              38.32201554939528
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 623.0,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31312487149545,
+              38.322017856061564
+            ],
+            [
+              -75.31333506149797,
+              38.32202872819427
+            ],
+            [
+              -75.3132408646393,
+              38.32384986381137
+            ],
+            [
+              -75.31303067463678,
+              38.32383899167866
+            ],
+            [
+              -75.31312487149545,
+              38.322017856061564
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 640.5,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31356483146953,
+              38.32203947438437
+            ],
+            [
+              -75.31377637672405,
+              38.322050910520936
+            ],
+            [
+              -75.3136779388849,
+              38.32387201602132
+            ],
+            [
+              -75.31346639363036,
+              38.32386057988475
+            ],
+            [
+              -75.31356483146953,
+              38.32203947438437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 644.0,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.31399212462873,
+              38.322042903582606
+            ],
+            [
+              -75.31420418460522,
+              38.322055021452
+            ],
+            [
+              -75.31409899514699,
+              38.32389585613604
+            ],
+            [
+              -75.3138869351705,
+              38.323883738266645
+            ],
+            [
+              -75.31399212462873,
+              38.322042903582606
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+        "county": "Worcester",
+        "headcount": 328000,
+        "area_px": 644.5,
+        "tile": "site_07.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.59341848115372,
+              38.14391636545318
+            ],
+            [
+              -75.5934362750142,
+              38.14417438197991
+            ],
+            [
+              -75.59264456414634,
+              38.14422898157097
+            ],
+            [
+              -75.59262677028575,
+              38.14397096504424
+            ],
+            [
+              -75.59341848115372,
+              38.14391636545318
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 291.5,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58359620055636,
+              38.147413040439275
+            ],
+            [
+              -75.58538621496336,
+              38.147413040439275
+            ],
+            [
+              -75.58538621496336,
+              38.14806192066181
+            ],
+            [
+              -75.58359620055636,
+              38.14806192066181
+            ],
+            [
+              -75.58359620055636,
+              38.147413040439275
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 1317.5,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58364095091653,
+              38.14815142138216
+            ],
+            [
+              -75.58525196388283,
+              38.14815142138216
+            ],
+            [
+              -75.58525196388283,
+              38.14855417462374
+            ],
+            [
+              -75.58364095091653,
+              38.14855417462374
+            ],
+            [
+              -75.58364095091653,
+              38.14815142138216
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 714.5,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58073255033376,
+              38.14957638876843
+            ],
+            [
+              -75.58284174974382,
+              38.149687398832434
+            ],
+            [
+              -75.5828343314102,
+              38.14982832532069
+            ],
+            [
+              -75.58072513200014,
+              38.14971731525669
+            ],
+            [
+              -75.58073255033376,
+              38.14957638876843
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 406.0,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5805851218782,
+              38.14984618012443
+            ],
+            [
+              -75.5832934364008,
+              38.149927429450855
+            ],
+            [
+              -75.58327384719283,
+              38.15058042034796
+            ],
+            [
+              -75.58056553267024,
+              38.15049917102153
+            ],
+            [
+              -75.5805851218782,
+              38.14984618012443
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 1422.0,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5836857012767,
+              38.151283946594425
+            ],
+            [
+              -75.58435695667933,
+              38.151283946594425
+            ],
+            [
+              -75.58435695667933,
+              38.15144057285504
+            ],
+            [
+              -75.5836857012767,
+              38.15144057285504
+            ],
+            [
+              -75.5836857012767,
+              38.151283946594425
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 153.5,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.5811185262873,
+              38.15058278364441
+            ],
+            [
+              -75.58134506679164,
+              38.15059411053306
+            ],
+            [
+              -75.58126761949778,
+              38.15214307552988
+            ],
+            [
+              -75.58104107899342,
+              38.15213174864123
+            ],
+            [
+              -75.5811185262873,
+              38.15058278364441
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 346.0,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58149767524343,
+              38.15059863773777
+            ],
+            [
+              -75.58173073820018,
+              38.15061743348994
+            ],
+            [
+              -75.58160559069329,
+              38.152169273227614
+            ],
+            [
+              -75.58137252773655,
+              38.15215047747544
+            ],
+            [
+              -75.58149767524343,
+              38.15059863773777
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 441.0,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58189230000161,
+              38.15060045613086
+            ],
+            [
+              -75.58211429827885,
+              38.15062018873444
+            ],
+            [
+              -75.58197458723923,
+              38.15219193315044
+            ],
+            [
+              -75.58175258896199,
+              38.15217220054686
+            ],
+            [
+              -75.58189230000161,
+              38.15060045613086
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 471.5,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.58228607326292,
+              38.15062359745328
+            ],
+            [
+              -75.5824427418594,
+              38.15063805856058
+            ],
+            [
+              -75.58229768421148,
+              38.15220952028235
+            ],
+            [
+              -75.58214101561502,
+              38.15219505917505
+            ],
+            [
+              -75.58228607326292,
+              38.15062359745328
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+        "county": "Somerset",
+        "headcount": 320000,
+        "area_px": 384.0,
+        "tile": "site_08.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86903834916333,
+              38.78918676724625
+            ],
+            [
+              -75.86909635202605,
+              38.78946953051304
+            ],
+            [
+              -75.86779919665756,
+              38.78973561444288
+            ],
+            [
+              -75.86774119379483,
+              38.789452851176094
+            ],
+            [
+              -75.86903834916333,
+              38.78918676724625
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 571.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86809361299876,
+              38.79094418839393
+            ],
+            [
+              -75.86977491400162,
+              38.79105627508152
+            ],
+            [
+              -75.86974154774875,
+              38.79155676818585
+            ],
+            [
+              -75.86806024674588,
+              38.79144468149826
+            ],
+            [
+              -75.86809361299876,
+              38.79094418839393
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 950.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86530802524078,
+              38.79097967056898
+            ],
+            [
+              -75.866211726571,
+              38.79147524971797
+            ],
+            [
+              -75.86608829203644,
+              38.79170033533051
+            ],
+            [
+              -75.86518459070622,
+              38.79120475618153
+            ],
+            [
+              -75.86530802524078,
+              38.79097967056898
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 199.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.8583880433941,
+              38.79416085171345
+            ],
+            [
+              -75.85866853020147,
+              38.79519864986916
+            ],
+            [
+              -75.85831539512547,
+              38.795294093047865
+            ],
+            [
+              -75.85803490831809,
+              38.79425629489216
+            ],
+            [
+              -75.8583880433941,
+              38.79416085171345
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 410.5,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.8569353866941,
+              38.79474584666013
+            ],
+            [
+              -75.8574892277702,
+              38.79537880710253
+            ],
+            [
+              -75.85567506049767,
+              38.79696620208799
+            ],
+            [
+              -75.85512121942158,
+              38.79633324164559
+            ],
+            [
+              -75.8569353866941,
+              38.79474584666013
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 1964.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86384211353896,
+              38.80077566191285
+            ],
+            [
+              -75.86416197399922,
+              38.80089947815398
+            ],
+            [
+              -75.86368681132876,
+              38.802126984475336
+            ],
+            [
+              -75.86336695086851,
+              38.80200316823421
+            ],
+            [
+              -75.86384211353896,
+              38.80077566191285
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 358.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86584030747464,
+              38.80662756779806
+            ],
+            [
+              -75.86678058097954,
+              38.80686263634654
+            ],
+            [
+              -75.86669159994149,
+              38.807218559120706
+            ],
+            [
+              -75.86575132643661,
+              38.806983490572236
+            ],
+            [
+              -75.86584030747464,
+              38.80662756779806
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 380.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.84971488051207,
+              38.80680685844039
+            ],
+            [
+              -75.8507534310569,
+              38.807845408985216
+            ],
+            [
+              -75.85047121623494,
+              38.80812762380718
+            ],
+            [
+              -75.8494326656901,
+              38.80708907326235
+            ],
+            [
+              -75.84971488051207,
+              38.80680685844039
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 626.5,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.85645216408959,
+              38.80824963305698
+            ],
+            [
+              -75.85761256860062,
+              38.80868478543762
+            ],
+            [
+              -75.85750586714508,
+              38.80896932012605
+            ],
+            [
+              -75.85634546263405,
+              38.808534167745414
+            ],
+            [
+              -75.85645216408959,
+              38.80824963305698
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 494.5,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86255683792623,
+              38.80830303511533
+            ],
+            [
+              -75.86405149888503,
+              38.8092895116513
+            ],
+            [
+              -75.86393960649573,
+              38.80945904517778
+            ],
+            [
+              -75.86244494553694,
+              38.80847256864181
+            ],
+            [
+              -75.86255683792623,
+              38.80830303511533
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 404.5,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86234708534262,
+              38.808523919027344
+            ],
+            [
+              -75.86384740575588,
+              38.80947866837928
+            ],
+            [
+              -75.86375537037627,
+              38.80962329518599
+            ],
+            [
+              -75.86225504996301,
+              38.80866854585559
+            ],
+            [
+              -75.86234708534262,
+              38.808523919027344
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 409.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.86970299839948,
+              38.809082505382726
+            ],
+            [
+              -75.87044007710337,
+              38.809524752676104
+            ],
+            [
+              -75.87030461394576,
+              38.80975052452291
+            ],
+            [
+              -75.86956753519881,
+              38.80930827724029
+            ],
+            [
+              -75.86970299839948,
+              38.809082505382726
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "poultry_house",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 213.0,
+        "tile": "site_09.tif"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.85531740970892,
+              38.801810592446266
+            ],
+            [
+              -75.8556408378165,
+              38.802518091776115
+            ],
+            [
+              -75.85426478700704,
+              38.80314714282667
+            ],
+            [
+              -75.85394135889946,
+              38.80243964349682
+            ],
+            [
+              -75.85531740970892,
+              38.801810592446266
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "manure_lagoon",
+        "detector": "classical_cv",
+        "farm_name": "Christopher Both",
+        "county": "Caroline",
+        "headcount": 315000,
+        "area_px": 1200.0,
+        "tile": "site_09.tif"
+      }
+    }
+  ]
+}

@@ -45,10 +45,25 @@ That's a 1% confidence floor — low enough to let essentially random noise thro
 
 Off-the-shelf zero-shot detection (YOLO-World, no fine-tuning) does **not** work for finding poultry houses/lagoons in NAIP imagery, even on the largest, most obvious sites. This is a model-capability gap, not a data-availability gap — the signal is clearly there in the imagery.
 
+## Follow-up: a working classical CV detector (no ML training needed)
+
+Since poultry houses and lagoons both have very distinctive, consistent visual
+signatures — bright elongated rectangular roofs, and teal/turquoise water —
+we tried plain color + shape filtering (OpenCV) as an alternative to a
+learned model, instead of jumping straight to fine-tuning.
+
+Script: `scripts/classical_cv_detector.py`. Output: `data/processed/detections/top10_classical_cv_detections.geojson`, annotated previews in `docs/imagery_experiment_assets/`.
+
+**Result: 122 poultry houses found across all 10 tiles (vs. 0 from zero-shot YOLO-World), plus 2 correctly-identified water bodies.** Visual spot-checks confirm the boxes land on real structures — see `cv_annotated_site_00.png` for a clean example (all 15 houses across 3 clusters correctly boxed) and `cv_annotated_site_09.png`.
+
+Known limitations, so these aren't overstated:
+- **Poultry houses:** occasionally boxes bright roads/farm-track segments (same brightness/elongation signature). Precision is good but not perfect — worth a quick manual pass before treating counts as ground truth.
+- **Lagoons:** tuned conservatively after an initial pass over-triggered on dark crop fields — current version only fires on clearly teal/turquoise water (confirmed correct both times it fired), so it likely **misses** darker, murkier, algae-covered lagoons rather than false-alarming on them. Recall is the open question here, not precision.
+
 ## Recommended next step
 
-Zero-shot isn't going to get us there. We need one of:
-- **Fine-tune YOLOv8** on a small hand-labeled set (even 20-30 boxed poultry houses from tiles like these would likely be enough to start, since the shape is extremely regular/distinctive).
-- Try a different / larger vision-language checkpoint or better prompt engineering as a cheaper first pass before committing to labeling.
+We now have two real options instead of one dead end:
+1. **Ship the classical CV poultry-house detector as v0** — it already works, needs no training data, and just needs a false-positive pass (exclude road-shaped detections) and a recall check across more sites.
+2. **Fine-tune YOLOv8** on a small hand-labeled set for a more general, learned solution — the classical detector's 122 boxes above are themselves usable as a first-pass label set, cutting most of the manual labeling work.
 
-Either way, the "continue extraction work" task now has a concrete, falsifiable next step instead of an open-ended "run the pipeline more" — and we have hard evidence to bring to the meeting rather than a vague status update.
+Either way, the "continue extraction work" task now has concrete, working output and a clear next step — not just a negative zero-shot result.
