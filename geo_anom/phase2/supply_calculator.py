@@ -19,7 +19,17 @@ from geo_anom.core.logging import setup_logger
 logger = setup_logger(__name__)
 
 
-# Mapping from MDE animal type strings to config keys
+# Mapping from MDE animal type strings to config keys. Kept for any
+# already-clean short-form input, but _normalize_animal_type() below no
+# longer relies on this being an exhaustive exact-match table -- it wasn't:
+# the registry's real animal_type values are raw Socrata column names
+# (e.g. "chickens_not_laying_hens", "swine_55_lbs", "cattle_includes_heifers"),
+# none of which matched any key here, so every broiler farm -- the dominant
+# type in the live MD registry (303/329 in the active set) -- silently got
+# annual_N_lbs=0. MDE's Socrata schema has already changed column names once
+# (see the endpoint-ID comment in configs/maryland.yaml), so a fixed
+# exact-match dict will keep breaking the same way; see the keyword-based
+# classifier below instead.
 _ANIMAL_TYPE_MAP: dict[str, str] = {
     "broiler": "broiler_chicken",
     "broiler chicken": "broiler_chicken",
@@ -42,6 +52,22 @@ _ANIMAL_TYPE_MAP: dict[str, str] = {
     "pig": "swine",
     "pigs": "swine",
 }
+
+# Keyword classifier for raw Socrata-style column names. Order matters --
+# "not_laying" must be checked before bare "laying"/"layer": the real
+# registry column "chickens_not_laying_hens" means broilers (meat birds,
+# explicitly NOT egg layers) but contains "laying" as a substring, so a
+# naive laying-keyword check first would misclassify the dominant animal
+# type in the registry as a layer operation.
+_ANIMAL_TYPE_KEYWORDS: list[tuple[tuple[str, ...], str]] = [
+    (("not_laying", "not laying"), "broiler_chicken"),
+    (("laying", "layer"), "layer_chicken"),
+    (("chicken", "hen", "broiler", "poultry"), "broiler_chicken"),
+    (("turkey",), "turkey"),
+    (("dairy",), "dairy_cattle"),
+    (("cattle", "beef", "heifer", "cow"), "beef_cattle"),
+    (("swine", "hog", "pig"), "swine"),
+]
 
 
 class SupplyCalculator:
@@ -87,7 +113,13 @@ class SupplyCalculator:
         Returns
         -------
         GeoDataFrame
-            Supply map with nutrient volumes per facility.
+            One row per detected structure. `annual_N_lbs`/`annual_P2O5_lbs`
+            are each structure's *apportioned share* of its farm's total
+            (farm total / `n_structures_at_farm`), so summing either column
+            across all rows for one farm reconstructs the correct farm-level
+            total, and summing across the whole output gives the correct
+            statewide total -- not an overcount from farms with multiple
+            detected structures.
         """
         logger.info(
             "Calculating nutrient supply: %d polygons × %d permits",
@@ -117,6 +149,17 @@ class SupplyCalculator:
             distance_col="join_distance_m",
         )
 
+        # A farm with N detected structures produces N rows here, all
+        # matched to the same permit (same "index_right"). Farm-level
+        # annual N/P must be divided by this count before being assigned
+        # to each row -- otherwise every structure gets the *full* farm
+        # total, and summing annual_N_lbs across the output (as this
+        # function's own summary below does) overcounts by a factor of N.
+        # This was invisible against the old ~71-detection dataset (rarely
+        # >1 polygon per permit); it's certain now that real farms produce
+        # 5-20 detected barns routinely.
+        structures_per_permit = joined.groupby("index_right").size()
+
         # Calculate nutrient supply for each matched row
         supply_records = []
         for idx, row in joined.iterrows():
@@ -127,14 +170,20 @@ class SupplyCalculator:
             if pd.isna(hc_val):
                 hc_val = 0
             headcount = int(hc_val)
-            
+
             area_m2 = float(row.get("area_m2", 0))
+
+            permit_idx = row.get("index_right")
+            n_structures = (
+                int(structures_per_permit.get(permit_idx, 1))
+                if pd.notna(permit_idx) else 1
+            )
 
             # Look up nutrient coefficient
             coeff = self.config.nutrient_coefficients.get(animal_type)
             if coeff and headcount > 0:
-                annual_n = headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
-                annual_p = headcount * coeff.P2O5_lbs_per_head_per_year * coeff.flocks_per_year
+                annual_n = headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year / n_structures
+                annual_p = headcount * coeff.P2O5_lbs_per_head_per_year * coeff.flocks_per_year / n_structures
             else:
                 annual_n = 0.0
                 annual_p = 0.0
@@ -153,6 +202,7 @@ class SupplyCalculator:
                 "headcount": headcount,
                 "area_m2": area_m2,
                 "area_acres": meters_sq_to_acres(area_m2),
+                "n_structures_at_farm": n_structures,
                 "annual_N_lbs": round(annual_n, 1),
                 "annual_P2O5_lbs": round(annual_p, 1),
                 "join_distance_m": row.get("join_distance_m", None),
@@ -211,8 +261,24 @@ class SupplyCalculator:
 
     @staticmethod
     def _normalize_animal_type(raw: str) -> str:
-        """Map MDE animal type string to a standardised config key."""
+        """Map an MDE animal type string to a standardised config key.
+
+        Tries the exact-match table first (for already-clean short-form
+        input), then falls back to keyword matching against the raw
+        Socrata-style column names the live registry actually produces
+        (e.g. "chickens_not_laying_hens", "swine_55_lbs") -- see
+        _ANIMAL_TYPE_KEYWORDS. Returns the normalized-but-unmapped string
+        (not "unknown") when nothing matches, so a genuinely new/rare type
+        (e.g. ducks -- no config coefficient exists for them) still shows
+        up distinctly in the "no nutrient coefficient" warning instead of
+        being silently lumped into "unknown".
+        """
         if not raw or pd.isna(raw):
             return "unknown"
         normalized = raw.strip().lower()
-        return _ANIMAL_TYPE_MAP.get(normalized, normalized)
+        if normalized in _ANIMAL_TYPE_MAP:
+            return _ANIMAL_TYPE_MAP[normalized]
+        for keywords, mapped in _ANIMAL_TYPE_KEYWORDS:
+            if any(kw in normalized for kw in keywords):
+                return mapped
+        return normalized

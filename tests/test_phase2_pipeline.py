@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import geopandas as gpd
 import numpy as np
 import pytest
+from shapely.geometry import Point
 
 from geo_anom.core.config import load_config, NutrientCoefficient
 from geo_anom.core.geo_utils import BBox, meters_sq_to_acres, polygon_area_m2
@@ -74,6 +76,92 @@ class TestSupplyCalculation:
         assert calc._normalize_animal_type("dairy") == "dairy_cattle"
         assert calc._normalize_animal_type("hog") == "swine"
         assert calc._normalize_animal_type("") == "unknown"
+
+    def test_normalize_raw_socrata_animal_types(self):
+        """The exact-match table never matches the live registry's actual
+        raw column-name values -- these are the real strings, not made up
+        for the test. Covers the exact bug found 2026-09: broilers (the
+        dominant type) silently mapped to nothing."""
+        calc = SupplyCalculator()
+        assert calc._normalize_animal_type("chickens_not_laying_hens") == "broiler_chicken"
+        assert calc._normalize_animal_type("swine_55_lbs") == "swine"
+        assert calc._normalize_animal_type("cattle_includes_heifers") == "beef_cattle"
+        assert calc._normalize_animal_type("chickens_laying_hens") == "layer_chicken"
+        # a real, currently-uncoefficiented type -- must NOT collide with a
+        # keyword (e.g. must not match "hen") and must surface as itself,
+        # not silently become "unknown", so it's visible in the
+        # no-nutrient-coefficient warning instead of being hidden.
+        assert calc._normalize_animal_type("ducks_liquid_manure") == "ducks_liquid_manure"
+
+
+class TestSupplyApportionment:
+    """calculate_supply() end-to-end: a farm with N detected structures
+    must have its farm-level nutrient total divided across all N rows, not
+    assigned in full to each one -- the bug found 2026-09 that would have
+    overcounted statewide totals by a factor of N on any farm with more
+    than one detected structure (routine at real scale: 5-20 barns/farm)."""
+
+    def test_apportions_evenly_across_multiple_structures(self):
+        permits = gpd.GeoDataFrame(
+            {
+                "animal_type": ["chickens_not_laying_hens"],
+                "headcount": [100_000],
+            },
+            geometry=[Point(-75.80, 38.60)],
+            crs="EPSG:4326",
+        )
+        # Three structures at the same farm, close enough to all join to
+        # the one permit above (well within the default 2km).
+        polygons = gpd.GeoDataFrame(
+            {
+                "class_name": ["poultry_house"] * 3,
+                "area_m2": [1000.0, 1000.0, 1000.0],
+                "confidence": [0.9, 0.9, 0.9],
+            },
+            geometry=[
+                Point(-75.8001, 38.6001),
+                Point(-75.8002, 38.6002),
+                Point(-75.8003, 38.6003),
+            ],
+            crs="EPSG:4326",
+        )
+
+        result = SupplyCalculator().calculate_supply(polygons, permits)
+
+        assert len(result) == 3
+        assert (result["n_structures_at_farm"] == 3).all()
+
+        config = load_config()
+        coeff = config.nutrient_coefficients["broiler_chicken"]
+        farm_total_n = 100_000 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
+        expected_per_structure = round(farm_total_n / 3, 1)
+
+        assert (result["annual_N_lbs"] == expected_per_structure).all()
+        # Summing back across the farm reconstructs the real farm total,
+        # not 3x an overcount.
+        assert result["annual_N_lbs"].sum() == pytest.approx(farm_total_n, rel=1e-3)
+
+    def test_single_structure_gets_full_farm_total(self):
+        permits = gpd.GeoDataFrame(
+            {"animal_type": ["turkeys"], "headcount": [10_000]},
+            geometry=[Point(-75.80, 38.60)],
+            crs="EPSG:4326",
+        )
+        polygons = gpd.GeoDataFrame(
+            {"class_name": ["poultry_house"], "area_m2": [800.0], "confidence": [0.9]},
+            geometry=[Point(-75.8001, 38.6001)],
+            crs="EPSG:4326",
+        )
+
+        result = SupplyCalculator().calculate_supply(polygons, permits)
+
+        assert len(result) == 1
+        assert result.iloc[0]["n_structures_at_farm"] == 1
+
+        config = load_config()
+        coeff = config.nutrient_coefficients["turkey"]
+        expected_n = round(10_000 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year, 1)
+        assert result.iloc[0]["annual_N_lbs"] == expected_n
 
 
 class TestGeoUtils:
