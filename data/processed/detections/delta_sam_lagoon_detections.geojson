@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.53114741498062,
+              38.297027020085764
+            ],
+            [
+              -75.53112499196497,
+              38.29682521294493
+            ],
+            [
+              -75.53056441657377,
+              38.29675794389799
+            ],
+            [
+              -75.53038503244858,
+              38.29678036691363
+            ],
+            [
+              -75.53040745546423,
+              38.297027020085764
+            ],
+            [
+              -75.53092318482413,
+              38.29709428913271
+            ],
+            [
+              -75.53110256894932,
+              38.29709428913271
+            ],
+            [
+              -75.53114741498062,
+              38.297027020085764
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "class_name": "manure_lagoon",
+        "detector": "classical_cv_candidates+sam_refined+barn_proximity",
+        "farm_name": "Hoa Tran/Morning Sun LLC",
+        "county": "Wicomico",
+        "headcount": 98000,
+        "area_px": 457,
+        "area_m2": 2026.1,
+        "solidity": 0.949,
+        "sam_score": 0.94,
+        "tile": "site_0048.tif",
+        "candidate_source": "tight",
+        "distance_to_barn_m": null
+      }
+    }
+  ]
+}
