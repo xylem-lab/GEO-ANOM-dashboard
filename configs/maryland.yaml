@@ -23,7 +23,10 @@ state:
 
 # --- Data Source Endpoints ---
 endpoints:
-  # MD iMAP NAIP ImageServer (1m, 4-band RGBN)
+  # MD iMAP NAIP ImageServer (1m, RGB only -- confirmed via service metadata
+  # 2026-09-01: bandCount=3, serviceDataType=esriImageServiceDataTypeRGB.
+  # No NIR on this endpoint despite the config below assuming RGBN; a
+  # CIR/4-band service may exist elsewhere on iMAP but hasn't been found.
   naip_image_server: "https://mdgeodata.md.gov/imagery/rest/services/NAIP/MD_NAIPImagery/ImageServer"
 
   # MDE AFO Public Registry (Socrata Open Data)
@@ -39,7 +42,7 @@ naip:
   resolution_m: 1
   tile_size_px: 1024  # 1024x1024 px = ~1km x 1km at 1m res
   format: "tiff"
-  bands: ["R", "G", "B", "NIR"]
+  bands: ["R", "G", "B"]  # NIR not available on this ImageServer -- see note above
   # Max concurrent downloads (be polite to state servers)
   max_workers: 4
   request_delay_s: 1.0
