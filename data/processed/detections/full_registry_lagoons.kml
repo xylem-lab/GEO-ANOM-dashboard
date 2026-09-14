@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Folder><name>full_registry_lagoons</name>
+  <Placemark id="full_registry_lagoons.1">
+	<name>James Donald Dulin</name>
+	<description>Farm: James Donald Dulin&lt;br&gt;County: Caroline&lt;br&gt;Area: 3010 m2&lt;br&gt;Solidity: 0.95&lt;br&gt;QA: visually_confirmed</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-75.7901595662609,38.7871891051324 -75.7903401480606,38.7871891051324 -75.7904078662355,38.7871213869576 -75.7905884480352,38.7866699324583 -75.7906110207602,38.7864216324837 -75.7905884480352,38.7863539143088 -75.7904981571353,38.7862861961339 -75.7903852935105,38.7862636234089 -75.7902950026107,38.7863313415838 -75.790091848086,38.7870310960577 -75.790091848086,38.7871439596825 -75.7901595662609,38.7871891051324</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark id="full_registry_lagoons.2">
+	<name>Roland Todd/Roland's Roaster's</name>
+	<description>Farm: Roland Todd/Roland's Roaster's&lt;br&gt;County: Dorchester&lt;br&gt;Area: 12565 m2&lt;br&gt;Solidity: 0.915&lt;br&gt;QA: visually_confirmed</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-75.8444200040953,38.6862126238856 -75.8443523758455,38.6860999101361 -75.8439691490969,38.6861449956359 -75.8438789780973,38.6860322818863 -75.8427518406014,38.6857392261374 -75.8424362421025,38.6857392261374 -75.8422559001032,38.6860773673861 -75.8423686138528,38.6861900811357 -75.8422559001032,38.6862802521354 -75.8423460711029,38.6863704231351 -75.8427067551015,38.6863704231351 -75.8440818628465,38.6867536498837 -75.8442847475958,38.6867311071337 -75.8444200040953,38.6862126238856</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark id="full_registry_lagoons.3">
+	<name>Jabar Rahim</name>
+	<description>Farm: Jabar Rahim&lt;br&gt;County: Dorchester&lt;br&gt;Area: 3812 m2&lt;br&gt;Solidity: 0.922&lt;br&gt;QA: uncertain_needs_review</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-75.9898189021577,38.4951612268176 -75.9897964216168,38.495093785195 -75.9897289799943,38.4950713046542 -75.9895266551267,38.4948240187048 -75.9892568886365,38.4948240187048 -75.9890995248505,38.4949589019499 -75.9890096026871,38.4949813824908 -75.9889196805238,38.4949364214091 -75.9888297583604,38.4949813824908 -75.9889871221463,38.4952286684401 -75.9892344080956,38.4954534738486 -75.9894592135041,38.4954309933077 -75.989773941076,38.495251148981 -75.9898189021577,38.4951612268176</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark id="full_registry_lagoons.4">
+	<name>Paul Aaron Hutchison Sr./Home Farm</name>
+	<description>Farm: Paul Aaron Hutchison Sr./Home Farm&lt;br&gt;County: Talbot&lt;br&gt;Area: 4056 m2&lt;br&gt;Solidity: 0.918&lt;br&gt;QA: uncertain_needs_review</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-76.015922075033,38.8053848594666 -76.0161704605162,38.8052493764758 -76.0164188459993,38.8052493764758 -76.0167801339748,38.8051364739835 -76.0168478754703,38.8050235714911 -76.0167801339748,38.8049332494972 -76.0168027144733,38.804730025011 -76.0166672314825,38.8046848640141 -76.015922075033,38.8048655080018 -76.015922075033,38.8053848594666</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark id="full_registry_lagoons.5">
+	<name>Paul Aaron Hutchison Sr./Home Farm</name>
+	<description>Farm: Paul Aaron Hutchison Sr./Home Farm&lt;br&gt;County: Talbot&lt;br&gt;Area: 9057 m2&lt;br&gt;Solidity: 0.863&lt;br&gt;QA: uncertain_needs_review</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-76.0167123924794,38.8047526055095 -76.0171414219504,38.8052719569743 -76.0174801294274,38.8051816349804 -76.0175478709228,38.8049784104942 -76.0182478663753,38.8047526055095 -76.0183156078707,38.8045719615217 -76.0184059298646,38.8046397030171 -76.0184285103631,38.8042106735462 -76.0183607688677,38.8041655125493 -76.0182027053784,38.8042784150416 -76.0179994808922,38.8042558345431 -76.017028519458,38.8045493810233 -76.0167123924794,38.8047526055095</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark id="full_registry_lagoons.6">
+	<name>Paul Aaron Hutchison Sr./Home Farm</name>
+	<description>Farm: Paul Aaron Hutchison Sr./Home Farm&lt;br&gt;County: Talbot&lt;br&gt;Area: 11340 m2&lt;br&gt;Solidity: 0.912&lt;br&gt;QA: uncertain_needs_review</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-76.0193091498034,38.809833217665 -76.0191285058156,38.8085912902492 -76.0185414128554,38.8087041927416 -76.0177059344121,38.8090654807171 -76.0179317393968,38.8093816076957 -76.0182704468738,38.8095848321819 -76.0191285058156,38.8096977346742 -76.019241408308,38.809878378662 -76.0193091498034,38.809833217665</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark id="full_registry_lagoons.7">
+	<name>Hoa Tran/Morning Sun LLC</name>
+	<description>Farm: Hoa Tran/Morning Sun LLC&lt;br&gt;County: Wicomico&lt;br&gt;Area: 2026 m2&lt;br&gt;Solidity: 0.949&lt;br&gt;QA: visually_confirmed</description>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>-75.5311474149806,38.2970270200858 -75.531124991965,38.2968252129449 -75.5305644165738,38.296757943898 -75.5303850324486,38.2967803669136 -75.5304074554642,38.2970270200858 -75.5309231848241,38.2970942891327 -75.5311025689493,38.2970942891327 -75.5311474149806,38.2970270200858</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+</Folder>
+</Document></kml>
