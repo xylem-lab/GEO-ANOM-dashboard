@@ -1,13 +1,14 @@
-# Task 1 — Building Detection: Formal Accuracy Metrics
+# Task 1 — Building and Lagoon Detection: Formal Accuracy Metrics
 
-Computed 2026-09-10 using `geo_anom/phase1/evaluation.py` (unit-tested against
-synthetic known values — see `tests/test_evaluation.py`). Replaces informal
-"ratio" and one-off scratchpad-script correlation figures used earlier in
-this project with standard, reproducible metrics. Lagoon detection is
-explicitly out of scope here (paused — see plan file for why); this covers
-poultry/confined-animal house detection only, which was independently
-verified clean of the MD-iMAP registration bug that affected lagoons (0/2,724
-detections fall outside their own source tile's bounds).
+Building metrics computed 2026-09-10; lagoon rebuild and audit done
+2026-09-14 (see section 5) using `geo_anom/phase1/evaluation.py`
+(unit-tested against synthetic known values — see
+`tests/test_evaluation.py`). Replaces informal "ratio" and one-off
+scratchpad-script correlation figures used earlier in this project with
+standard, reproducible metrics. Sections 1-4 cover poultry/confined-animal
+house detection, which was independently verified clean of the MD-iMAP
+registration bug that affected lagoons (0/2,724 detections fall outside
+their own source tile's bounds). Section 5 covers the lagoon rebuild.
 
 ## 1. Farm-level count regression vs. 2016/17 ground truth
 
@@ -149,6 +150,77 @@ to canopy occlusion or a shape-filter edge case on an otherwise-normal
 barn — every non-model explanation found here is a registry/coordinate
 or building-typology issue, not a detector weakness.
 
+## 5. Lagoon detection rebuild (2026-09-14): registration bug fixed, but a new, deeper precision problem found
+
+**Background**: lagoons were detected from MD iMAP RGB tiles while houses
+were detected from Planetary Computer (PC) NAIP tiles — two different
+imagery sources with a real, confirmed ~70-100m mutual georeferencing
+offset. This is what produced the "lagoon sitting on a field" bug you
+found in Google Earth. The fix: rebuild lagoon candidate generation on
+Planetary Computer imagery (same source as houses), reusing the
+already-validated color/solidity/area/barn-proximity filters from
+`sam_lagoon_refine.py`, ported into a new `scripts/ndwi_lagoon_detect.py`.
+
+**Registration bug: confirmed fixed.** Direct coordinate comparison
+against the previously-confirmed-real lagoons on James Donald Dulin's and
+Hoa Tran's farms shows the new PC-sourced detections land within ~5m of
+the original MD-iMAP-derived coordinates — negligible, expected
+floating-point-level agreement. Roland Todd's farm (the exact farm used
+in the original bug diagnosis) shows the offset directly: the
+MD-iMAP-derived coordinate for that farm's real lagoon sits **~100m from
+the actual visible water body** on the PC tile — confirming the bug's
+magnitude and cause exactly as diagnosed, and confirming MD iMAP's
+georeferencing error is real but **spatially variable** (negligible on
+some farms, ~100m on others), consistent with a local
+orthorectification/DEM error rather than one constant global offset.
+
+**A new, more serious problem found while building the fix: candidate
+generation does not generalize to full scale, even after honest
+recalibration.** The color/solidity thresholds from `sam_lagoon_refine.py`
+were calibrated on MD iMAP's specific color rendering; direct measurement
+found they don't transfer to PC imagery's different color processing (a
+known-false Brian Harding natural-pond candidate measured b-r=17.5 on PC
+imagery, inside the old threshold's "water" range). Recalibrated on a
+7-farm hand-checked test set (raised `MIN_SOLIDITY` 0.85→0.90,
+`mask_is_water_colored`'s b-r floor 15→19) — but a **position-level check
+caught a labeling mistake in that recalibration itself**: a candidate on
+Roland Todd's tile that matched by farm name was assumed to be the
+confirmed-real lagoon, but was actually a *different*, false candidate
+~1km away in solid forest canopy — the real lagoon's color was too dark
+(near-black under partial canopy shading) to generate a candidate box at
+all. Corrected, the true positive count in that test set was only 2 (not
+3), which the recalibrated thresholds still didn't cleanly separate from
+every false class using color/solidity alone.
+
+**Full-scale run (417 farms) found 74 candidates. A stratified visual
+audit of 10 candidates across 4 farms found only 1 confirmed real
+lagoon** — the rest were dark building rooftops, forest-edge/hedgerow
+shadow, and river/wetland fragments, each independently passing the
+color+solidity check the same way real lagoons do. This is the same
+false-positive-whack-a-mole pattern already documented multiple times in
+this project's history (river → pool → forest canopy on MD iMAP), now
+recurring in new forms (rooftops, hedgerows, river fragments) on a
+different imagery source, after an honest recalibration attempt. **This
+sample is small (n=10) and not a full audit of all 74** — reported as a
+clear, preliminary signal, not a final precision number.
+
+**Recommendation**: the registration-bug fix is real and should be kept —
+`scripts/ndwi_lagoon_detect.py` is the correct pipeline shape (same
+imagery source as houses, filters ported and honestly recalibrated where
+measurement supported it). But `data/processed/detections/
+full_registry_pc_lagoon_detections.geojson`'s 74 candidates should be
+treated as **unverified candidates requiring individual visual review**,
+not a trusted detection count — do not report "N lagoons detected" from
+this file without that review. NDWI is computed and stored per-candidate
+(`ndwi_mean` property) as a diagnostic; it does not separate real lagoons
+from these false-positive classes any better than color did (real lagoons
+measured NDWI from -0.15 to +0.19 in this project's own data, overlapping
+false positives' range) — this reinforces, rather than resolves, the
+NDWI negative result already found earlier this session. A reliable
+automated lagoon detector likely needs either a labeled training set for
+a real classifier, or hand-verification of every candidate before use;
+neither is in scope for this pass.
+
 ## Known limitation, stated explicitly (not hidden)
 
 Soroka & Duren's 2016/17 ground truth has a real positional-accuracy issue
@@ -162,12 +234,22 @@ audit against current imagery, which is not affected by this limitation.
 
 ## What "a reasonable position" looks like from here
 
-This is a genuine, reproducible, honestly-scoped, and now **fully closed
-out** result: strong farm-level count agreement (R²=0.655 vs. real
-2016/17 ground truth), very high measured precision (~99.7% on a
-stratified sample spanning the whole state), and a true miss rate,
-audited across the entire zero-detection population (14/14, not a
-partial sample), of **0.9%** (not the less-informative blanket 2.9%-8%
-figures used earlier in the project). The floor-area finding (#2) is a
-real, usable methodological improvement for the nutrient-calculation
-step, not yet applied to `supply_calculator.py` (see plan file).
+**Buildings** are a genuine, reproducible, honestly-scoped, and now
+**fully closed out** result: strong farm-level count agreement
+(R²=0.655 vs. real 2016/17 ground truth), very high measured precision
+(~99.7% on a stratified sample spanning the whole state), and a true
+miss rate, audited across the entire zero-detection population (14/14,
+not a partial sample), of **0.9%** (not the less-informative blanket
+2.9%-8% figures used earlier in the project). The floor-area finding is
+a real, usable methodological improvement, already applied to
+`supply_calculator.py`. This half of Task 1 is publication-ready.
+
+**Lagoons** are a different story: the registration bug is genuinely
+fixed (section 5), but full-scale precision is not — a preliminary
+10-candidate audit found ~1/10 real. This is a real, honestly-reported
+negative result for the write-up, not a solved problem: automated
+lagoon detection from single-date RGB(+NIR) NAIP imagery, at this
+resolution, has hit a real ceiling across every signal tried this
+project (RGB color, shape/solidity, NDWI, texture). Worth framing in a
+paper as a genuine limitation/future-work finding rather than glossed
+over — the buildings result stands on its own regardless.

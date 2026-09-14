@@ -7,24 +7,43 @@ below it, which is kept for history.
 ## 2026-09-09 through 2026-09-14 — read this before citing any lagoon or
 ## recall number below
 
-**Lagoon detection is paused. The user opened this project's own KMZ
-exports in Google Earth and found real problems — lagoon markers sitting
-on open fields, poultry houses visibly offset.** Root-caused, not
-patched: houses are detected from **Planetary Computer** NAIP imagery;
-lagoons are detected from a **different source — MD iMAP** RGB tiles.
-Direct visual overlay (the same house polygons, plotted on both tiles for
-the same farm) showed the MD-iMAP-sourced lagoon layer inherits a real
-~70-100m georeferencing offset from that source's own orthoimagery mosaic
-relative to USDA NAIP — a source-data limitation, not a bug in our
-reprojection code (checked: both tiles are centered on the identical true
-lat/lon, just physically misaligned). Houses themselves are clean
-(0/2,724 detections fall outside their own tile's bbox). **Fix, not yet
-built**: move lagoon candidate generation onto Planetary Computer imagery
-(same source as houses), keeping the already-validated RGB
-color/solidity/area/proximity filters as the primary discriminator. See
-`/Users/umeshadari/.claude/plans/wondrous-floating-hummingbird.md` Phase
-4 for the concrete plan and why NDWI isn't the primary signal there
-despite being the original idea (see next paragraph).
+**Lagoon registration bug: root-caused AND fixed. Full-scale lagoon
+detection precision: a new, deeper problem found, unresolved.** The user
+opened this project's own KMZ exports in Google Earth and found real
+problems — lagoon markers sitting on open fields, poultry houses visibly
+offset. Root cause: houses are detected from **Planetary Computer** NAIP
+imagery; lagoons were detected from a **different source — MD iMAP** RGB
+tiles, with a real ~70-100m mutual georeferencing offset (source-data
+limitation, not a bug in our reprojection code). **Fix built and
+verified 2026-09-14**: `scripts/ndwi_lagoon_detect.py` moves lagoon
+candidate generation onto Planetary Computer imagery (same source as
+houses). Direct coordinate comparison confirms the fix: previously-real
+lagoons (Dulin, Tran) now land within ~5m of their prior positions;
+Roland Todd's farm (the original bug-diagnosis example) shows the ~100m
+offset directly when you look for the real lagoon at the old coordinate —
+confirming the bug's cause and magnitude exactly as diagnosed, and
+showing the offset is spatially variable (not one constant global shift).
+
+**But the color/solidity candidate-generation filters, even after honest
+recalibration, do not generalize to full scale.** Thresholds calibrated
+on MD iMAP's color rendering don't transfer to Planetary Computer's
+(measured directly: a known-false natural-pond candidate that MD iMAP
+correctly rejected passed on PC imagery). Recalibrated on a 7-farm test
+set — but a position-level check caught the recalibration's own labeling
+mistake (a "confirmed real" candidate, matched only by farm name, turned
+out to be a different false positive ~1km from the real lagoon, which
+was too shadowed to generate a candidate box at all — a new recall
+failure mode). Full-scale run (417 farms): 74 candidates; a 10-candidate
+stratified audit found only ~1 confirmed real. New false-positive
+classes found: dark building rooftops, forest-edge/hedgerow shadow,
+river/wetland fragments — see `docs/labeling_guide.md` and
+`docs/task1_metrics.md` §5 for full detail and exact numbers. **Treat
+`data/processed/detections/full_registry_pc_lagoon_detections.geojson`
+as unverified candidates requiring individual review, not a trusted
+detection count.** The registration-bug fix itself is real and should be
+kept; the candidate-generation approach needs either a labeled training
+set for a real classifier or full manual verification before any lagoon
+count from this pipeline is usable — neither done here.
 
 **NDWI and GLCM-texture were tested as a water-discrimination signal and
 neither worked — a real, honestly-reported negative result.** The idea:
@@ -433,12 +452,13 @@ Not started; a real, well-scoped next step once someone picks this back up.
 
 ## Still open as of 2026-09-14 (current priority order)
 
-1. **Lagoon detection rebuild on Planetary Computer imagery** — fixes the
-   real registration bug found in Google Earth. Plan: `wondrous-floating-
-   hummingbird.md` Phase 4. NDWI/texture already tried and don't work as
-   the primary discriminator — reuse the existing validated RGB/solidity/
-   area/proximity filters instead, with NDWI reported as a diagnostic
-   feature, not a gate.
+1. ~~Lagoon detection rebuild on Planetary Computer imagery~~ — done,
+   registration bug confirmed fixed. **New open item**: full-scale
+   candidate-generation precision (~1/10 on a preliminary audit) — needs
+   either a labeled training set for a real classifier, or full manual
+   verification of the 74 candidates in
+   `full_registry_pc_lagoon_detections.geojson` before any lagoon count
+   is usable. Not started; see `docs/task1_metrics.md` §5.
 2. External validation (nutrient regression vs. Stephanie's county data,
    CAFOSat feasibility) — gated on outside input, not actionable yet.
 3. Stable registry ID as a join key instead of `farm_name` — real, minor,

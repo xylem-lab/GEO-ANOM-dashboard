@@ -34,6 +34,20 @@ can be pulled up again if useful.
 | Small, very regular, bright blue pond near a house/driveway, not part of a farm complex | **NO — residential pool** | Found during recall-widening testing near Roland Todd's farm (257m from a barn, small enough to pass a loose area check). **This is the exact case Stephanie and Catherine raised in the meeting** (bright uniform blue vs. lagoon's brownish/teal color, checked via the g-r/b-r color channels). Implemented as `mask_is_water_colored()` in `sam_lagoon_refine.py` — checks the *segmented mask's own* mean color (b-r > 15 is the real discriminator; g-r alone doesn't separate a pool from dense dark cropland). **Confirmed working**: re-running the pipeline after this fix, this exact pool candidate no longer appears. |
 | Stormwater retention pond on a farm property | **UNRESOLVED — flagged by Stephanie, not yet built** | She named this as a real, distinct confusion class from manure lagoons (farms sometimes have both). No discriminating feature identified or tested yet — needs either a labeled example from a farm visit, or a rule based on typical stormwater pond siting (near buildings/parking, not near barns) |
 | Water body inside dense forest canopy shadow | **UNRESOLVED — known gap** | Full-scale testing of the loosened recall-widening candidate set found dense forest canopy can pass the same color check that correctly rejects cropland — one farm (Ishtiaq Ahmed Chaudhry) still returned false candidates after the color fix. This is why recall-widening stays off by default. |
+| Dark building rooftop (metal/asphalt, blue-gray tint) | **NO — new false-positive class, found 2026-09-14** | Nathan Wolf/Wolf Farm: a residential-looking garage's dark roof measured as "water-colored" and high-solidity on Planetary Computer imagery. Not seen as a false-positive class on MD iMAP — a real example of a threshold not transferring between imagery sources with different color processing. |
+| Forest-edge/hedgerow shadow strip (dark, elongated, along a field boundary) | **NO — new false-positive class, found 2026-09-14** | William Moore, III (0/3 candidates real) and the "Roland Todd" candidate this pipeline's own recalibration mistakenly labeled as real (see task1_metrics.md §5) — a solid-canopy shadow strip with no water, high enough solidity to pass even a raised (0.90) threshold. |
+| River/tidal-wetland fragment near, but distinct from, the farm | **NO — same class as Jabar Rahim, recurring on PC imagery** | Van Boi, Joseph E. Chisholm Jr./Big Mill Pond Farm — small isolated-looking segments of a much larger winding river/wetland visible elsewhere in the same tile. `MAX_AREA_M2` catches the largest instances but not small fragments. |
+| Real lagoon shaded by adjacent tree canopy (partial shadow, not full cover) | **NEW FAILURE MODE — false negative, found 2026-09-14** | Roland Todd's actual, previously-confirmed real lagoon: on Planetary Computer imagery its shaded portion reads as near-black (g-r≈0, b-r≈4 at the darkest pixel), well below any tested color threshold, so `detect_lagoons()` never generated a candidate box there at all. This is a *recall* gap, not a precision one — the opposite direction from every other row in this table, and a genuinely new problem discovered while rebuilding on the new imagery source, not present (or not previously noticed) on MD iMAP. |
+
+**Overall finding from the 2026-09-14 rebuild**: a stratified 10-candidate
+audit of the full-scale (417-farm) Planetary-Computer-sourced run found
+only ~1/10 confirmed real — see `task1_metrics.md` §5 for full detail.
+The registration-bug fix (moving lagoons onto the same imagery source as
+houses) is confirmed correct and necessary, but color+shape-based
+candidate generation itself has not generalized reliably across two
+different imagery sources despite an honest recalibration attempt.
+Treat `full_registry_pc_lagoon_detections.geojson` as unverified
+candidates, not a trusted count.
 
 ## Temporal / context rules discussed at the meeting, not yet implemented
 
