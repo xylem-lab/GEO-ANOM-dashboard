@@ -11,6 +11,7 @@ this tries plain color + shape filtering instead of a learned model.
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -72,6 +73,22 @@ def detect_poultry_houses(rgb: np.ndarray) -> list[dict]:
     # A single roof often shows up as 2 parallel stripe-contours (bright slope +
     # shadowed ridge); merge only very tight pairs (<12px centroid distance) so
     # those collapse into 1 box without chain-merging whole rows together.
+    #
+    # Tried: dropping boxes with no other house-box within 150px, on the
+    # theory that farm roads (site 6's known FP) are isolated while real
+    # houses cluster in rows. Measured against all 10 tiles: it cut the
+    # true-positive count from 122 to 106 (-16), because several real
+    # AFOs have a single isolated house with no other structure nearby
+    # (confirmed visually on site 4 -- 3 of the "isolated" boxes it would
+    # drop sit right next to a farmstead driveway, not in open field like
+    # the site-6 road). Also tried a minimum-width cutoff instead (the
+    # site-6 road's 6.4px short side looked narrower than real houses at
+    # first) -- but several confirmed-real houses on other tiles are just
+    # as narrow (6.1-7.0px), so width doesn't separate them either.
+    # Neither is a clean fix without hand-labeled ground truth to tune
+    # against, so left as-is: the road false-positive is a known,
+    # documented limitation of color+shape-only detection, not something
+    # to "fix" by trading away real recall.
     return merge_nearby_boxes(results, dist_thresh=12.0)
 
 
@@ -113,20 +130,28 @@ def merge_nearby_boxes(dets: list[dict], dist_thresh: float = 10.0) -> list[dict
     return merged
 
 
-def detect_lagoons(rgb: np.ndarray) -> list[dict]:
+def detect_lagoons(rgb: np.ndarray, g_r_min: int = 24, b_r_min: int = 18) -> list[dict]:
     """Teal/turquoise rectangular manure lagoons.
 
     Plain HSV hue thresholding false-positives heavily on dark forest-shadow
     pixels (similar hue, low saturation). What actually distinguishes
     teal/turquoise water is the *relationship* between channels -- green and
     blue both pulled well above red -- which shadow doesn't share.
+
+    g_r_min/b_r_min are exposed (not hardcoded) so callers can loosen them to
+    catch darker/murkier lagoons missed at the default thresholds -- see
+    sam_lagoon_refine.py's proximity-to-barn filter, which is what makes
+    loosening these safe to use (it was previously found to also pick up
+    residential swimming pools, which are just as color-regular as real
+    lagoons; the default values here are unchanged and still the safe,
+    tight setting for any caller that doesn't pass a proximity filter).
     """
     r = rgb[:, :, 0].astype(np.int16)
     g = rgb[:, :, 1].astype(np.int16)
     b = rgb[:, :, 2].astype(np.int16)
     v = rgb.max(axis=2)
 
-    mask = ((g - r > 24) & (b - r > 18) & (v > 80) & (v < 235)).astype(np.uint8) * 255
+    mask = ((g - r > g_r_min) & (b - r > b_r_min) & (v > 80) & (v < 235)).astype(np.uint8) * 255
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((7, 7), np.uint8))
 
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -169,8 +194,19 @@ def annotate(rgb: np.ndarray, houses: list[dict], lagoons: list[dict]) -> np.nda
 
 
 def main():
-    manifest = json.loads(MANIFEST_PATH.read_text())
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(description="Classical CV detector for AFO poultry houses and lagoons.")
+    parser.add_argument("--manifest", type=Path, default=MANIFEST_PATH,
+                         help="Path to a tile manifest.json (default: top-10 pilot manifest)")
+    parser.add_argument("--out-dir", type=Path, default=OUT_DIR,
+                         help="Directory for annotated preview PNGs")
+    parser.add_argument("--out-geojson", type=Path, default=OUT_GEOJSON,
+                         help="Output detections GeoJSON path")
+    parser.add_argument("--no-previews", action="store_true",
+                         help="Skip writing annotated PNGs (faster for large runs)")
+    args = parser.parse_args()
+
+    manifest = json.loads(args.manifest.read_text())
+    args.out_dir.mkdir(parents=True, exist_ok=True)
 
     all_features = []
     total_houses = 0
@@ -187,9 +223,10 @@ def main():
 
         print(f"[{i}] {site['farm_name']:<45} houses={len(houses):<3} lagoons={len(lagoons)}")
 
-        annotated = annotate(rgb, houses, lagoons)
-        from PIL import Image
-        Image.fromarray(annotated).save(OUT_DIR / f"cv_annotated_site_{i:02d}.png")
+        if not args.no_previews:
+            annotated = annotate(rgb, houses, lagoons)
+            from PIL import Image
+            Image.fromarray(annotated).save(args.out_dir / f"cv_annotated_site_{i:04d}.png")
 
         for det in houses + lagoons:
             geo_coords = px_box_to_geo(det["box_px"], transform)
@@ -207,13 +244,14 @@ def main():
                 },
             })
 
-    OUT_GEOJSON.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUT_GEOJSON, "w") as f:
+    args.out_geojson.parent.mkdir(parents=True, exist_ok=True)
+    with open(args.out_geojson, "w") as f:
         json.dump({"type": "FeatureCollection", "features": all_features}, f, indent=2)
 
     print(f"\nTotal: {total_houses} poultry houses, {total_lagoons} lagoons across {len(manifest)} tiles")
-    print(f"Saved -> {OUT_GEOJSON}")
-    print(f"Annotated previews -> {OUT_DIR}/cv_annotated_site_*.png")
+    print(f"Saved -> {args.out_geojson}")
+    if not args.no_previews:
+        print(f"Annotated previews -> {args.out_dir}/cv_annotated_site_*.png")
 
 
 if __name__ == "__main__":
