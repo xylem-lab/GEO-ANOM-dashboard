@@ -114,12 +114,16 @@ class SupplyCalculator:
         -------
         GeoDataFrame
             One row per detected structure. `annual_N_lbs`/`annual_P2O5_lbs`
-            are each structure's *apportioned share* of its farm's total
-            (farm total / `n_structures_at_farm`), so summing either column
-            across all rows for one farm reconstructs the correct farm-level
-            total, and summing across the whole output gives the correct
-            statewide total -- not an overcount from farms with multiple
-            detected structures.
+            are each structure's *apportioned share* of its farm's total,
+            weighted by that structure's share of the farm's total detected
+            floor area (falls back to an even 1/`n_structures_at_farm` split
+            only if the farm's structures have no usable area data), so
+            summing either column across all rows for one farm reconstructs
+            the correct farm-level total, and summing across the whole
+            output gives the correct statewide total -- not an overcount
+            from farms with multiple detected structures, and not an
+            even-split assumption that a bigger barn houses the same
+            number of birds as a smaller one on the same farm.
         """
         logger.info(
             "Calculating nutrient supply: %d polygons × %d permits",
@@ -151,14 +155,25 @@ class SupplyCalculator:
 
         # A farm with N detected structures produces N rows here, all
         # matched to the same permit (same "index_right"). Farm-level
-        # annual N/P must be divided by this count before being assigned
-        # to each row -- otherwise every structure gets the *full* farm
-        # total, and summing annual_N_lbs across the output (as this
-        # function's own summary below does) overcounts by a factor of N.
-        # This was invisible against the old ~71-detection dataset (rarely
-        # >1 polygon per permit); it's certain now that real farms produce
-        # 5-20 detected barns routinely.
+        # annual N/P must be divided across these rows before being
+        # assigned to each one -- otherwise every structure gets the
+        # *full* farm total, and summing annual_N_lbs across the output
+        # (as this function's own summary below does) overcounts by a
+        # factor of N. This was invisible against the old ~71-detection
+        # dataset (rarely >1 polygon per permit); it's certain now that
+        # real farms produce 5-20 detected barns routinely.
+        #
+        # The split is weighted by each structure's share of the farm's
+        # total detected floor area, not divided evenly -- an even split
+        # implicitly assumes every barn houses the same number of birds,
+        # which task1_metrics.md's own headcount-vs-house-count analysis
+        # found is a poor assumption (R^2=0.043): farms trade off house
+        # count against house size, and floor area is a materially better
+        # proxy for stocking capacity (R^2=0.256, log-log). Falls back to
+        # an even split only if a farm's structures have no usable area
+        # data (area sums to 0) -- can't weight by area that isn't there.
         structures_per_permit = joined.groupby("index_right").size()
+        area_per_permit = joined.groupby("index_right")["area_m2"].sum()
 
         # Calculate nutrient supply for each matched row
         supply_records = []
@@ -178,12 +193,22 @@ class SupplyCalculator:
                 int(structures_per_permit.get(permit_idx, 1))
                 if pd.notna(permit_idx) else 1
             )
+            farm_area_m2 = (
+                float(area_per_permit.get(permit_idx, 0.0))
+                if pd.notna(permit_idx) else area_m2
+            )
+            if farm_area_m2 > 0:
+                area_share = area_m2 / farm_area_m2
+            else:
+                # No usable area data for this farm's structures -- fall
+                # back to an even split rather than dividing by zero.
+                area_share = 1.0 / n_structures
 
             # Look up nutrient coefficient
             coeff = self.config.nutrient_coefficients.get(animal_type)
             if coeff and headcount > 0:
-                annual_n = headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year / n_structures
-                annual_p = headcount * coeff.P2O5_lbs_per_head_per_year * coeff.flocks_per_year / n_structures
+                annual_n = headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year * area_share
+                annual_p = headcount * coeff.P2O5_lbs_per_head_per_year * coeff.flocks_per_year * area_share
             else:
                 annual_n = 0.0
                 annual_p = 0.0

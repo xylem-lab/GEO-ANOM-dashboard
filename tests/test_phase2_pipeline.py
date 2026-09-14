@@ -99,9 +99,67 @@ class TestSupplyApportionment:
     must have its farm-level nutrient total divided across all N rows, not
     assigned in full to each one -- the bug found 2026-09 that would have
     overcounted statewide totals by a factor of N on any farm with more
-    than one detected structure (routine at real scale: 5-20 barns/farm)."""
+    than one detected structure (routine at real scale: 5-20 barns/farm).
+    The split itself is weighted by each structure's share of the farm's
+    total detected floor area, not an even 1/N split -- see
+    docs/task1_metrics.md section 2 for why an even split is a poor
+    assumption (headcount-vs-house-count R^2=0.043 vs. headcount-vs-area
+    R^2=0.256 log-log: farms trade off house count against house size)."""
 
-    def test_apportions_evenly_across_multiple_structures(self):
+    def test_apportions_proportionally_to_floor_area(self):
+        """Two structures at one farm with a 3:1 area ratio must receive
+        nutrient shares in that same 3:1 ratio, not an even 1:1 split."""
+        permits = gpd.GeoDataFrame(
+            {"animal_type": ["chickens_not_laying_hens"], "headcount": [100_000]},
+            geometry=[Point(-75.80, 38.60)],
+            crs="EPSG:4326",
+        )
+        polygons = gpd.GeoDataFrame(
+            {
+                "class_name": ["poultry_house"] * 2,
+                "area_m2": [3000.0, 1000.0],  # 3:1 ratio
+                "confidence": [0.9, 0.9],
+            },
+            geometry=[Point(-75.8001, 38.6001), Point(-75.8002, 38.6002)],
+            crs="EPSG:4326",
+        )
+
+        result = SupplyCalculator().calculate_supply(polygons, permits)
+
+        assert len(result) == 2
+        big, small = result.sort_values("area_m2", ascending=False)["annual_N_lbs"]
+        assert big == pytest.approx(3 * small, rel=1e-3)
+
+        config = load_config()
+        coeff = config.nutrient_coefficients["broiler_chicken"]
+        farm_total_n = 100_000 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
+        assert result["annual_N_lbs"].sum() == pytest.approx(farm_total_n, rel=1e-3)
+
+    def test_falls_back_to_even_split_when_area_data_missing(self):
+        """If a farm's structures have no usable area data (area sums to
+        zero), apportion evenly rather than dividing by zero."""
+        permits = gpd.GeoDataFrame(
+            {"animal_type": ["chickens_not_laying_hens"], "headcount": [100_000]},
+            geometry=[Point(-75.80, 38.60)],
+            crs="EPSG:4326",
+        )
+        polygons = gpd.GeoDataFrame(
+            {
+                "class_name": ["poultry_house"] * 2,
+                "area_m2": [0.0, 0.0],
+                "confidence": [0.9, 0.9],
+            },
+            geometry=[Point(-75.8001, 38.6001), Point(-75.8002, 38.6002)],
+            crs="EPSG:4326",
+        )
+
+        result = SupplyCalculator().calculate_supply(polygons, permits)
+
+        assert result["annual_N_lbs"].iloc[0] == pytest.approx(result["annual_N_lbs"].iloc[1])
+
+    def test_equal_area_structures_still_split_evenly(self):
+        """Area-weighting should reduce to an even split as the special
+        case where every structure at a farm has the same area."""
         permits = gpd.GeoDataFrame(
             {
                 "animal_type": ["chickens_not_laying_hens"],

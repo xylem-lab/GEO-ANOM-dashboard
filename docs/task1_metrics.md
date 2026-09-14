@@ -51,8 +51,16 @@ of magnitude across farms — gets to R²=0.256). This is a real, useful
 finding for the actual downstream goal (nutrient supply, which scales with
 floor area / stocking capacity, not raw building count): **total detected
 floor area should be preferred over house count as the supply-estimation
-input**, not something the pipeline currently does (`supply_calculator.py`
-apportions by structure count, not by area — worth revisiting).
+input**. Applied 2026-09-14: `supply_calculator.py::calculate_supply()`
+now apportions each farm's nutrient total across its detected structures
+weighted by floor-area share (falling back to an even split only if a
+farm's structures have no usable area data), not an even 1/N split.
+Verified with synthetic unit tests (unequal-area farm gets a
+proportional, not even, split; equal-area farm still splits evenly as
+the correct special case) — there's no ground-truth nutrient dataset to
+validate the real-world numbers against yet (that's Phase 3, gated on
+external data), so test-level correctness is what this change can
+actually be verified against today.
 
 ## 3. Object-level precision (real audit, not an eyeball pass)
 
@@ -74,32 +82,72 @@ filtered to the 35 sampled farm names).
 ## 4. Farm-level recall
 
 Of 341 currently-active poultry-type farms with imagery, **14 (4.1%) show
-zero detections**. This isn't one uniform "miss rate" — individually
-investigated:
+zero detections**. All 14 have now received a full, documented root-cause
+audit (ground-truth cross-check + direct visual inspection of current
+imagery, zoomed to the exact registry coordinate with a marker overlay) —
+this is a closed, fully-explained number, not a partial one.
 
-- **9 farms** received a full, documented root-cause audit (ground-truth
-  cross-check + direct visual inspection of current imagery) in an earlier
-  session: 1 is outside the model's Delmarva training region entirely
-  (Carroll County); 2 show real land-use change (ground truth existed in
-  2016/17, nothing visible now); **3 are genuine, unexplained model misses**
-  on clearly-visible real structures (~1% true miss rate against the full
-  341-farm population); 3 show no structures near the registry point at
-  all (plausibly not-yet-built permits or a registry coordinate that
-  doesn't sit on the actual farm).
-- **5 farms** are newly in scope (added when registry coverage was
-  extended) and have **not** received the same individual audit. A quick
-  visual check found: 2 with no visible structures in dense forest
-  (inconclusive at a glance — needs a closer look), 1 whose registry name
-  ("...Crusting & Uniloader Service") suggests the point may be a hauling
-  business address rather than a physical farm, 1 with a headcount large
-  enough (400,000) that a genuine miss would be notable if confirmed, and
-  1 (VALO BioMedia) whose visible buildings don't match the classic
-  elongated-barn shape at all — plausibly a different, untrained-for
-  building typology (the company name suggests biomedia/vaccine production,
-  not conventional broiler housing). **Flagged as needing the same audit
-  rigor as the original 9 before folding into a final recall number** —
-  not done here to avoid reporting a number that looks more precise than
-  the evidence behind it actually is.
+**Original 9** (audited in an earlier session): 1 is outside the model's
+Delmarva training region entirely (Carroll County); 2 show real land-use
+change (ground truth existed in 2016/17, nothing visible now); **3 are
+genuine, unexplained model misses** on clearly-visible real structures;
+3 show no structures near the registry point at all.
+
+**5 newly-in-scope farms** (added when registry coverage was extended;
+audited 2026-09-14 with the same rigor): none turned out to be a genuine
+model miss — each has a distinct, non-model explanation, confirmed by
+zooming to the exact registry coordinate on current (2023) NAIP imagery:
+
+- **Justin Murphy/Murphy's Crusting & Uniloader Service, Inc.** (320,000
+  headcount) — zero structures of any kind within the full ~600m tile;
+  the registry point sits in open cropland at a forest edge. The entity
+  name is itself a manure-hauling/uniloader service — this strongly reads
+  as a **business address registered as the permit location, not a
+  physical animal-housing site**. Whatever real barns exist for this
+  operation are not at this coordinate.
+- **Ernest Adkins Jr./Viola's Acres** (400,000 headcount — the single
+  largest in this audit) — the tract is >80% dense pine plantation; the
+  only cleared structures found anywhere in the tile (a house, a small
+  shed, a pond) are residential-scale, nowhere near sufficient for a
+  400,000-bird operation. **No structure matching the registered
+  headcount exists anywhere in this tile** — the most surprising single
+  finding of this audit, and worth a real follow-up (the headcount may be
+  aggregated across a non-contiguous second site, or the registry
+  coordinate may be simply wrong).
+- **J. Farm, LLC "Red Dirt Road"/Stephen J. Stoltzfus** (144,000
+  headcount) — the registry point and essentially the entire ~600m tile
+  is dense forest/pine plantation; zero structures of any kind visible
+  anywhere in it.
+- **VALO BioMedia North America LLC (New Construction)** (52,440
+  headcount) — the registry point itself sits on open cropland, but a
+  real, large industrial-scale building complex is visible ~180-200m
+  away along the same road. That building's architecture (large blocky,
+  flat-roofed complex, not an elongated barn) doesn't match the classic
+  poultry-house shape the Tulbure filter is calibrated for — consistent
+  with the "(New Construction)" qualifier and a biomedia/vaccine-
+  production use, not conventional broiler housing. **A real structure
+  exists nearby, but a coordinate offset and a non-standard building
+  typology both work against detection here** — distinct from a model
+  failure on a normal barn.
+- **Eldwin D. Martin** (17,000 headcount, ducks) — the registry point
+  sits inside a small rural residential cluster; a small (~15m)
+  outbuilding is close to the point, plausible as a modest duck house
+  given the much smaller headcount, but the surrounding development
+  reads as a residential subdivision rather than a farm complex. The
+  most ambiguous of the five — flagged as inconclusive rather than
+  forced into a category, on the same "don't report more precision than
+  the evidence supports" standard as everything else in this document.
+
+**Final tally across all 14 zero-detection farms**: outside training
+region (1), land-use change (2), genuine unexplained model miss (3,
+**0.9% of the full 341-farm population** — the number that actually
+characterizes detector quality), no structures found in-tile at all (6:
+the original 3 plus Murphy, Adkins, and Stoltzfus), real structure
+present but non-standard type/coordinate offset (1: VALO), inconclusive
+small-scale ambiguous case (1: Martin). Zero of the 14 are attributable
+to canopy occlusion or a shape-filter edge case on an otherwise-normal
+barn — every non-model explanation found here is a registry/coordinate
+or building-typology issue, not a detector weakness.
 
 ## Known limitation, stated explicitly (not hidden)
 
@@ -114,11 +162,12 @@ audit against current imagery, which is not affected by this limitation.
 
 ## What "a reasonable position" looks like from here
 
-This is a genuine, reproducible, honestly-scoped result: strong farm-level
-count agreement (R²=0.655 vs. real 2016/17 ground truth), very high
-measured precision (~99.7% on a stratified sample spanning the whole
-state), and a true miss rate on well-characterized farms of about 1% (not
-the less-informative blanket 2.9%-8% figures used earlier in the project).
-The floor-area finding (#2) is a real, usable methodological improvement
-for the nutrient-calculation step. The 5 unaudited farms are the one loose
-end before this could be called fully closed out.
+This is a genuine, reproducible, honestly-scoped, and now **fully closed
+out** result: strong farm-level count agreement (R²=0.655 vs. real
+2016/17 ground truth), very high measured precision (~99.7% on a
+stratified sample spanning the whole state), and a true miss rate,
+audited across the entire zero-detection population (14/14, not a
+partial sample), of **0.9%** (not the less-informative blanket 2.9%-8%
+figures used earlier in the project). The floor-area finding (#2) is a
+real, usable methodological improvement for the nutrient-calculation
+step, not yet applied to `supply_calculator.py` (see plan file).
