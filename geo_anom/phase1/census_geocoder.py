@@ -210,30 +210,38 @@ class CensusBatchGeocoder:
         Response format (matched):
           ID, address, "Match", "Exact", matched_address, "lon,lat", ..., side
 
+        Must use a real CSV parser, not str.split(",") -- the echoed input
+        address field (column 2) is itself a comma-joined "street, city,
+        state, zip" string inside its own quotes, so a naive split shifts
+        every later column's index and silently breaks match_type/coordinate
+        parsing for every real response (found and fixed 2026-09-02: this
+        was why Census geocoding matched 0/148 rows even though the API
+        itself works fine and returns real matches -- verified with a raw
+        request outside this class).
+
         Returns
         -------
         list[tuple[int, float, float]]
         """
+        import csv
+        import io
+
         results = []
-        for line in response_text.strip().splitlines():
-            parts = line.split(",")
+        for parts in csv.reader(io.StringIO(response_text.strip())):
             if len(parts) < 6:
                 continue
 
-            uid = parts[0].strip().strip('"')
-            match_type = parts[2].strip().strip('"').lower()
+            uid = parts[0].strip()
+            match_type = parts[2].strip().lower()
 
             # Only process matched rows
             if match_type != "match":
                 continue
 
-            # Coordinate field is "lon,lat" merged into the CSV at index 5
-            # The API returns: ..., "lon,lat", ...
-            # After split, columns 5 and 6 are lon and lat
+            # Coordinate field ("lon,lat") is its own properly-quoted CSV
+            # column (index 5) once parsed with a real CSV reader.
             try:
-                # Handle quoted coordinate pair: "-76.5432,38.1234"
-                coord_str = ",".join(parts[5:7]).strip().strip('"')
-                lon_str, lat_str = coord_str.split(",")
+                lon_str, lat_str = parts[5].split(",")
                 lon = float(lon_str.strip())
                 lat = float(lat_str.strip())
 

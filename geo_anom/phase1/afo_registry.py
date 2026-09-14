@@ -320,8 +320,14 @@ class AFORegistryClient:
         """
         Improve geocoding accuracy using the Census Batch Geocoder.
 
-        Only attempts geocoding for rows where lat/lon appear to be the
-        Maryland centroid placeholder (lat≈38.80, lon≈-75.80).
+        Attempts geocoding for rows where lat/lon are missing (NaN -- the
+        live MDE registry has genuine gaps here, not just placeholder rows)
+        as well as rows where lat/lon equal the Maryland centroid placeholder
+        (lat≈38.80, lon≈-75.80). Originally this only checked the placeholder
+        value, which never matched true NaN (NaN.round(2) == 38.80 is always
+        False in pandas), so the ~22% of live registry rows with no lat/lon
+        at all silently skipped Census geocoding entirely and fell through as
+        permanently un-locatable -- found and fixed 2026-09-02.
 
         Parameters
         ----------
@@ -345,14 +351,17 @@ class AFORegistryClient:
             benchmark=self.config.geocoding.census_benchmark,
         )
 
-        # Only geocode rows using the centroid placeholder
-        needs_geocoding = (
+        # Geocode rows using the centroid placeholder OR missing lat/lon
+        # entirely (true NaN from the live registry) -- see docstring.
+        is_placeholder = (
             (df["latitude"].round(2) == 38.80) &
             (df["longitude"].round(2) == -75.80)
         )
+        is_missing = df["latitude"].isna() | df["longitude"].isna()
+        needs_geocoding = is_placeholder | is_missing
         logger.info(
-            "%d / %d AFO records need Census geocoding",
-            needs_geocoding.sum(), len(df),
+            "%d / %d AFO records need Census geocoding (%d placeholder, %d missing)",
+            needs_geocoding.sum(), len(df), is_placeholder.sum(), is_missing.sum(),
         )
 
         if not needs_geocoding.any():
