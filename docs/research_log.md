@@ -85,6 +85,36 @@ This is where the survey found the most directly relevant new material for the p
 - **Magesh et al. California factory-farm dataset** — published via *Scientific Data*; check the paper's Data Availability section for the actual repository (not independently confirmed downloadable in this survey — flag as "cited, access unverified").
 - **PRISM-CAFO code + masks** — [github.com/Nibir088/PRISM-CAFO](https://github.com/Nibir088/PRISM-CAFO), CC BY 4.0, code/masks/descriptors only (not a raw imagery dataset).
 
+---
+
+## 2026-09-15 (experiment follow-up) — CAFOSat validation run + PRISM-CAFO feasibility check
+
+Ran the experiment this survey recommended (§5). Two concrete findings:
+
+**CAFOSat-audited precision for `full_registry_pc_lagoon_detections.geojson`
+(the 74 unverified full-scale candidates): 2/19 = 10.5%**, using CAFOSat's
+842 MD/DE patches (40 with manure_pond>0) as independent, externally-sourced
+ground truth, spatially matched within 300m (`scripts/validate_lagoons_against_cafosat.py`,
+full detail in `docs/cafosat_lagoon_validation_result.md`). Only 19/74
+candidates had any independent CAFOSat coverage nearby — this is a partial
+audit, not a full one. **This independently confirms** the project's own
+10-candidate manual stratified audit (which found "~1 confirmed real," also
+~10%) via a completely different method (external dataset vs. visual
+inspection) — two independent checks landing on the same ~10% precision is
+much stronger evidence the full-scale color/solidity approach is genuinely
+broken, not an artifact of one audit's sampling.
+
+**PRISM-CAFO is not usable on this machine as-is**: its GitHub README lists
+pretrained model weights under "🔮 Roadmap" (not released — training scripts
+only, `train_yolo.py`/`train_multiclass_v2.py`), and its stated environment
+requires **Python 3.10**, which this machine doesn't have (system Python is
+3.9.6, no Homebrew/pyenv to add another cleanly). Using PRISM-CAFO's
+architecture here means training a YOLOv8 detector from scratch (on CAFOSat
+and/or Maryland-specific data) in a new Python 3.10 environment — a real
+GPU-scale training job and an environment-setup task, not something to
+attempt casually. This is a decision for the user: whether to invest in a
+Zaratan/GCP environment for this, not something to force onto this laptop.
+
 ### Compute note (informational only, not a recommendation)
 
 Fine-tuning a YOLOv8/YOLOv11-class detector or a U-Net on CAFOSat-scale data (~45,000 patches, 833×833px) plus any Maryland-specific fine-tuning is a realistic single-GPU training job (comparable in scale to the existing poultry U-Net training) — the kind of job typically run on a single mid-to-high-end cloud GPU instance (e.g., one A10/A100/L4-class instance) over hours to a low number of days, not a multi-GPU or multi-week job. SAM2 inference at scale (statewide lagoon refinement) is more compute-hungry per-image than the detector step, since it runs a large image encoder per candidate region; this is the same class of cost the project's existing SAM lagoon step already incurs, just potentially applied to more candidates if a learned detector proposes more/different regions than the classical CV step did. Actual sizing (instance type, hours, cost) is left to the user's own evaluation.
