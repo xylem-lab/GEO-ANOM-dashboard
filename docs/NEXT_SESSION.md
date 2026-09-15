@@ -1,8 +1,26 @@
-# Start Here — Project Status as of 2026-09-14
+# Start Here — Project Status as of 2026-09-15
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-09-15 — three-agent autonomous cycle set up
+
+Task 1's scope is now explicit: map every poultry, dairy, swine, beef, and
+lagoon AFO (not poultry+lagoon only). To work toward that with continuous
+research/experiment/documentation while keeping git clean and staying
+inside scope, a three-role subagent system was set up:
+`.claude/agents/geo-anom-{researcher,experimenter,teacher}.md`, orchestrated
+per `docs/AUTONOMOUS_CYCLE.md` — read that file before running or scheduling
+a cycle. Dairy/swine/beef detection is new research, not a known transfer of
+the existing poultry U-Net; that's the researcher's first assignment.
+Compute defaults to this laptop; UMD Zaratan or GCP only gets used once a
+specific cycle identifies a real need for it, and only with the user's
+explicit go-ahead. All experiment work happens on `experiment/*` branches
+with a PR for review — no more direct commits to `main` from automated work.
+
+## 2026-09-09 through 2026-09-14 — read this before citing any lagoon or
+## recall number below
 
 ## 2026-09-09 through 2026-09-14 — read this before citing any lagoon or
 ## recall number below
