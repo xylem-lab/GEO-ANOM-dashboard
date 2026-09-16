@@ -115,6 +115,42 @@ GPU-scale training job and an environment-setup task, not something to
 attempt casually. This is a decision for the user: whether to invest in a
 Zaratan/GCP environment for this, not something to force onto this laptop.
 
+---
+
+## 2026-09-16 — Dynamic World + AlphaEarth zero-shot lagoon checks (both negative)
+
+Ran the two "no-training-needed" options scoped after the CAFOSat/PRISM-CAFO
+finding above. Full detail in `docs/dynamicworld_alphaearth_lagoon_check_result.md`;
+summary here.
+
+**Dynamic World (10m water-probability band): not usable.** Real lagoons
+scored 0.029-0.458 (median 0.042), false positives 0.027-0.091 (median
+0.036) — near-total overlap. 10m Sentinel-2 pixels are too coarse for
+farm-scale lagoons, as expected going in.
+
+**AlphaEarth Satellite Embedding: also negative, but a real bug fix landed
+along the way.** `geo_anom/phase2/alphaearth_filter.py` (committed March
+2026, never tested, no test coverage) had two bugs that meant it had
+**never once successfully extracted a real embedding**: it filtered on a
+`year` image property that doesn't exist on this collection (always matched
+zero images), and guessed wrong band names (`embedding_i`/`bi` instead of
+the real `A00`-`A63`), so every extraction silently fell back to an
+all-zero vector. Both fixed and verified against live data this session.
+With real embeddings finally flowing, a reference-mean cosine-similarity
+check (6 known-real lagoons as reference, tested against 1 held-out real +
+4 CAFOSat-supported + 19 CAFOSat-contradicted) still found **no separating
+threshold** — false positives' similarity range (0.547-0.827) actually
+exceeds real lagoons' (0.691-0.766). Caveat: this was a fast 6-point mean
+baseline, not a trained classifier — doesn't rule out a properly trained
+AlphaEarth-based classifier, just rules out the free/instant version.
+
+**Running tally of what's been tried and ruled out for lagoon detection**:
+color/solidity thresholds, NDWI, GLCM-texture, Dynamic World, and a naive
+AlphaEarth similarity check. What's left: a real classifier trained on
+CAFOSat's national presence-labeled patches (or AlphaEarth embeddings of
+them), a Maryland labeling campaign, or full PRISM-CAFO-style detector
+training (needs both of those plus a Python 3.10 GPU environment).
+
 ### Compute note (informational only, not a recommendation)
 
 Fine-tuning a YOLOv8/YOLOv11-class detector or a U-Net on CAFOSat-scale data (~45,000 patches, 833×833px) plus any Maryland-specific fine-tuning is a realistic single-GPU training job (comparable in scale to the existing poultry U-Net training) — the kind of job typically run on a single mid-to-high-end cloud GPU instance (e.g., one A10/A100/L4-class instance) over hours to a low number of days, not a multi-GPU or multi-week job. SAM2 inference at scale (statewide lagoon refinement) is more compute-hungry per-image than the detector step, since it runs a large image encoder per candidate region; this is the same class of cost the project's existing SAM lagoon step already incurs, just potentially applied to more candidates if a learned detector proposes more/different regions than the classical CV step did. Actual sizing (instance type, hours, cost) is left to the user's own evaluation.

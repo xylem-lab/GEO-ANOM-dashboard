@@ -65,14 +65,29 @@ class AlphaEarthFilter:
                 ee.Initialize(credentials)
                 logger.info("Earth Engine initialized with service account: %s", sa_email)
             else:
-                # Fall back to interactive/default auth
-                ee.Initialize()
-                logger.info("Earth Engine initialized with default credentials")
+                # Fall back to interactive/default auth. Modern Earth Engine
+                # requires an explicit registered Cloud project -- ee.Initialize()
+                # with no args fails with "no project found" even with valid
+                # cached credentials.
+                project_id = self.config.env.gcs_project_id or None
+                ee.Initialize(project=project_id)
+                logger.info(
+                    "Earth Engine initialized with default credentials (project=%s)",
+                    project_id,
+                )
 
-            # Load the AlphaEarth collection
+            # Load the AlphaEarth collection. NOTE: images in this collection
+            # have no "year" property (verified directly against the live
+            # collection 2026-09-16: properties are system:time_start/time_end,
+            # UTM_ZONE, MODEL_VERSION, DATASET_VERSION -- filtering by
+            # ee.Filter.eq("year", ...) as this code previously did matches
+            # zero images every time, silently. Filter by date range instead.
+            # This is also a per-UTM-zone tiled global collection, not one
+            # image per year -- filterBounds is required at query time, done
+            # in get_embedding(), not here.
             self._collection = ee.ImageCollection(
                 self.config.alphaearth.collection_id
-            ).filter(ee.Filter.eq("year", self.year))
+            ).filterDate(f"{self.year}-01-01", f"{self.year + 1}-01-01")
 
             self._ee_initialized = True
 
@@ -121,7 +136,11 @@ class AlphaEarthFilter:
         point = ee.Geometry.Point([lon, lat])
 
         try:
-            image = self._collection.first()
+            # This collection is tiled per UTM zone -- self._collection.first()
+            # (previous behavior) grabbed an arbitrary tile that usually didn't
+            # even cover this point, so sampling silently returned nothing.
+            # Filter to tiles that actually cover this point first.
+            image = self._collection.filterBounds(point).mosaic()
             sample = image.sample(
                 region=point,
                 scale=self.config.alphaearth.sample_scale,
@@ -132,9 +151,12 @@ class AlphaEarthFilter:
             feature = sample.first()
             props = feature.getInfo()["properties"]
 
-            # Extract embedding bands (band_0 through band_63)
+            # Real band names verified directly against the live collection
+            # 2026-09-16: "A00".."A63", not "embedding_i"/"bi" as previously
+            # assumed (which meant every extraction silently fell back to 0.0
+            # for every dimension).
             embedding = np.array([
-                props.get(f"embedding_{i}", props.get(f"b{i}", 0.0))
+                props.get(f"A{i:02d}", 0.0)
                 for i in range(self.config.alphaearth.embedding_dim)
             ], dtype=np.float32)
 
