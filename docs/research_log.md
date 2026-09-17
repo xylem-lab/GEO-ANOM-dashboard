@@ -151,6 +151,40 @@ CAFOSat's national presence-labeled patches (or AlphaEarth embeddings of
 them), a Maryland labeling campaign, or full PRISM-CAFO-style detector
 training (needs both of those plus a Python 3.10 GPU environment).
 
+---
+
+## 2026-09-16 (continued) — trained AlphaEarth classifier: works on CAFOSat, doesn't transfer here
+
+Went one step past the naive mean-similarity check above: trained a real
+logistic regression on AlphaEarth embeddings of ~1,400 CAFOSat points
+(700 pond-positive / 700 pond-negative farms, grouped-split by
+`CAFO_UNIQUE_ID` to avoid same-farm leakage). Full detail in
+`docs/alphaearth_classifier_result.md`.
+
+**On CAFOSat's own held-out test set: genuinely good** — precision 0.791,
+recall 0.833, ROC-AUC 0.837. AlphaEarth embeddings do carry real signal for
+"does this farm have a pond."
+
+**On this project's own known real-lagoon vs. false-positive set: no
+separation** — real lagoons mean p(pond)=0.715, false positives mean
+p(pond)=0.724 (FPs actually score slightly *higher*). Best threshold gets
+38% precision, barely above the 37% base rate.
+
+**Why, and this is the useful finding**: this project's false positives
+aren't generic "not a pond" examples — they're candidates that already
+survived classical-CV color/solidity + SAM specifically *because* they look
+pond-like (canopy shadow, dark rooftops, wetland fragments). CAFOSat's
+negative class is an easy "farm with no pond," not "thing that already
+fooled a first-stage pond detector." A classifier needs to be trained
+against *this project's own* false-positive population (or comparably
+adversarial examples) to help at this stage of the pipeline — a generic
+external pond/no-pond dataset, however large, doesn't transfer to it.
+
+This closes out the "cheap, no-labeling-campaign" options. What's left is
+what was scoped before: a Maryland-specific labeling effort (ideally
+including these exact false-positive shapes as explicit hard negatives),
+or full detector training.
+
 ### Compute note (informational only, not a recommendation)
 
 Fine-tuning a YOLOv8/YOLOv11-class detector or a U-Net on CAFOSat-scale data (~45,000 patches, 833×833px) plus any Maryland-specific fine-tuning is a realistic single-GPU training job (comparable in scale to the existing poultry U-Net training) — the kind of job typically run on a single mid-to-high-end cloud GPU instance (e.g., one A10/A100/L4-class instance) over hours to a low number of days, not a multi-GPU or multi-week job. SAM2 inference at scale (statewide lagoon refinement) is more compute-hungry per-image than the detector step, since it runs a large image encoder per candidate region; this is the same class of cost the project's existing SAM lagoon step already incurs, just potentially applied to more candidates if a learned detector proposes more/different regions than the classical CV step did. Actual sizing (instance type, hours, cost) is left to the user's own evaluation.
