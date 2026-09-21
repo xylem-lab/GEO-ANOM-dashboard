@@ -1,8 +1,34 @@
-# Start Here — Project Status as of 2026-09-15
+# Start Here — Project Status as of 2026-09-21
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-09-21 — daily cloud research routine was silently broken for 6 days; fixed and findings recovered
+
+**The daily `geo-anom-researcher` cloud routine (set up 2026-09-15) has
+been failing at its final push/PR step every single day since 2026-09-16**
+with `403 Resource not accessible by integration` against
+`xylem-lab/GEO-ANOM-dashboard` — the Claude GitHub App has read access but
+not write access to this repo. Six days of real research ran and got
+stuck; see `docs/research_log.md`'s "2026-09-16 through 2026-09-21"
+entry for the consolidated, recovered findings (the actual research was
+good — the delivery mechanism was broken, not the research).
+
+**Action needed before the routine can deliver on its own again**: an org
+admin needs to reinstall/reauthorize the Claude GitHub App for the
+`xylem-lab` org with write access — https://github.com/apps/claude/installations/select_target
+— or reconnect GitHub under claude.ai Settings → Connectors. Until that's
+done, treat the daily routine as research-only-with-manual-recovery, not
+fully autonomous; check its run history periodically rather than assuming
+silence means nothing happened.
+
+**The recovered finding, worth acting on**: the poultry U-Net pipeline
+already incidentally detects swine and beef confinement barns (see
+`docs/labeling_guide.md`) — dairy is the real gap, likely explained by
+`scripts/unet_detect.py`'s `WIDTH_MAX_M=30.0` filter excluding standard
+~30.5m-wide free-stall barns. Recommended next experiment is in the
+research log entry above.
 
 ## 2026-09-15 — three-agent autonomous cycle set up
 
