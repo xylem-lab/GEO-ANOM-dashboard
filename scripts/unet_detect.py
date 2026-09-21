@@ -57,6 +57,20 @@ WIDTH_MIN_M, WIDTH_MAX_M = 10.0, 30.0
 ASPECT_MIN, ASPECT_MAX = 2.5, 18.0
 MIN_DIST_TO_ROAD_M = 20.0
 
+# Species-scoped exception, added 2026-09-21. A full-registry test of
+# loosening LENGTH_MIN_M/ASPECT_MIN globally (to 40.0/2.0) DID catch real,
+# plausible beef-barn shapes on 2 previously-zero-detection farms (Dwight
+# Brandenburg: area=739m2, length=52.5m, aspect=2.25; Panora Acres:
+# area=753m2, length=44.0m, aspect=2.06 -- see docs/beef_filter_diagnosis.json)
+# but ALSO introduced 169 new, unverified detections across poultry farms --
+# an unacceptable, unaudited risk to the validated 99.7% poultry precision.
+# Scoping the loosened bounds to ONLY cattle_includes_heifers (3 farms total
+# in the active registry) gets the beef fix with zero effect on poultry,
+# dairy, or swine, since it only ever applies to that species.
+SPECIES_FILTER_OVERRIDES = {
+    "cattle_includes_heifers": {"LENGTH_MIN_M": 40.0, "ASPECT_MIN": 2.0},
+}
+
 
 def polygon_geo_stats(poly) -> dict:
     """Area and long/short side from the minimum rotated rectangle.
@@ -81,16 +95,21 @@ def polygon_geo_stats(poly) -> dict:
     return {"area_m2": area_m2, "long_side_m": long_side, "short_side_m": short_side}
 
 
-def passes_tulbure_filter(stats: dict, dist_to_road_m: float | None) -> bool:
+def passes_tulbure_filter(stats: dict, dist_to_road_m: float | None, animal_type: str | None = None) -> bool:
     area, length, width = stats["area_m2"], stats["long_side_m"], stats["short_side_m"]
     if width <= 0:
         return False
     aspect = length / width
+
+    overrides = SPECIES_FILTER_OVERRIDES.get(animal_type, {})
+    length_min = overrides.get("LENGTH_MIN_M", LENGTH_MIN_M)
+    aspect_min = overrides.get("ASPECT_MIN", ASPECT_MIN)
+
     return all([
         AREA_MIN_M2 <= area <= AREA_MAX_M2,
-        LENGTH_MIN_M <= length <= LENGTH_MAX_M,
+        length_min <= length <= LENGTH_MAX_M,
         WIDTH_MIN_M <= width <= WIDTH_MAX_M,
-        ASPECT_MIN <= aspect <= ASPECT_MAX,
+        aspect_min <= aspect <= ASPECT_MAX,
         dist_to_road_m is None or dist_to_road_m >= MIN_DIST_TO_ROAD_M,
     ])
 
@@ -174,7 +193,7 @@ def main():
         for poly in raw_polys:
             stats = polygon_geo_stats(poly)  # meters, in native UTM CRS
             dist = distance_to_road_m(poly, road_union) if args.use_road_filter else None
-            if passes_tulbure_filter(stats, dist):
+            if passes_tulbure_filter(stats, dist, animal_type=site.get("animal_type")):
                 kept.append((poly, stats, dist))
 
         print(f"[{i}] {site['farm_name']:<45} raw={len(raw_polys):<4} filtered={len(kept)}")
