@@ -37,3 +37,4 @@ Thumbs.db
 *.pt
 *.pth
 *.onnx
+data/processed/detections/full_registry_unet_tulbure_detections_task1_scoped.geojson
