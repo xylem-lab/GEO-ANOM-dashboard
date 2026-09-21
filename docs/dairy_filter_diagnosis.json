@@ -1,0 +1,169 @@
+[
+  {
+    "farm_name": "Lester C. Jones & Sons, Inc.",
+    "headcount": 3300,
+    "raw_count": 0,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Horizon Organic Dairy, LLC",
+    "headcount": 544,
+    "raw_count": 0,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Matthew Hoff/Coldsprings Farms",
+    "headcount": 1230,
+    "raw_count": 1,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Oak Bluff Dairy Farms",
+    "headcount": 1280,
+    "raw_count": 0,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Mason Dixon Farms, Inc",
+    "headcount": 2612,
+    "raw_count": 1,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Teabow, Incorporated",
+    "headcount": 1764,
+    "raw_count": 6,
+    "n_pass_current_filter": 0,
+    "near_misses": [
+      {
+        "area_m2": 464.0894830472628,
+        "length_m": 48.75205692848894,
+        "width_m": 16.10080042532862,
+        "fails": [
+          "AREA=464 (need 500-7500)",
+          "LENGTH=48.8 (need 55-300)"
+        ]
+      },
+      {
+        "area_m2": 282.0543840933361,
+        "length_m": 21.00298433098942,
+        "width_m": 21.001065396587364,
+        "fails": [
+          "AREA=282 (need 500-7500)",
+          "LENGTH=21.0 (need 55-300)",
+          "ASPECT=1.00 (need 2.5-18.0)"
+        ]
+      },
+      {
+        "area_m2": 468.0902544556661,
+        "length_m": 56.58410836008105,
+        "width_m": 12.165785542220659,
+        "fails": [
+          "AREA=468 (need 500-7500)"
+        ]
+      }
+    ]
+  },
+  {
+    "farm_name": "Oakland View Farms LLC",
+    "headcount": 1465,
+    "raw_count": 4,
+    "n_pass_current_filter": 1,
+    "near_misses": [
+      {
+        "area_m2": 275.91633363910694,
+        "length_m": 37.113263211433164,
+        "width_m": 11.625687006856145,
+        "fails": [
+          "AREA=276 (need 500-7500)",
+          "LENGTH=37.1 (need 55-300)"
+        ]
+      }
+    ]
+  },
+  {
+    "farm_name": "Arbaugh's Flowering Springs Inc./Home Farm",
+    "headcount": 300,
+    "raw_count": 1,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "My Lady's Manor Farm, Inc.",
+    "headcount": 775,
+    "raw_count": 2,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Patterson Farms, Inc/Home Farm",
+    "headcount": 680,
+    "raw_count": 1,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Deerspring Dairy Farm, LLC",
+    "headcount": 705,
+    "raw_count": 1,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Whitelyn Farms, Inc.",
+    "headcount": 400,
+    "raw_count": 6,
+    "n_pass_current_filter": 0,
+    "near_misses": [
+      {
+        "area_m2": 384.1109394198445,
+        "length_m": 52.20185357461674,
+        "width_m": 10.80896264612385,
+        "fails": [
+          "AREA=384 (need 500-7500)",
+          "LENGTH=52.2 (need 55-300)"
+        ]
+      }
+    ]
+  },
+  {
+    "farm_name": "David Pyle/Cow Comfort Inn Dairy",
+    "headcount": 555,
+    "raw_count": 5,
+    "n_pass_current_filter": 0,
+    "near_misses": [
+      {
+        "area_m2": 411.09273931870314,
+        "length_m": 25.8895820867632,
+        "width_m": 20.00695105920521,
+        "fails": [
+          "AREA=411 (need 500-7500)",
+          "LENGTH=25.9 (need 55-300)",
+          "ASPECT=1.29 (need 2.5-18.0)"
+        ]
+      },
+      {
+        "area_m2": 236.05325177453395,
+        "length_m": 25.001671579608228,
+        "width_m": 13.002064000815153,
+        "fails": [
+          "AREA=236 (need 500-7500)",
+          "LENGTH=25.0 (need 55-300)",
+          "ASPECT=1.92 (need 2.5-18.0)"
+        ]
+      }
+    ]
+  },
+  {
+    "farm_name": "Matthew Fry/Fair Hill Farms, Inc",
+    "headcount": 1050,
+    "raw_count": 0,
+    "n_pass_current_filter": 0,
+    "near_misses": []
+  }
+]

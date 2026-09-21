@@ -23,12 +23,21 @@ done, treat the daily routine as research-only-with-manual-recovery, not
 fully autonomous; check its run history periodically rather than assuming
 silence means nothing happened.
 
-**The recovered finding, worth acting on**: the poultry U-Net pipeline
-already incidentally detects swine and beef confinement barns (see
-`docs/labeling_guide.md`) — dairy is the real gap, likely explained by
-`scripts/unet_detect.py`'s `WIDTH_MAX_M=30.0` filter excluding standard
-~30.5m-wide free-stall barns. Recommended next experiment is in the
-research log entry above.
+**The recovered finding, still good**: the poultry U-Net pipeline already
+incidentally detects swine and beef confinement barns (see
+`docs/labeling_guide.md`) — dairy is the real, still-open gap.
+
+**But the cloud routine's specific hypothesis for *why* was wrong, and this
+was caught same-day**: it guessed `unet_detect.py`'s `WIDTH_MAX_M=30.0`
+filter was excluding ~30.5m-wide free-stall barns. Run for real against the
+actual 14 dairy farms and the real U-Net checkpoint
+(`scripts/diagnose_dairy_filter.py`, 2026-09-21): zero farms have a
+candidate shape failing only on width. The real problem is upstream — the
+U-Net mostly isn't segmenting dairy barn roofs as building-like at all (4/14
+farms produce zero raw candidates before any filter runs). This needs a
+model/training fix (CAFOSat dairy patches or Maryland-specific labels), not
+a threshold tweak — see the same-day follow-up entry in
+`docs/research_log.md` for the full diagnosis.
 
 ## 2026-09-15 — three-agent autonomous cycle set up
 

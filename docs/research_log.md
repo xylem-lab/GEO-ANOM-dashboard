@@ -106,3 +106,20 @@ Fine-tuning a YOLOv8/YOLOv11-class detector or a U-Net on CAFOSat-scale data (~4
 **Not a real finding, a correction to a cloud run's own inference**: the 09-19 run noticed two branches (`experiment/cafosat-lagoon-validation-2026-09-15`, `experiment/dynamicworld-alphaearth-lagoon-check-2026-09-16`) with no PR ever opened and guessed they'd hit this same GitHub App issue. They didn't — those came from an interactive session using different git credentials, and were simply pending user review, unrelated to this bug.
 
 **Recommended next experiment** (ground-truth-checkable, laptop-feasible, no new data/compute needed): raise `unet_detect.py`'s `WIDTH_MAX_M` past 30.5m (and re-check `ASPECT_MIN`/`ASPECT_MAX` against real dairy barn aspect ratios), re-run detection against the same ~14 dairy farms referenced in `docs/labeling_guide.md`, and check two things: (a) does detection recall on those farms improve, and (b) does it introduce new false positives elsewhere (re-run the existing 35-farm precision audit sample). This directly tests hypothesis (1) above and would either close the dairy gap cheaply or prove it's actually hypothesis (2), the deeper roof-signature issue.
+
+---
+
+## 2026-09-21 (same day, later) — the WIDTH_MAX_M hypothesis above is wrong; ran it against real data
+
+The recommended experiment above was run for real, immediately, against the actual 14 dairy farms (`data/raw/naip_tiles_pc_4band_full/manifest.json`, filtered to `animal_type` containing "dairy") using the real U-Net checkpoint (`scripts/diagnose_dairy_filter.py`, raw output in `docs/dairy_filter_diagnosis.json`). This is exactly the kind of thing the six blocked cloud cycles above could *reason about* from specs but never actually *run* (no model weights or imagery in their sandboxes) — worth doing before spending any code-change effort on their hypothesis.
+
+**Baseline reconfirmed first**: 13/14 dairy farms currently show zero detections (not 11/14 as `docs/labeling_guide.md` states — likely drift since that note was written, given several pipeline changes landed 2026-09-09 through 09-14; not investigated further, noted as a discrepancy).
+
+**The WIDTH_MAX_M hypothesis is wrong.** Zero of the 14 farms have a raw candidate polygon failing *only* on width. What's actually happening:
+- 4/14 farms (Lester C. Jones & Sons, Horizon Organic Dairy, Oak Bluff Dairy Farms, Matthew Fry/Fair Hill Farms) produce **zero raw candidate polygons at all** — the U-Net isn't segmenting anything roof-shaped on these tiles, before the Tulbure filter is even applied.
+- The remaining farms mostly produce small fragments (200-470 m²) that fail on **AREA and LENGTH being too small** (well under the 500 m² / 55m floors), not width being too large. None resemble a real barn shape that's merely too wide.
+- Oakland View Farms (the one farm that already works, per `labeling_guide.md`) is the only one producing a full-size passing candidate.
+
+**Conclusion: this is hypothesis (2), not (1).** The gap is in the U-Net's segmentation step itself, not the post-filter thresholds. The model most likely wasn't trained on dairy free-stall barn roof signatures (open-sided, curtain-sidewall, ridge-vented — visually different from an enclosed poultry house roof) and largely doesn't recognize them as building-like at all. **Raising `WIDTH_MAX_M` would fix nothing and was not implemented.** This is a real course-correction on a hypothesis that looked reasonable on paper (dairy barns being ~30.5m wide, right at the old cutoff) but didn't survive contact with real data — exactly the failure mode this project's process is built to catch before it reaches a deck or a paper.
+
+**What this actually means for dairy detection**: a filter tweak won't help. The realistic paths are the ones already scoped in the 2026-09-15/16 entries — a classifier or detector trained on real dairy barn examples (CAFOSat's dairy patches, and/or Maryland-specific labels), not a threshold adjustment to the existing poultry-trained model.
