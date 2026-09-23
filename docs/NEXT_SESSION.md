@@ -1,8 +1,18 @@
-# Start Here — Project Status as of 2026-09-21
+# Start Here — Project Status as of 2026-09-23
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-09-23 — looked at the imagery for the first time; read this before citing any lagoon or dairy number
+
+Full detail in `docs/research_log.md` ("first look at the actual imagery"). Field deliverables: `docs/Task1_Field_Labeling_Guide_2026-09-23.pdf` (23 satellite crops, decision rules, where to go) and `data/processed/detections/GEO-ANOM_Task1_Field_Map.kmz` (offline Google Earth; FIELD PRIORITY folder first).
+
+- **Lagoons: only 1 of the 7 hand-recorded "confirmed/uncertain" lagoons (Dulin) looks real.** Tran = poultry roof; Roland Todd = three poultry houses / empty field depending on imagery source; Rahim = pond beside a house; Hutchison = crop field. Ignore "3 confirmed + 2 corroborated"; treat lagoon truth as 1 verified plus 6 analyst-spotted (Lester Jones 3, Horizon 3), none in the detection files. #1 false positive = blue-gray metal roofs.
+- **Registry permit points are often 400-860 m from the real barns**, and two dairy permits (Fry, Oak Bluff) are not on a dairy. Some "zero detection" farms are geocode errors.
+- **Dairy: two true model misses** (Lester Jones, Horizon), two registry errors, ten unreviewed. Corrects the 2026-09-21 "4/14 model can't see dairy roofs" statement.
+- **Beef fix confirmed sound (both added detections are real barns) but outlines are partial** (about half a roof); farm-level 3/3 is not building-level coverage.
+- Still open from 2026-09-21: today's fresh full-registry rerun does not reproduce the committed baseline; do not regenerate and adopt it wholesale.
 
 ## 2026-09-21 (evening) — full-registry species audit; Task 1 status across all 5 target categories
 
