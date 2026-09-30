@@ -1,0 +1,52 @@
+[
+  {
+    "farm_name": "Bistate Feeders, LLC",
+    "headcount": 3400,
+    "raw_count": 7,
+    "n_pass_current_filter": 7,
+    "near_misses": []
+  },
+  {
+    "farm_name": "Dwight Brandenburg/Brandenburg Family Limited Partnership",
+    "headcount": 817,
+    "raw_count": 2,
+    "n_pass_current_filter": 0,
+    "near_misses": [
+      {
+        "area_m2": 237.0079974788756,
+        "length_m": 38.81260128751677,
+        "width_m": 11.882382155839613,
+        "fails": [
+          "AREA=237 (need 500-7500)",
+          "LENGTH=38.8 (need 55-300)"
+        ]
+      },
+      {
+        "area_m2": 739.0249373138176,
+        "length_m": 52.46582931879384,
+        "width_m": 23.296970866657908,
+        "fails": [
+          "LENGTH=52.5 (need 55-300)",
+          "ASPECT=2.25 (need 2.5-18.0)"
+        ]
+      }
+    ]
+  },
+  {
+    "farm_name": "Panora Acres Inc./Stacy Sellers",
+    "headcount": 600,
+    "raw_count": 2,
+    "n_pass_current_filter": 0,
+    "near_misses": [
+      {
+        "area_m2": 753.0720287627398,
+        "length_m": 43.9813105214676,
+        "width_m": 21.355631648273775,
+        "fails": [
+          "LENGTH=44.0 (need 55-300)",
+          "ASPECT=2.06 (need 2.5-18.0)"
+        ]
+      }
+    ]
+  }
+]

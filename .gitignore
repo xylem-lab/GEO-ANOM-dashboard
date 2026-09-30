@@ -5,6 +5,14 @@ data/processed/*.npz
 *.tif
 *.tiff
 
+# Experimental/derived detection outputs -- large (pixel-level, unsimplified
+# polygon boundaries), regenerable by rerunning the script named in the
+# filename, not referenced by anything else. The canonical
+# full_registry_unet_tulbure_detections.geojson stays tracked.
+data/processed/detections/experimental_*.geojson
+data/processed/detections/*_v2.geojson
+data/processed/detections/*_task1_scoped.geojson
+
 # BUT keep essential processed data for dashboard
 !data/processed/scenarios/
 !data/processed/*.csv
@@ -38,3 +46,7 @@ Thumbs.db
 *.pt
 *.pth
 *.onnx
+data/processed/detections/full_registry_unet_tulbure_detections_task1_scoped.geojson
+
+# Field-guide renders (regenerable by scripts/render_field_screenshots.py)
+data/processed/field_screenshots/

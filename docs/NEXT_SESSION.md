@@ -1,8 +1,54 @@
-# Start Here — Project Status as of 2026-09-21
+# Start Here — Project Status as of 2026-09-23
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-09-23 — looked at the imagery for the first time; read this before citing any lagoon or dairy number
+
+Full detail in `docs/research_log.md` ("first look at the actual imagery"). Field deliverables: `docs/Task1_Field_Labeling_Guide_2026-09-23.pdf` (23 satellite crops, decision rules, where to go) and `data/processed/detections/GEO-ANOM_Task1_Field_Map.kmz` (offline Google Earth; FIELD PRIORITY folder first).
+
+- **Lagoons: only 1 of the 7 hand-recorded "confirmed/uncertain" lagoons (Dulin) looks real.** Tran = poultry roof; Roland Todd = three poultry houses / empty field depending on imagery source; Rahim = pond beside a house; Hutchison = crop field. Ignore "3 confirmed + 2 corroborated"; treat lagoon truth as 1 verified plus 6 analyst-spotted (Lester Jones 3, Horizon 3), none in the detection files. #1 false positive = blue-gray metal roofs.
+- **Registry permit points are often 400-860 m from the real barns**, and two dairy permits (Fry, Oak Bluff) are not on a dairy. Some "zero detection" farms are geocode errors.
+- **Dairy: two true model misses** (Lester Jones, Horizon), two registry errors, ten unreviewed. Corrects the 2026-09-21 "4/14 model can't see dairy roofs" statement.
+- **Beef fix confirmed sound (both added detections are real barns) but outlines are partial** (about half a roof); farm-level 3/3 is not building-level coverage.
+- Still open from 2026-09-21: today's fresh full-registry rerun does not reproduce the committed baseline; do not regenerate and adopt it wholesale.
+
+## 2026-09-21 (evening) — full-registry species audit; Task 1 status across all 5 target categories
+
+Full detail in `docs/research_log.md`'s "full-registry species audit" entry
+and `docs/task1_species_completeness.md`. Short version, per animal type
+across the entire 417-farm active registry:
+
+- **Poultry** (389 farms): validated, 358/389 detected. Unchanged tonight.
+- **Swine** (1 farm): 1/1, complete.
+- **Beef** (3 farms): fixed tonight, 1/3 -> 3/3. Root cause was real
+  barn-shaped candidates failing just under the poultry-tuned
+  `LENGTH_MIN_M`/`ASPECT_MIN` floor — fixed via a species-scoped filter
+  exception (`unet_detect.py`'s `SPECIES_FILTER_OVERRIDES`, only applies to
+  `cattle_includes_heifers`), with the 2 recovered detections added directly
+  to the canonical detection file as a minimal diff.
+- **Dairy** (14 farms): still 1/14. Root-caused (see the earlier same-day
+  entry): the U-Net mostly doesn't segment dairy barn roofs at all — needs
+  real training examples, not a threshold change. Open.
+- **Lagoons**: full-scale precision still ~10%, not a usable count. 3 fully
+  confirmed real lagoons, 2 more independently corroborated via CAFOSat.
+  Open — needs a labeling campaign or full detector training.
+- Also cleaned out 4 false-positive detections on a horse racetrack
+  (not a Task 1 target species) and found that all 9 "unknown"-animal-type
+  registry entries have real detected structures despite missing species
+  data — a registry data-completeness gap, not a detection failure.
+
+**Important open flag, not resolved tonight**: validating the beef fix
+required a full-registry rerun, which revealed that today's raw model
+output does NOT fully reproduce the committed baseline even where no
+filter logic changed (one poultry farm went from 0 to 18 valid detections
+using completely unmodified thresholds). Cause not identified (raw
+inference drift vs. imagery/manifest drift vs. something else) — **do not
+regenerate and adopt the full registry detection file wholesale until this
+is understood**, since the existing R²=0.655/99.7%-precision figures
+describe the specific committed file, not necessarily what a fresh run
+produces today.
 
 ## 2026-09-21 — daily cloud research routine was silently broken for 6 days; fixed and findings recovered
 
