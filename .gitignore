@@ -1,6 +1,7 @@
 # Data directories (large files)
 data/raw/
 data/processed/*.gpkg
+data/processed/*.npz
 *.tif
 *.tiff
 
