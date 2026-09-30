@@ -9,6 +9,7 @@ from shapely.geometry import Point
 
 from geo_anom.core.config import load_config, NutrientCoefficient
 from geo_anom.core.geo_utils import BBox, meters_sq_to_acres, polygon_area_m2
+from geo_anom.phase2.species_capacity import predict_poultry_headcount
 from geo_anom.phase2.yolo_detector import Detection
 from geo_anom.phase2.supply_calculator import SupplyCalculator
 
@@ -95,16 +96,25 @@ class TestSupplyCalculation:
 
 
 class TestSupplyApportionment:
-    """calculate_supply() end-to-end: a farm with N detected structures
-    must have its farm-level nutrient total divided across all N rows, not
+    """calculate_supply() end-to-end: a farm/cluster's total nutrient
+    number must be divided across all its detected structures, not
     assigned in full to each one -- the bug found 2026-09 that would have
     overcounted statewide totals by a factor of N on any farm with more
     than one detected structure (routine at real scale: 5-20 barns/farm).
-    The split itself is weighted by each structure's share of the farm's
+    The split itself is weighted by each structure's share of the group's
     total detected floor area, not an even 1/N split -- see
     docs/task1_metrics.md section 2 for why an even split is a poor
     assumption (headcount-vs-house-count R^2=0.043 vs. headcount-vs-area
-    R^2=0.256 log-log: farms trade off house count against house size)."""
+    R^2=0.256 log-log: farms trade off house count against house size).
+
+    As of 2026-09-30, headcount for poultry-shaped detections comes from
+    `species_capacity.predict_poultry_headcount()` (floor area only, no
+    registry lookup at prediction time) rather than the matched permit's
+    headcount -- see docs/task1_completion_criteria.md for why a
+    registry-dependent number defeated the point of using remote sensing
+    at all. These tests compute their expected values through that same
+    model rather than hardcoding a registry headcount, since that registry
+    number is no longer what the pipeline actually uses."""
 
     def test_apportions_proportionally_to_floor_area(self):
         """Two structures at one farm with a 3:1 area ratio must receive
@@ -127,13 +137,18 @@ class TestSupplyApportionment:
         result = SupplyCalculator().calculate_supply(polygons, permits)
 
         assert len(result) == 2
+        assert (result["capacity_source"] == "vision_poultry_model").all()
         big, small = result.sort_values("area_m2", ascending=False)["annual_N_lbs"]
         assert big == pytest.approx(3 * small, rel=1e-3)
 
         config = load_config()
         coeff = config.nutrient_coefficients["broiler_chicken"]
-        farm_total_n = 100_000 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
+        predicted_headcount, _ = predict_poultry_headcount(4000.0, 2)
+        farm_total_n = predicted_headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
         assert result["annual_N_lbs"].sum() == pytest.approx(farm_total_n, rel=1e-3)
+        # The registry's headcount is still carried for comparison, but is
+        # not what the N/P numbers above were computed from.
+        assert (result["registry_headcount"] == 100_000).all()
 
     def test_falls_back_to_even_split_when_area_data_missing(self):
         """If a farm's structures have no usable area data (area sums to
@@ -191,7 +206,8 @@ class TestSupplyApportionment:
 
         config = load_config()
         coeff = config.nutrient_coefficients["broiler_chicken"]
-        farm_total_n = 100_000 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
+        predicted_headcount, _ = predict_poultry_headcount(3000.0, 3)
+        farm_total_n = predicted_headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year
         expected_per_structure = round(farm_total_n / 3, 1)
 
         assert (result["annual_N_lbs"] == expected_per_structure).all()
@@ -199,7 +215,11 @@ class TestSupplyApportionment:
         # not 3x an overcount.
         assert result["annual_N_lbs"].sum() == pytest.approx(farm_total_n, rel=1e-3)
 
-    def test_single_structure_gets_full_farm_total(self):
+    def test_matched_poultry_subtype_used_for_coefficient_not_headcount(self):
+        """A matched permit's specific poultry subtype (turkey, here) still
+        picks which nutrient coefficient applies -- that's using available
+        information, not depending on it -- but the headcount itself comes
+        from the vision model, not the registry's 10,000."""
         permits = gpd.GeoDataFrame(
             {"animal_type": ["turkeys"], "headcount": [10_000]},
             geometry=[Point(-75.80, 38.60)],
@@ -215,10 +235,66 @@ class TestSupplyApportionment:
 
         assert len(result) == 1
         assert result.iloc[0]["n_structures_at_farm"] == 1
+        assert result.iloc[0]["capacity_source"] == "vision_poultry_model"
+        assert result.iloc[0]["animal_type"] == "turkey"
+        assert result.iloc[0]["registry_headcount"] == 10_000
+        assert result.iloc[0]["headcount"] != 10_000  # not the registry number
 
         config = load_config()
         coeff = config.nutrient_coefficients["turkey"]
-        expected_n = round(10_000 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year, 1)
+        predicted_headcount, _ = predict_poultry_headcount(800.0, 1)
+        expected_n = round(predicted_headcount * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year, 1)
+        assert result.iloc[0]["annual_N_lbs"] == pytest.approx(expected_n, rel=1e-3)
+
+    def test_unregistered_poultry_shaped_cluster_still_gets_a_number(self):
+        """The actual point of this change: a detected building cluster
+        with NO permit anywhere nearby must still produce a nonzero N/P
+        estimate, not a silent zero -- that's the difference between a
+        pipeline that only works on farms already in the registry and one
+        that doesn't need the registry at all."""
+        permits = gpd.GeoDataFrame(
+            {"animal_type": [], "headcount": []},
+            geometry=[],
+            crs="EPSG:4326",
+        )
+        polygons = gpd.GeoDataFrame(
+            {"class_name": ["poultry_house"] * 2, "area_m2": [1200.0, 1500.0], "confidence": [0.9, 0.9]},
+            geometry=[Point(-76.10, 39.00), Point(-76.1005, 39.0005)],
+            crs="EPSG:4326",
+        )
+
+        result = SupplyCalculator().calculate_supply(polygons, permits)
+
+        assert len(result) == 2
+        assert (result["capacity_source"] == "vision_poultry_model").all()
+        assert (result["registry_headcount"].isna()).all()
+        assert (result["annual_N_lbs"] > 0).all()
+        assert (result["headcount"] > 0).all()
+
+    def test_matched_non_poultry_species_falls_back_to_registry(self):
+        """A matched permit with a known non-poultry species (dairy here)
+        should NOT run the poultry capacity model -- it wasn't fit on that
+        shape -- and should fall back to the registry's own headcount,
+        explicitly flagged as a fallback rather than vision-derived."""
+        permits = gpd.GeoDataFrame(
+            {"animal_type": ["dairy_cattle"], "headcount": [500]},
+            geometry=[Point(-75.80, 38.60)],
+            crs="EPSG:4326",
+        )
+        polygons = gpd.GeoDataFrame(
+            {"class_name": ["poultry_house"], "area_m2": [1200.0], "confidence": [0.9]},
+            geometry=[Point(-75.8001, 38.6001)],
+            crs="EPSG:4326",
+        )
+
+        result = SupplyCalculator().calculate_supply(polygons, permits)
+
+        assert result.iloc[0]["capacity_source"] == "registry_fallback"
+        assert result.iloc[0]["headcount"] == 500
+
+        config = load_config()
+        coeff = config.nutrient_coefficients["dairy_cattle"]
+        expected_n = round(500 * coeff.N_lbs_per_head_per_year * coeff.flocks_per_year, 1)
         assert result.iloc[0]["annual_N_lbs"] == expected_n
 
 

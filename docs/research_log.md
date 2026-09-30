@@ -310,3 +310,79 @@ Headline findings:
 Five concrete questions for the AGNR team are listed at the end of
 `docs/task1_imagery_audit_2026-09-30.md`, each tied to a specific farm and finding
 rather than a general ask.
+
+---
+
+## 2026-09-30 (later) — supply calculation is now vision-first for poultry, not registry-dependent
+
+Direct response to the standing objection: if species and headcount only ever
+come from a registry lookup, detection quality never actually drives the
+number that matters. Implemented the fix rather than just describing it —
+see `docs/task1_completion_criteria.md` §5 for the full writeup and
+`docs/species_capacity_model_metrics.md` for the model's honest metrics.
+
+**What changed**: `scripts/train_capacity_model.py` fits headcount from
+detected floor area alone on 357 poultry-type farms (held-out CV R²=0.23).
+`geo_anom/phase2/species_capacity.py` loads it; `supply_calculator.py` now
+uses that prediction for every poultry-shaped detection, registered or not,
+via DBSCAN-clustered groups for unmatched detections. Dairy/beef/swine still
+fall back to registry headcount (no model exists for those shapes — see
+below for why), explicitly flagged `capacity_source: "registry_fallback"`.
+
+**Scope was checked before building anything, not after**: of 417 active
+farms, only 372 have any U-Net building detection at all. Within those,
+poultry has 352-357 farms depending on exact filter; dairy has exactly 1
+(Oakland View); beef has 3; swine/turkey/ducks have 1 each. No classifier or
+regression fit on 1-3 examples per class would generalize, so none was
+built for those species — reporting an accuracy on 3 points isn't a real
+evaluation. The deeper reason isn't sample size alone: `unet_detect.py`'s
+existing Tulbure-derived shape filter already restricts every detected
+building in this dataset to a narrow poultry-like shape band by
+construction, so there's almost no shape variance left for a species
+classifier to work with even in principle. **The actual fix for dairy/beef
+is retraining the segmentation step on real non-poultry examples
+(CAFOSat's patches, or Maryland-specific labels) — not a downstream
+classifier.**
+
+**Real bug found and fixed along the way**: `calculate_supply()` read an
+unqualified `row.get("headcount")`/`row.get("farm_name")` after
+`gpd.sjoin_nearest()`. Both the detection polygons and the permit table
+carry columns of those exact names, so geopandas silently resolved the
+collision with `_left`/`_right` suffixes — meaning the unqualified key
+never existed post-join, and both fields silently defaulted to 0/blank.
+This has been in `supply_calculator.py` since it was written; the unit
+test fixtures never exercised it because they didn't give the polygon side
+its own `headcount`/`farm_name` columns, only the real detection file does.
+Caught by actually running the new code against the real full-registry
+file rather than trusting the test suite alone — the test suite *passed*
+throughout, on the wrong behavior, until checked by hand. Fixed by
+renaming the permit table's columns (`permit_animal_type`,
+`permit_headcount`, `permit_farm_name`) before the join instead of relying
+on collision-suffix behavior. 6 tests added/updated in
+`tests/test_phase2_pipeline.py`, including one that directly asserts an
+unregistered detection produces a nonzero number.
+
+**Second bug caught the same way**: the "unknown"-species registry entries
+(9 farms, no `animal_type` on file) were initially still landing in the
+registry-fallback path and coming out as `no_data`, because the live
+registry stores the literal string `"unknown"` for these, not a null/blank
+value, and the first version of the non-poultry check didn't exclude that
+literal string. Fixed; verified directly against the full registry that
+all previously-`no_data` "unknown" farms (Hannah Jones, Bawi Hlun/Chan UK,
+etc.) now get a vision-model estimate.
+
+**Known limitation, not fixed today**: farm grouping is still keyed on
+nearest-registered-permit, so a building physically closer to a
+neighboring farm's permit point than to its own farm's point gets grouped,
+and its headcount predicted, with that neighbor's buildings instead. Seen
+directly in testing: Hannah Jones's 8 detected buildings split across two
+different predicted headcounts. Pre-existing (the original code had the
+same nearest-permit assignment), not introduced by this change, and not
+fixed by the new DBSCAN clustering, which only applies to buildings with
+no permit match at all.
+
+**Statewide total, for reference, not yet validated against anything
+independent**: ~256M lbs N/yr, ~178M lbs P₂O₅/yr on the current full
+registry detection file. This number will keep moving as the model and
+detection coverage improve — cross-check once Stephanie's Extension list
+gives an actual independent comparison point.

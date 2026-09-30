@@ -1,8 +1,38 @@
-# Start Here — Project Status as of 2026-09-23
+# Start Here — Project Status as of 2026-09-30
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-09-30 — supply calculation is now vision-first for poultry; a real 33-farm imagery audit; all branches merged
+
+Three things happened, in order — read `docs/research_log.md`'s two
+2026-09-30 entries for full detail.
+
+1. **Imagery audit**: rendered and reviewed 33 new farms (full dairy/layer
+   census, all 9 "unknown species" entries, a random poultry sample).
+   Dairy miss rate corrected to 13/14 (not "11 of ~14"). 4 real-looking
+   dairy lagoons found that the lagoon detector never proposes a candidate
+   for. 6 of 9 "unknown species" entries are confidently poultry from
+   imagery alone. See `docs/task1_imagery_audit_2026-09-30.md`.
+2. **Repo cleanup**: all 7 open branches (some dating to 2026-09-15) merged
+   into `main` and deleted. `main` is now the single source of truth.
+3. **Architecture fix, implemented not just planned**: `supply_calculator.py`
+   no longer requires a registry match to produce a poultry headcount/N/P
+   number — it comes from a floor-area model instead (held-out CV R²=0.23,
+   n=357). Dairy/beef/swine still fall back to registry headcount (no
+   detected-shape data exists to build a model from — see
+   `docs/species_capacity_model_metrics.md` for exactly why). Found and
+   fixed a real pre-existing bug in the same code (a column-name collision
+   after the spatial join was silently zeroing headcount/farm_name on any
+   real detection file). See `docs/task1_completion_criteria.md` §5.
+
+**Still open**: no independent (non-registry) validation set exists yet —
+blocked on Stephanie's Extension non-CAFO farm list. The farm-grouping
+logic still assigns a building to its *nearest* registered permit, which
+can be the wrong farm when two are close together (seen directly: Hannah
+Jones's 8 buildings split across two different predicted headcounts) —
+noted, not fixed.
 
 ## 2026-09-23 — looked at the imagery for the first time; read this before citing any lagoon or dairy number
 

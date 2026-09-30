@@ -1,0 +1,15 @@
+{
+  "features": [
+    "log_total_area_m2"
+  ],
+  "intercept": 8.544579953712882,
+  "coef": [
+    0.328429896581047
+  ],
+  "residual_log_std": 0.5375835532079902,
+  "cv_r2_mean": 0.23075602353025912,
+  "cv_r2_std": 0.10509653590976568,
+  "n_training_farms": 357,
+  "trained_on": "poultry-type farms only (chickens_not_laying_hens, laying_hens_dry_manure, turkeys, ducks_liquid_manure)",
+  "scope_warning": "Do not apply to dairy/beef/swine detections -- fit on poultry-shaped buildings only, no held-out evidence it generalizes to other species."
+}

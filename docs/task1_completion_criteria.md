@@ -6,16 +6,20 @@ targeted search grounded in the actual gaps found this project, not a systematic
 review — read the primary papers before committing to a method, not just this
 summary.
 
+**Update, same day**: the architectural fix under criterion 3 (supply
+calculation must not require a registry lookup) is now implemented, not
+just planned — see §5.
+
 ## 1. What "done" actually requires
 
 Three separate criteria, from three separate sources — Task 1 isn't finished until
-all three are met, and right now none of them is:
+all three are met:
 
 | # | Criterion | Source | Status |
 |---|---|---|---|
 | 1 | Detect and map AFO features (poultry houses + lagoons, minimum) | Proposal, Objective 1 | Partially — buildings work moderately, lagoons mostly don't (see `task1_pipeline`) |
 | 2 | Quantify the efficiency gain of the GeoAI approach vs. the county-level baseline | Proposal, Objective 2 | **Not started.** No comparison metric exists anywhere in the codebase. |
-| 3 | Show the model works on facilities it wasn't trained on, not just facilities already in the registry | Catherine Nakalembe, 2026-09-09 meeting | **Not started.** No independent validation set exists yet. |
+| 3 | Show the model works on facilities it wasn't trained on, not just facilities already in the registry | Catherine Nakalembe, 2026-09-09 meeting | **Partially implemented.** The pipeline no longer *requires* a registry match to produce a poultry supply number (§5) — but there's still no independent (non-registry) dataset to validate that number against, which is the other half of this criterion. |
 
 Criterion 3 is the one this session has been circling — it's not an extra nice-to-have,
 it's a named requirement from the PI, and nothing currently satisfies it.
@@ -118,7 +122,65 @@ method attached to each step instead of just a status:
 Steps 1–2 can start immediately and don't depend on anything else. Step 6 is a
 decision point, not a task — it should be made deliberately, not by default.
 
-## 5. References
+## 5. Implemented 2026-09-30: supply calculation no longer requires a registry match
+
+The core objection that triggered this: if species and headcount only ever come
+from a registry lookup, the vision pipeline isn't actually driving the number
+that matters — it's decoration. That's now fixed for the ~85% of the active
+registry that's poultry-shaped:
+
+- `scripts/train_capacity_model.py` fits headcount-from-floor-area on 357
+  poultry-type farms (the only species with enough detected examples to
+  validate anything), held-out cross-validated **R² = 0.23** — a real, honest,
+  moderate signal, not the training-set 0.256 an earlier informal study
+  reported. See `docs/species_capacity_model_metrics.md` for the full
+  writeup, including exactly why this is poultry-only: of 417 active
+  farms, only 372 have any detection at all, and within those dairy has 1
+  farm with a detection, beef 3, swine/turkey/ducks 1 each — nowhere near
+  enough to fit or validate a classifier. The deeper reason isn't sample
+  size alone: the existing shape filter already restricts every detected
+  building to a narrow poultry-like shape band by construction, so there's
+  almost no shape variance left to separate species by. **Fixing dairy/beef
+  requires retraining the segmentation step on real non-poultry examples
+  (CAFOSat's patches, or Maryland-specific labels) — not a downstream
+  classifier**, which is why one wasn't built.
+- `geo_anom/phase2/species_capacity.py` loads that model and predicts
+  headcount from detected floor area alone, no registry lookup involved.
+- `geo_anom/phase2/supply_calculator.py` now uses that prediction as the
+  primary source of headcount for every poultry-shaped detection —
+  registered or not. A detected building cluster with no permit anywhere
+  nearby is spatially grouped (DBSCAN) and still gets a real N/P₂O₅ number.
+  A matched permit's specific poultry subtype (turkey/layer/broiler) still
+  picks which nutrient coefficient applies — using information that's
+  available isn't the same as depending on it — but the headcount itself is
+  always vision-derived for poultry. Non-poultry species (dairy, beef,
+  swine, horses) still fall back to registry headcount where a permit
+  match exists, explicitly flagged `capacity_source: "registry_fallback"`
+  rather than presented as vision-derived; with no match and no poultry
+  default to fall back on, the result is `"no_data"`, honestly, not a
+  fabricated number.
+- Found and fixed along the way: a real, pre-existing bug where
+  `calculate_supply()` read an unqualified `"headcount"`/`"farm_name"` key
+  after a spatial join — silently wrong (defaulting to 0/blank) any time
+  the input polygons carried their own `headcount`/`farm_name` properties,
+  which every real detection file does. The unit test fixtures never
+  triggered it because they didn't include those columns; running against
+  the real full-registry file did. Fixed by renaming the permit table's
+  columns before the join instead of relying on pandas' collision
+  suffixes. 6 new/updated tests in `tests/test_phase2_pipeline.py` cover
+  both this and the new vision-first behavior, including one that asserts
+  directly that an unregistered detection gets a nonzero number — the
+  actual point of this change.
+- **Known remaining limitation, not fixed today**: farm grouping is still
+  by nearest-registered-permit, so a building physically closer to a
+  neighboring farm's permit point than to its "own" farm's point gets
+  grouped (and its headcount predicted) with that neighbor instead —
+  visible in testing as two different predicted headcounts across one
+  farm's buildings (Hannah Jones, 8 buildings, split across 2 predicted
+  values). This predates this change; the DBSCAN clustering added here
+  only applies to buildings with no permit match at all.
+
+## 6. References
 
 - Robinson, C. et al. [Mapping Industrial Poultry Operations at Scale with Deep Learning and Aerial Imagery](https://arxiv.org/pdf/2112.10988). The base model this project's U-Net detector is built on.
 - Hoque, T. et al. [CAFOSat: A Strongly Annotated Dataset for Infrastructure-Aware CAFO Mapping Using High-Resolution Imagery](https://arxiv.org/pdf/2606.00548).
