@@ -267,3 +267,46 @@ Prompted by building a field guide with real satellite crops (`scripts/render_fi
 **Hypothesis tested and rejected along the way (do not re-try):** the MD iMAP GeoTIFFs' embedded latitude span is ~1.28x the manifest bbox for all 417 tiles (georeferenced as equal degrees). Rebuilding the transform from the bbox displaced Dulin's confirmed lagoon by ~90 m, so the file georeference is the one the detections used; the mismatch is just how the tiles were downloaded. The iMAP-vs-Planetary-Computer disagreement near Roland Todd remains unexplained.
 
 **Tooling note:** overlays can be checked by eye -- render a crop and open it with the image viewer -- so future validation of detections should include looking, not only counting.
+
+---
+
+## 2026-09-30 — Hands-on imagery audit: 33 new farms, real screenshots, real findings
+
+While waiting on Stephanie's Extension non-CAFO farm list, did a direct trial-and-error
+pass rather than more planning: rendered real crops from the 417 tiles already on disk
+(`data/raw/naip_tiles_pc_4band_full`) for a stratified sample of 33 farms never looked
+at before — every remaining dairy farm (9), every remaining laying-hen farm (4), all 9
+"unknown species" registry entries, the second duck farm, and 10 randomly sampled
+ordinary broiler farms. Script: `scripts/render_species_audit_batch.py` (extracted from
+the still-unmerged `docs/field-guide-imagery-kmz-2026-09-23` branch's `field_imagery.py`
+module). Full writeup: `docs/task1_imagery_audit_2026-09-30.md`.
+
+Headline findings:
+- **Dairy census now complete (14/14 farms)**: 13 of 14 return zero detections, not
+  "11 of ~14" as previously stated — corrected in `labeling_guide.md`. The missed
+  structures are consistently wide/blocky/clustered, not a threshold-tuning gap.
+- **4 real-looking manure lagoons at dairy sites the lagoon detector never proposed a
+  box for at all** (Teabow, Arbaugh's, Patterson, Deerspring) — all read brownish-olive
+  on screen, not the bright teal the color check was calibrated on. Plausible root
+  cause for the candidate-generation step silently missing this class of water.
+- **Round manure tanks confirmed at a second site** (David Pyle, 2 tanks) beyond Panora
+  Acres — a recurring, currently untracked structure type.
+- **6 of 9 "unknown species" registry entries are confidently, visually identifiable as
+  ordinary poultry operations** — a direct, low-effort registry fix. 1 (Alan & Kristin
+  Hudson) is not a standard livestock building at all and may be correctly unclassified.
+  2 have no visible structure near the registry point (same geocode-error pattern as
+  Fry/Oak Bluff).
+- **Registry-point/structure mismatch is not dairy-specific**: 3 of 10 randomly sampled
+  ordinary broiler farms also had the registry coordinate in an empty field with nothing
+  visible nearby (Boi & Nawl, Maurice Blake, Smithville View/MacDonald).
+- **One unexplained miss with no shape excuse**: Cobb Heritage LLC/Pocomoke Farm #4 has
+  a textbook-clean 7-8 house complex directly at the registry point — zero detections,
+  with no obvious reason from the imagery. Worth checking whether this tile actually ran
+  through inference before assuming it's a model failure.
+- **VALO BioMedia North America LLC** is registered as `laying_hens_dry_manure` but its
+  coordinate sits on what looks like an industrial/biologics building, not a poultry
+  farm — flagged as a possible registry miscategorization, not a detection gap.
+
+Five concrete questions for the AGNR team are listed at the end of
+`docs/task1_imagery_audit_2026-09-30.md`, each tied to a specific farm and finding
+rather than a general ask.

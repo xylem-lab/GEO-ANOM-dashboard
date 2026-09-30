@@ -46,7 +46,7 @@ Thumbs.db
 *.pt
 *.pth
 *.onnx
-data/processed/detections/full_registry_unet_tulbure_detections_task1_scoped.geojson
 
-# Field-guide renders (regenerable by scripts/render_field_screenshots.py)
+# Rendered field/audit screenshots (regenerable by scripts/render_*_screenshots*.py)
 data/processed/field_screenshots/
+data/processed/species_audit_screenshots/
