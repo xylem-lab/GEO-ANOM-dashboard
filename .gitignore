@@ -37,3 +37,7 @@ Thumbs.db
 *.pt
 *.pth
 *.onnx
+
+# Rendered field/audit screenshots (regenerable by scripts/render_*_screenshots*.py)
+data/processed/field_screenshots/
+data/processed/species_audit_screenshots/
