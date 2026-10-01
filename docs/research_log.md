@@ -310,3 +310,55 @@ Headline findings:
 Five concrete questions for the AGNR team are listed at the end of
 `docs/task1_imagery_audit_2026-09-30.md`, each tied to a specific farm and finding
 rather than a general ask.
+
+---
+
+## 2026-10-01 — Rafi's lab shared real external data; first evidence the detector works off-registry
+
+Rafian Aziz replied to the workshop thread with two things: his lab's 2023
+AWTF final report (animal waste technology assessment) and an MDE AFO
+inspection/compliance spreadsheet, separate from the CAFO permit registry
+this project has used all along. Both turned into real findings, not just
+reading material.
+
+**AWTF report — corrects a number from earlier this week.** Built from three
+independent sources (USDA NASS Census, MDA's farmer-reported AIR, and MDE
+permits, triangulated together), it puts broilers at 51% of statewide N+P
+(2019) and cattle at 36% — not the 93.6%/94.5% poultry share this project
+calculated a few days ago from registry headcounts alone. The gap is exactly
+the registry-completeness problem this project has been circling: a
+calculation built only from CAFO-registered farms structurally
+under-counts cattle, because cattle are the species most likely to sit
+below the registration threshold. Also independently corroborates the
+2026-09-23/30 finding that poultry lagoons mostly don't hold up on imagery
+review: the report states 100% of poultry's historically-cataloged waste
+storage ponds were retired by 2021, while dairy/beef treatment lagoons are
+still active. Full writeup: `docs/awtf_report_findings_2026-10-01.md`.
+
+**MDE AFO-inspection list — first real registry-independence test.**
+`AFO.csv.xlsx` (465 unique AFO-inspected sites, no animal-type field) has 43
+sites with no CAFO permit number at all. Geocoded 38 of them from street
+address alone (US Census batch geocoder, free, no key), pulled fresh NAIP
+imagery, and ran the unmodified U-Net + Tulbure pipeline:
+**31 of 38 (82%) produced at least one real building detection, with zero
+registry lookup anywhere in the process.** Two of the "hits" are known
+patterns reappearing rather than new findings (Pimlico Racetrack's
+false-positive roofs; VALO BioMedia's 0/0 independently confirms the
+09-30 call that it's a non-farm building) -- excluding both, the real rate
+is still ~81% on genuinely new-to-us sites. One address (8665 Hickory Mill
+Road) has two site records -- Kathuria Farms and International
+BioRefineries, LLC (iNBIO) -- almost certainly the same physical buildings
+double-counted, and iNBIO looks like a real, already-operating biorefinery
+at a farm address, directly relevant to Task 3 siting. Full table and
+analysis: `docs/mde_inspection_crosscheck_2026-10-01.md`. Script:
+`scripts/crosscheck_mde_inspection_list.py`. New detections (not yet merged
+into the canonical registry file -- these are off-registry sites, kept
+separate on purpose): `data/processed/detections/mde_inspection_crosscheck_detections.geojson`.
+
+**Engineering note**: the first run of the crosscheck script died at site
+27/38 with `OSError: [Errno 49] Can't assign requested address` -- macOS
+running out of ephemeral ports under rapid successive HTTPS requests to
+Planetary Computer, not a data problem. Added a retry-on-fresh-session guard
+and a longer per-request sleep; the script already skips tiles it's already
+downloaded, so the retry resumed from site 27 instead of re-fetching
+everything.

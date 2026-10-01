@@ -1,8 +1,27 @@
-# Start Here — Project Status as of 2026-09-23
+# Start Here — Project Status as of 2026-10-01
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-10-01 — Rafi's lab shared real data; first off-registry detection test, 82% hit rate
+
+Full detail in `docs/research_log.md`. Two things came in from the workshop
+thread (Rafian Aziz): his lab's 2023 AWTF report and an MDE AFO-inspection
+spreadsheet separate from the CAFO permit registry.
+
+- **The AWTF report corrects a number from this week**: broilers are 51% of
+  statewide N+P (not 93.6% as calculated earlier from registry headcounts
+  alone) -- independent, three-source-triangulated confirmation that a
+  registry-only calculation badly understates cattle. `docs/awtf_report_findings_2026-10-01.md`.
+- **First real registry-independence test, and it worked**: 43 AFO-inspected
+  sites with no CAFO permit at all, geocoded from street address alone (free
+  US Census geocoder), fresh imagery pulled, unmodified detector run.
+  **31 of 38 (82%) produced real building detections, zero registry lookup
+  involved.** `docs/mde_inspection_crosscheck_2026-10-01.md`,
+  `scripts/crosscheck_mde_inspection_list.py`.
+- Still pending merge into `main`: `feature/vision-first-supply-estimate-2026-09-30`
+  (poultry headcount from floor area, no registry lookup at prediction time).
 
 ## 2026-09-23 — looked at the imagery for the first time; read this before citing any lagoon or dairy number
 
