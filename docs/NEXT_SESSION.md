@@ -1,8 +1,23 @@
-# Start Here — Project Status as of 2026-09-23
+# Start Here — Project Status as of 2026-10-05
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-10-05 — pipeline streamlined into one module + notebooks; drift resolved; two numbers corrected
+
+(Branched from `main`; the 2026-10-01 MDE/AWTF crosscheck entry and the vision-first supply work are on their own unmerged branches.)
+
+**How to run Task 1 now** (`notebooks/README.md`):
+`scripts/map_buildings.py` (tiles -> U-Net + filter -> de-duplicated, permit-attributed buildings -> KMZ by animal type -> `run_meta.json` with commit/checkpoint/manifest hashes), then `scripts/compute_supply.py <run_dir>` (N/P per farm/building/species). All code lives in `geo_anom/task1/`; `notebooks/01_map_buildings.ipynb` and `02_supply_check.ipynb` call the same functions step by step. Old `unet_inference.py`/`unet_detect.py`/`planetary_computer_naip.py` are now thin wrappers. Refactor verified bit-identical to the old code (same mask, same polygons) on 10 farms. New baseline: `data/processed/task1/run_2026-10-05/`.
+
+- **The 2026-09-21 "drift" is resolved -- it was a gap in the committed run, not drift.** Full rerun vs. committed file: 401/416 farms identical detection-for-detection; the other 15 all had 0 committed and detections today, all in one tile-index block (site_0151-0231), none decreased. Hite (18) checked by eye: all real houses. Fresh runs are deterministic on the current tiles.
+- **20% of the committed "buildings" are duplicates.** Neighbouring 2 km tiles overlap; 2,828 per-tile detections today = **2,251 unique buildings** (committed file: 2,726 features, ~541 duplicated). Statewide building counts must use the de-duplicated layer; per-farm counts in the old file include neighbours' barns.
+- **Cobb Heritage Pocomoke #4 is not an unexplained miss**: it was in the gap (2 kept today), and its other houses are rejected because adjacent houses merge into one oversized blob. The 0.9% "unexplained miss" figure and the 14-farm zero-detection root-cause list in `task1_metrics.md` §4 need rechecking against the new baseline -- some of those 14 may be gap farms.
+- **Broiler N coefficient is ~12x too high.** `configs/maryland.yaml` uses 0.91 lb N per bird per flock x 6.5 flocks; the AWTF 2023 report (p.23: 21.85M lb N from broiler litter, 2019) implies ~0.08. Statewide broiler N comes out 300.8M lb/yr = 13.8x AWTF. **Do not present any N/P total** until the coefficients are checked with Stephanie's lab (AWTF Table 1a.1 is the obvious reference). Not changed in config -- it's a domain call.
+- Mask outlines often cover only part of a roof (e.g. Sheng Lin #0), so floor area -- used to split N/P across a farm's barns -- is underestimated, unevenly.
+- Beef shows 2/3 farms with buildings in the new layer (was 3/3): the two hand-added beef detections from 09-21 aren't in a fresh run, and attribution is now by nearest permit. Recheck in notebook 01 (`FARM = "Panora"`, `"Brandenburg"`).
+- Farm names aren't unique (two separate Chaudhry Farm permits, 13 km apart) and tile file names repeat across `naip_tiles_pc_4band_full/` and `_delta/` (site_0000-0087), so the old file's `tile` field is ambiguous; everything is now keyed on full tile path.
 
 ## 2026-09-23 — looked at the imagery for the first time; read this before citing any lagoon or dairy number
 
