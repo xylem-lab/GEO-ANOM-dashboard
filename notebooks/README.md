@@ -15,6 +15,15 @@ full run.
 python3 -m jupyter lab notebooks/
 ```
 
+Or in **VS Code** (Python + Jupyter extensions): open the repo folder, open a
+notebook, and pick the kernel *Python 3.9* at
+`/Library/Developer/CommandLineTools/usr/bin/python3`, which is the
+interpreter with torch/rasterio/geopandas installed. Any other interpreter
+will fail on the imports.
+
+`00_workshop_walkthrough.ipynb` is the audience version used at the
+2026-10-07 knowledge-sharing workshop (code collapsed, ~15 s end to end).
+
 The full pipeline, outside the notebooks:
 
 ```bash
