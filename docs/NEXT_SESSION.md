@@ -4,6 +4,13 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-07 (afternoon) — workshop with Rafi's lab: priorities set; read `docs/meeting_notes_2026-10-07_workshop.md`
+
+- **Next priority: poultry statewide**, county by county (not only registry farms), with per-county metrics and a density map; other species after. Soroka & Duren hand-labelled *all* Delmarva poultry houses, registered or not, so it can grade a registry-independent run directly.
+- **N/P for poultry**: treat all poultry houses as broilers; get birds/house and litter/house from Extension (Ginny Rhodes, John Moyle — Stephanie is scheduling); report a long-run annual average; then compare county totals with the AWTF appendix (birds per county).
+- **Dairy ideas**: wider-barn width band (~35–65 m); barns + lagoon + corn fields as a combined rule; search for lagoons next to detected barns; Washington County dairy list + NASS counts.
+- **Privacy**: no farm names in anything public; consider offset/aggregated locations before publishing.
+
 ## 2026-10-07 — tile georeferencing bug found and fixed; every building number before today is superseded
 
 **Use `data/processed/task1/run_2026-10-07/` (1,831 unique buildings) and tiles in `data/raw/naip_tiles_pc_4band_v2/`.** `run_2026-10-05/` and every tile in `naip_tiles_pc_4band_full/` / `_delta/` are historical only.
