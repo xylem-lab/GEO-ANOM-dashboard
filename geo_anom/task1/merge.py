@@ -102,3 +102,34 @@ def deduplicate(features: list[dict], sites: list[dict], min_overlap: float = 0.
     best["farm_name"] = best["assigned_farm"]
     best = best.drop(columns=["_i"])
     return best.to_crs("EPSG:4326")
+
+
+def farm_overview(buildings: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """One point per farm, at the centre of its detected buildings.
+
+    For finding farms when zoomed out: a poultry house is ~15 x 150 m and
+    vanishes below a pixel at county zoom. The point sits on the barns
+    themselves, not on the registry point (often hundreds of metres off).
+    """
+    cols = ["site_id", "farm_name", "county", "species_group", "animal_type", "headcount",
+            "buildings", "floor_area_m2", "registry_point_distance_m", "lat", "lon", "maps_url", "geometry"]
+    if not len(buildings):
+        return gpd.GeoDataFrame(columns=cols, geometry="geometry", crs="EPSG:4326")
+    b = buildings.to_crs(UTM)
+    rows = []
+    for sid, grp in b.groupby("assigned_site_id"):
+        c = grp.geometry.unary_union.centroid
+        first = grp.iloc[0]
+        rows.append({
+            "site_id": sid, "farm_name": first["assigned_farm"], "county": first.get("county"),
+            "species_group": first.get("species_group"), "animal_type": first.get("animal_type"),
+            "headcount": first.get("headcount"), "buildings": len(grp),
+            "floor_area_m2": round(float(grp["area_m2"].sum()), 0),
+            "registry_point_distance_m": round(float(grp["assigned_distance_m"].median()), 0),
+            "geometry": c,
+        })
+    out = gpd.GeoDataFrame(rows, geometry="geometry", crs=UTM).to_crs("EPSG:4326")
+    out["lat"] = out.geometry.y.round(6)
+    out["lon"] = out.geometry.x.round(6)
+    out["maps_url"] = [f"https://www.google.com/maps/@{la},{lo},600m/data=!3m1!1e3" for la, lo in zip(out.lat, out.lon)]
+    return out.sort_values("buildings", ascending=False).reset_index(drop=True)

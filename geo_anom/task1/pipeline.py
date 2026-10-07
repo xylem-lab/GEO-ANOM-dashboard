@@ -23,7 +23,7 @@ import pandas as pd
 
 from geo_anom.task1 import detect, tiles
 from geo_anom.task1.kmz import write_kmz
-from geo_anom.task1.merge import deduplicate
+from geo_anom.task1.merge import deduplicate, farm_overview
 
 ROOT = tiles.ROOT
 
@@ -126,7 +126,11 @@ def run_pipeline(
         per_farm = buildings.groupby("assigned_site_id").agg(
             buildings=("building_id", "size"), building_area_m2=("area_m2", "sum"),
             median_assign_dist_m=("assigned_distance_m", "median"))
-        farms = pd.DataFrame(farm_rows).set_index("site_id").join(per_farm, how="left")
+        overview = farm_overview(buildings)
+        overview.to_file(out_dir / "farms_overview.geojson", driver="GeoJSON")
+        farms = (pd.DataFrame(farm_rows).set_index("site_id").join(per_farm, how="left")
+                 .join(overview.set_index("site_id")[["lat", "lon", "maps_url"]]
+                       .rename(columns={"lat": "barns_lat", "lon": "barns_lon"}), how="left"))
         farms[["buildings", "building_area_m2"]] = farms[["buildings", "building_area_m2"]].fillna(0)
         farms.reset_index().to_csv(out_dir / "farms.csv", index=False)
     write_geojson(out_dir / "buildings.geojson", buildings_fc)
@@ -155,6 +159,15 @@ def run_pipeline(
         "unique_buildings": n_unique,
     }
     (out_dir / "run_meta.json").write_text(json.dumps(meta, indent=2))
+
+    # Accuracy vs. Soroka & Duren hand-labelled houses, when that data is on disk.
+    from geo_anom.task1.evaluate import GROUND_TRUTH, evaluate_run
+    if dedupe and GROUND_TRUTH.exists():
+        acc = evaluate_run(out_dir)
+        (out_dir / "accuracy.json").write_text(json.dumps(acc, indent=2))
+        o = acc["object_level"]
+        log(f"Accuracy vs Soroka & Duren: precision {o['precision']:.2f}, recall {o['recall']:.2f}, "
+            f"F1 {o['f1']:.2f}; farm-count R^2 {acc['farm_level_counts']['r2']:.2f}")
     log(f"\n{len(kept)} kept detections -> {n_unique} unique buildings")
     log(f"Outputs in {out_dir}")
     return meta

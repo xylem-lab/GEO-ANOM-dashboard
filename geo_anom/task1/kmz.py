@@ -22,6 +22,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from PIL import Image, ImageDraw
+import geopandas as gpd
 from shapely.geometry import shape
 
 from geo_anom.task1.species import GROUPS, species_group
@@ -85,6 +86,11 @@ def _styles() -> tuple[str, dict]:
             f'<Style id="pin_{group}"><IconStyle><scale>0.8</scale><Icon><href>icons/pin_{group}.png</href></Icon>'
             f'<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/></IconStyle></Style>'
         )
+        xml.append(
+            f'<Style id="farm_{group}"><IconStyle><scale>1.0</scale><Icon><href>icons/pin_{group}.png</href></Icon>'
+            f'<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/></IconStyle>'
+            f'<LabelStyle><scale>0.8</scale></LabelStyle></Style>'
+        )
     files["icons/rejected.png"] = _icon_png("x", REJECT_RGB)
     xml.append(
         f'<Style id="rejected"><IconStyle><scale>0.45</scale><Icon><href>icons/rejected.png</href></Icon></IconStyle>'
@@ -133,8 +139,16 @@ def _description(p: dict) -> str:
     return "<br>".join(f"<b>{escape(k)}:</b> {escape(str(v))}" for k, v in rows if v is not None)
 
 
-def _placemark(name: str, style: str, desc: str, geom_kml: str) -> str:
-    return (f"<Placemark><name>{escape(name)}</name><styleUrl>#{style}</styleUrl>"
+def _region(geom, min_px: int = 24) -> str:
+    """Show only once the feature spans >= min_px on screen, i.e. zoomed in
+    to roughly farm level -- keeps the state-wide view uncluttered."""
+    w, s, e, n = geom.bounds
+    return (f"<Region><LatLonAltBox><north>{n:.7f}</north><south>{s:.7f}</south><east>{e:.7f}</east>"
+            f"<west>{w:.7f}</west></LatLonAltBox><Lod><minLodPixels>{min_px}</minLodPixels></Lod></Region>")
+
+
+def _placemark(name: str, style: str, desc: str, geom_kml: str, region: str = "") -> str:
+    return (f"<Placemark><name>{escape(name)}</name>{region}<styleUrl>#{style}</styleUrl>"
             f"<description><![CDATA[{desc}]]></description>{geom_kml}</Placemark>")
 
 
@@ -161,17 +175,44 @@ def write_kmz(features: list[dict], out_path: Path, sites: list[dict] | None = N
         group = p.get("species_group") or species_group(p.get("animal_type"))
         if p.get("kept", True):
             by_group[group].append(_placemark(
-                f"{GROUPS[group][0]} – {p.get('farm_name', '')}", f"b_{group}", _description(p), _geometry_kml(geom)))
+                f"{GROUPS[group][0]} – {p.get('farm_name', '')}", f"b_{group}", _description(p), _geometry_kml(geom),
+                _region(geom)))
         else:
             rejected.append(_placemark(
-                f"Rejected – {p.get('farm_name', '')}", "rejected", _description(p), _geometry_kml(geom)))
+                f"Rejected – {p.get('farm_name', '')}", "rejected", _description(p), _geometry_kml(geom),
+                _region(geom)))
 
-    folders = [_folder(
+    folders = []
+    kept = [f for f in features if f["properties"].get("kept", True)]
+    if kept and "assigned_site_id" in kept[0]["properties"]:
+        from geo_anom.task1.merge import farm_overview
+        ov = farm_overview(gpd.GeoDataFrame.from_features(kept, crs="EPSG:4326"))
+        pins_by_group = defaultdict(list)
+        for _, r in ov.iterrows():
+            g = r["species_group"] if r["species_group"] in GROUPS else "unknown"
+            hc = r.get("headcount")
+            lines = [
+                f"<b>{escape(str(r['farm_name']))}</b>",
+                f"{escape(GROUPS[g][0])} · {escape(str(r['county']))} County",
+                f"<b>{r['buildings']}</b> detected buildings · {r['floor_area_m2']:,.0f} m² floor area",
+            ]
+            if hc == hc and hc:  # not NaN, not 0
+                lines.append(f"Registry headcount: {int(hc):,}")
+            lines.append(f"Registry point is ~{r['registry_point_distance_m']:.0f} m from these barns")
+            lines.append(f"<a href=\"{r['maps_url']}\">Open in Google Maps</a>")
+            desc = "<br>".join(lines)
+            pins_by_group[g].append(_placemark(f"{r['buildings']} · {r['farm_name']}", f"farm_{g}", desc,
+                                               f"<Point><coordinates>{r['lon']:.6f},{r['lat']:.6f},0</coordinates></Point>"))
+        folders.append(_folder(
+            "Farms – start here (one pin per farm, on its barns; zoom in to see each building)",
+            [_folder(f"{GROUPS[g][0]} ({len(pins_by_group[g])} farms)", pins_by_group[g]) for g in GROUPS if pins_by_group[g]],
+            open_=True))
+    folders.append(_folder(
         "Detected buildings",
         [_folder(f"{GROUPS[g][0]} ({len(by_group[g])})", by_group[g], open_=False)
          for g in GROUPS if by_group[g]],
-        open_=True,
-    )]
+        open_=False,
+    ))
     if rejected:
         folders.append(_folder(f"Rejected candidates ({len(rejected)}) – filter reasons in balloon",
                                rejected, visible=False))

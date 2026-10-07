@@ -107,3 +107,16 @@ def test_species_groups():
     assert species_group("dairy_cattle") == "dairy"
     assert species_group(None) == "unknown"
     assert species_group("something_new") == "unknown"
+
+
+def test_farm_overview_pin_sits_on_barns_not_registry_point():
+    from geo_anom.task1.merge import farm_overview
+    # registry point 600 m west of the two barns it owns
+    sites = [site("A", -600, 0)]
+    b = deduplicate([feature(house(), "t", "A"), feature(house(dy=40), "t", "A")], sites)
+    ov = farm_overview(b)
+    assert len(ov) == 1 and ov.iloc[0]["buildings"] == 2
+    pin = transform(TO_UTM, ov.geometry.iloc[0])
+    assert abs(pin.x - (X0 + 60)) < 5 and abs(pin.y - (Y0 + 27.5)) < 5   # centre of the two houses
+    assert 550 < ov.iloc[0]["registry_point_distance_m"] < 700
+    assert ov.iloc[0]["maps_url"].startswith("https://www.google.com/maps/@")
