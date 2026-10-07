@@ -124,3 +124,27 @@ def show_candidate(result, n: int, pad_m: float = 40, size: float = 5):
                  + (f"\n{'; '.join(c['reasons'])}" if c["reasons"] else ""))
     fig.tight_layout()
     return fig
+
+
+def _auto_zoom(result, pad_m: float = 120):
+    if not result.candidates:
+        return None
+    t = result.meta["transform"]
+    pts = np.vstack([_to_px(c["poly"], t) for c in result.candidates])
+    pad = pad_m / result.meta["res_m"]
+    return (*(pts.min(0) - pad), *(pts.max(0) + pad))
+
+
+def show_area(result, size: float = 10, title: str | None = None):
+    """The same view as show_boxes(), with no detections drawn -- for
+    counting the buildings yourself before looking at the model's answer."""
+    fig, ax = plt.subplots(figsize=(size, size))
+    ax.imshow(rgb(result.img))
+    zoom = _auto_zoom(result)
+    if zoom:
+        x0, y0, x1, y1 = zoom
+        ax.set_xlim(x0, x1); ax.set_ylim(y1, y0)
+    ax.set_axis_off()
+    ax.set_title(title or result.site["farm_name"])
+    fig.tight_layout()
+    return fig
