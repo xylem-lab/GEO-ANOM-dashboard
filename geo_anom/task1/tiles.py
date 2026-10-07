@@ -21,12 +21,13 @@ import rasterio
 import requests
 from rasterio.enums import Resampling
 from rasterio.warp import transform_bounds
-from rasterio.windows import from_bounds
 
 from geo_anom.core.geo_utils import BBox
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-DEFAULT_MANIFEST = ROOT / "data/raw/naip_tiles_pc_4band_full/manifest.json"
+# v2 = edge-safe mosaic (2026-10-07). The older naip_tiles_pc_4band_full/ tiles
+# are distorted for 219/417 sites -- don't use them.
+DEFAULT_MANIFEST = ROOT / "data/raw/naip_tiles_pc_4band_v2/manifest.json"
 STAC_SEARCH_URL = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
 BUFFER_KM = 1.0
 
@@ -84,63 +85,95 @@ def find_naip_item(lon: float, lat: float, session: requests.Session) -> dict | 
     return features[0] if features else None
 
 
+def find_naip_items(bbox: BBox, session: requests.Session) -> list[dict]:
+    """All NAIP STAC items intersecting a bbox, most recent first."""
+    w, so, e, n = bbox.west, bbox.south, bbox.east, bbox.north
+    resp = session.post(
+        STAC_SEARCH_URL,
+        json={
+            "collections": ["naip"],
+            "intersects": {"type": "Polygon", "coordinates": [[[w, so], [e, so], [e, n], [w, n], [w, so]]]},
+            "limit": 50,
+            "sortby": [{"field": "properties.datetime", "direction": "desc"}],
+        },
+        timeout=30,
+    )
+    resp.raise_for_status()
+    return resp.json().get("features", [])
+
+
 def download_tile(site: dict, out_path: Path, session: requests.Session | None = None) -> dict | None:
     """Download a 2km x 2km, 1m, 4-band tile centred on site lat/lon.
 
-    Returns the site dict with tile_path/bbox/naip_item_id/naip_datetime
+    Every NAIP image (quarter quad) touching the square is warped onto one
+    fixed 1 m UTM grid and mosaicked, most recent first. The earlier version
+    (used for every tile from 2026-09-01 to 2026-10-06) read a single image
+    with an out-of-range window: when the 2 km square crossed that image's
+    edge (219 of 417 sites), rasterio clipped the read to the image and the
+    clipped data was then stretched over the full tile -- tiles shifted by up
+    to ~500 m and distorted, while still looking self-consistent.
+
+    Returns the site dict with tile_path/bbox/naip_item_id(s)/naip_datetime
     filled in, or None if no imagery was found.
     """
+    from rasterio.transform import from_origin
+    from rasterio.warp import reproject
+
     session = session or requests.Session()
-    item = find_naip_item(site["lon"], site["lat"], session)
-    if item is None:
+    bbox = BBox.from_point(lon=site["lon"], lat=site["lat"], buffer_km=BUFFER_KM)
+    items = find_naip_items(bbox, session)
+    if not items:
         print(f"  no NAIP item found for {site['farm_name']}")
         return None
 
-    href = item["assets"]["image"]["href"]
-    bbox = BBox.from_point(lon=site["lon"], lat=site["lat"], buffer_km=BUFFER_KM)
+    # Destination grid: the first (most recent) item's UTM CRS, snapped to 1 m.
+    with rasterio.open(items[0]["assets"]["image"]["href"]) as first:
+        dst_crs = first.crs
+        count = first.count
+        profile = first.profile.copy()
+    left, bottom, right, top = transform_bounds("EPSG:4326", dst_crs, bbox.west, bbox.south, bbox.east, bbox.north)
+    r = TARGET_RESOLUTION_M
+    left, top = np.floor(left / r) * r, np.ceil(top / r) * r
+    width, height = int(np.ceil((right - left) / r)), int(np.ceil((top - bottom) / r))
+    dst_transform = from_origin(left, top, r, r)
 
-    with rasterio.open(href) as src:
-        left, bottom, right, top = transform_bounds(
-            "EPSG:4326", src.crs, bbox.west, bbox.south, bbox.east, bbox.north
-        )
-        window = from_bounds(left, bottom, right, top, transform=src.transform)
-        if window.width < 10 or window.height < 10:
-            print(f"  empty/tiny window for {site['farm_name']}")
-            return None
+    mosaic = np.zeros((count, height, width), dtype=np.uint8)
+    used = []
+    for item in items:
+        filled = mosaic.any(axis=0)
+        if filled.all():
+            break
+        with rasterio.open(item["assets"]["image"]["href"]) as src:
+            tmp = np.zeros_like(mosaic)
+            for b in range(count):
+                reproject(rasterio.band(src, b + 1), tmp[b], src_transform=src.transform, src_crs=src.crs,
+                          dst_transform=dst_transform, dst_crs=dst_crs, src_nodata=0, dst_nodata=0,
+                          resampling=Resampling.average)
+        new = tmp.any(axis=0) & ~filled
+        if new.any():
+            mosaic[:, new] = tmp[:, new]
+            used.append(item)
+    if not used:
+        print(f"  empty mosaic for {site['farm_name']}")
+        return None
 
-        scale = src.res[0] / TARGET_RESOLUTION_M
-        out_width = max(int(round(window.width * scale)), 1)
-        out_height = max(int(round(window.height * scale)), 1)
-        data = src.read(
-            window=window,
-            out_shape=(src.count, out_height, out_width),
-            resampling=Resampling.average,
-        )
-        if data.size == 0:
-            print(f"  empty read for {site['farm_name']}")
-            return None
-        # window_transform gives the native-res transform; rescale it to
-        # match the resampled (target-res) output raster.
-        native_transform = src.window_transform(window)
-        out_transform = native_transform * native_transform.scale(
-            window.width / out_width, window.height / out_height
-        )
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        profile = src.profile.copy()
-        profile.update(
-            height=data.shape[1], width=data.shape[2], transform=out_transform,
-            driver="GTiff", compress="lzw", predictor=2,
-            tiled=True, blockxsize=256, blockysize=256,
-        )
-        with rasterio.open(out_path, "w", **profile) as dst:
-            dst.write(data)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    profile.update(
+        height=height, width=width, transform=dst_transform, crs=dst_crs, count=count,
+        driver="GTiff", compress="lzw", predictor=2, tiled=True, blockxsize=256, blockysize=256, nodata=None,
+    )
+    with rasterio.open(out_path, "w", **profile) as dst:
+        dst.write(mosaic)
 
     return {
         **site,
         "tile_path": str(out_path.relative_to(ROOT)) if out_path.is_relative_to(ROOT) else str(out_path),
         "bbox": bbox.as_tuple,
-        "naip_item_id": item["id"],
-        "naip_datetime": item["properties"].get("datetime"),
+        "naip_item_id": used[0]["id"],
+        "naip_item_ids": [it["id"] for it in used],
+        "naip_datetime": used[0]["properties"].get("datetime"),
+        "naip_datetimes": sorted({it["properties"].get("datetime", "")[:10] for it in used}),
+        "tile_method": "mosaic_reproject_v2",
     }
 
 

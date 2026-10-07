@@ -148,3 +148,118 @@ def show_area(result, size: float = 10, title: str | None = None):
     ax.set_title(title or result.site["farm_name"])
     fig.tight_layout()
     return fig
+
+
+# --- Whole-dataset views (read a saved run; no model needed) --------------
+
+def farm_thumbnail(ax, site: dict, buildings, pad_m: float = 150, half_m: float = 500):
+    """One farm from a saved run: its own buildings in the species colour,
+    neighbours' buildings in thin white, the registry point as a yellow x."""
+    import rasterio
+    from pyproj import Transformer
+    from rasterio.windows import Window
+
+    from geo_anom.task1.species import GROUPS, species_group
+    from geo_anom.task1.tiles import site_id, tile_path
+
+    with rasterio.open(tile_path(site)) as src:
+        crs, t, b = src.crs, src.transform, src.bounds
+        to_tile = Transformer.from_crs("EPSG:4326", crs, always_xy=True).transform
+        px, py = to_tile(site["lon"], site["lat"])
+        sid = site_id(site)
+        in_tile = buildings.to_crs(crs).cx[b.left:b.right, b.bottom:b.top]
+        own = in_tile[in_tile["assigned_site_id"] == sid]
+        frame = own if len(own) else in_tile
+        if len(frame):
+            x0, y0, x1, y1 = frame.total_bounds
+            x0, y0, x1, y1 = x0 - pad_m, y0 - pad_m, x1 + pad_m, y1 + pad_m
+        else:
+            x0, y0, x1, y1 = px - half_m, py - half_m, px + half_m, py + half_m
+        c0, r0 = ~t * (x0, y1)
+        c1, r1 = ~t * (x1, y0)
+        c0, r0 = max(int(c0), 0), max(int(r0), 0)
+        c1, r1 = min(int(c1), src.width), min(int(r1), src.height)
+        win = Window(c0, r0, max(c1 - c0, 1), max(r1 - r0, 1))
+        img = np.moveaxis(src.read([1, 2, 3], window=win), 0, -1)
+        wt = src.window_transform(win)
+
+    ax.imshow(stretch(img))
+    color = np.array(GROUPS[species_group(site.get("animal_type"))][1]) / 255
+    for geom, mine in [(g, True) for g in own.geometry] + \
+                      [(g, False) for g in in_tile[in_tile["assigned_site_id"] != sid].geometry]:
+        for poly in ([geom] if geom.geom_type == "Polygon" else geom.geoms):
+            xy = np.array([~wt * p for p in poly.exterior.coords])
+            ax.add_patch(MplPolygon(xy, closed=True, fill=mine, fc=(*color, 0.35) if mine else None,
+                                    ec=color if mine else "white", lw=1.6 if mine else 0.6))
+    rx, ry = ~wt * (px, py)
+    if 0 <= rx <= img.shape[1] and 0 <= ry <= img.shape[0]:
+        ax.plot(rx, ry, "x", color="yellow", ms=9, mew=2.5)
+    ax.set_xlim(0, img.shape[1]); ax.set_ylim(img.shape[0], 0)
+    ax.set_axis_off()
+    name = site["farm_name"] if len(site["farm_name"]) <= 34 else site["farm_name"][:32] + "…"
+    ax.set_title(f"{name}\n{site.get('county')} · {GROUPS[species_group(site.get('animal_type'))][0].split(' (')[0]}"
+                 f" · {len(own)} bldg", fontsize=9)
+
+
+def gallery(sites: list[dict], buildings, cols: int = 4, size: float = 4.2, title: str = ""):
+    """Grid of farm_thumbnail() for a list of sites (one page)."""
+    if not sites:
+        print("No farms to show.")
+        return None
+    rows = int(np.ceil(len(sites) / cols))
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * size, rows * size))
+    axes = np.atleast_1d(axes).ravel()
+    for ax, s in zip(axes, sites):
+        try:
+            farm_thumbnail(ax, s, buildings)
+        except Exception as e:  # a bad tile shouldn't kill the whole page
+            ax.set_axis_off(); ax.set_title(f"{s['farm_name'][:30]}\n(error: {type(e).__name__})", fontsize=9)
+    for ax in axes[len(sites):]:
+        ax.set_axis_off()
+    if title:
+        fig.suptitle(title, fontsize=14)
+    fig.tight_layout()
+    return fig
+
+
+def state_map(buildings, farms, sites: list[dict], satellite: bool = True):
+    """Interactive map (folium): one dot per building coloured by species,
+    registry pins for farms with no detected building. Needs internet for
+    the basemap only."""
+    import folium
+
+    from geo_anom.task1.species import GROUPS, species_group
+    from geo_anom.task1.tiles import site_id
+
+    m = folium.Map(location=[38.6, -76.0], zoom_start=8, tiles=None, control_scale=True)
+    if satellite:
+        folium.TileLayer(
+            tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            attr="Esri World Imagery", name="Satellite").add_to(m)
+    folium.TileLayer("OpenStreetMap", name="Streets").add_to(m)
+
+    def hexc(rgb):
+        return "#%02x%02x%02x" % tuple(rgb)
+
+    layers = {g: folium.FeatureGroup(name=f"{label}", show=True) for g, (label, _) in GROUPS.items()}
+    cent = buildings.to_crs("EPSG:32618").centroid.to_crs("EPSG:4326")
+    for (_, b), c in zip(buildings.iterrows(), cent):
+        g = b.get("species_group") or "unknown"
+        folium.CircleMarker(
+            [c.y, c.x], radius=3, color=hexc(GROUPS[g][1]), fill=True, fill_opacity=0.9, weight=1,
+            tooltip=f"{b['assigned_farm']} · {GROUPS[g][0]} · {b['area_m2']:.0f} m² · conf {b.get('mean_prob', 0):.2f}",
+        ).add_to(layers[g])
+    for lyr in layers.values():
+        lyr.add_to(m)
+
+    missing = folium.FeatureGroup(name="Registry farms with NO detected building", show=True)
+    zero = set(farms.loc[farms["buildings"] == 0, "site_id"])
+    for s in sites:
+        if site_id(s) in zero:
+            g = species_group(s.get("animal_type"))
+            folium.Marker([s["lat"], s["lon"]],
+                          tooltip=f"NO BUILDING DETECTED: {s['farm_name']} ({GROUPS[g][0]}, {s.get('headcount') or 0:,} head)",
+                          icon=folium.Icon(color="red", icon="question-sign")).add_to(missing)
+    missing.add_to(m)
+    folium.LayerControl(collapsed=False).add_to(m)
+    return m
