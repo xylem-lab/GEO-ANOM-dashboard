@@ -323,3 +323,7 @@ Branch `refactor/task1-pipeline-notebooks-2026-10-05`. Task 1 now runs from `geo
 - Beef: 2/3 farms in a fresh run (09-21's two hand-added detections aren't reproduced).
 - Still to recheck against the new baseline: the 0.9% unexplained-miss rate and the 14-farm zero-detection root-cause list (`task1_metrics.md` §4) — some of the 14 may be gap farms.
 
+## 2026-10-07 — 53% of tiles were shifted/stretched by a download bug; fixed, all tiles rebuilt, new baseline 1,831 buildings
+
+See `docs/NEXT_SESSION.md` 2026-10-07 for the full account. Root cause: windowed read past a NAIP quarter-quad edge, clipped then stretched over the full tile (219/417 tiles, offsets up to ~500 m). Fix: warp + mosaic all intersecting items onto a fixed 1 m grid (`tiles.download_tile`). Verification: stored-vs-source offset 0 m on rebuilt tiles; same-barn cross-tile distance median 0.2 m (was 68 m). Every number computed on `naip_tiles_pc_4band_full/` tiles (R^2 0.655, 99.7% precision, 0.9% unexplained-miss, 82% MDE crosscheck, lagoon positions, registry-offset estimates) needs recomputing before it is cited again. Lesson: a per-farm overlay can't reveal a georeferencing error because image and boxes share it -- cross-tile consistency (same object, two tiles) and comparison with the source are the checks that catch it.
+

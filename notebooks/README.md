@@ -7,6 +7,7 @@ full run.
 | Notebook | What you check |
 |---|---|
 | `01_map_buildings.ipynb` | One farm at a time: tile → U-Net probability → mask → shapes → filter (with the reason for every rejection) → boxes on the image → your own TP/FP/FN count → KMZ by animal type |
+| `03_full_dataset.ipynb` | Run all 417 farms (or load the latest run) and look at everything: statewide map, distributions, rejection reasons, a gallery of every farm, zero-detection farms |
 | `02_supply_check.ipynb` | N/P₂O₅ from a full run: coefficients against the AWTF report, one farm recomputed by hand, totals by species |
 
 ## Run

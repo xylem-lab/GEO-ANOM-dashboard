@@ -1,0 +1,8 @@
+species_group,farms,farms_with_buildings,headcount,annual_N_lbs,annual_P2O5_lbs,share_of_N
+broiler,380,354,50853322,300797399.63,208244353.59,0.975
+poultry_other,9,5,3618582,4160644.56,3297772.52,0.013
+dairy,14,3,16660,2798880.0,1599360.0,0.009
+beef,3,1,4817,602125.0,419079.0,0.002
+swine,1,0,2455,58920.0,44190.0,0.0
+excluded,1,1,350,0.0,0.0,0.0
+unknown,9,9,0,0.0,0.0,0.0

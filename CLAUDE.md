@@ -24,10 +24,13 @@ prototype. They are stale; don't treat them as current status.
   hashes). Then `scripts/compute_supply.py <run_dir>` for N/P.
 - `notebooks/01_map_buildings.ipynb`, `02_supply_check.ipynb` call the same
   functions for step-by-step checks.
-- Current baseline: `data/processed/task1/run_2026-10-05/` (2,251 unique
-  buildings). The older `data/processed/detections/full_registry_unet_tulbure_detections.geojson`
-  (2,726 features) has ~20% cross-tile duplicates and is missing 15 farms —
-  historical only.
+- Current baseline: `data/processed/task1/run_2026-10-07/` (1,831 unique
+  buildings) on tiles in `data/raw/naip_tiles_pc_4band_v2/`. **Tiles in
+  `naip_tiles_pc_4band_full/` and `_delta/` are shifted/stretched for 219/417
+  sites (download bug fixed 2026-10-07) — never use them**, and treat every
+  number computed from them (`run_2026-10-05`, the 2,726-feature
+  `full_registry_unet_tulbure_detections.geojson`, R² 0.655, 99.7% precision,
+  82% MDE crosscheck) as superseded until recomputed.
 - Change detection logic in `geo_anom/task1/`, not in new one-off scripts.
   `scripts/unet_detect.py` / `unet_inference.py` are compatibility wrappers.
   After any change, rerun a few farms and compare with the baseline before
@@ -43,7 +46,11 @@ prototype. They are stale; don't treat them as current status.
   unresolved and is a domain call for Stephanie Lansing's lab.
 - Farm names and tile file names are not unique keys; use the full tile path
   (`geo_anom.task1.tiles.site_id`).
-- Registry permit points are often 400–860 m from the real barns.
+- Registry permit points can be hundreds of metres from the real barns, so
+  attribution of buildings to farms (nearest permit point) is approximate.
+- When checking georeferencing, compare the same object across overlapping
+  tiles or against the source image — a single-farm overlay can't show it,
+  because the image and the boxes share the error.
 - Species comes from the registry permit, not from the detector. Dairy barns
   and lagoons are mostly not detected.
 - Git: work on a branch (`experiment/…`, `research/…`, `refactor/…`), open a

@@ -1,8 +1,20 @@
-# Start Here — Project Status as of 2026-10-05
+# Start Here — Project Status as of 2026-10-07
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-10-07 — tile georeferencing bug found and fixed; every building number before today is superseded
+
+**Use `data/processed/task1/run_2026-10-07/` (1,831 unique buildings) and tiles in `data/raw/naip_tiles_pc_4band_v2/`.** `run_2026-10-05/` and every tile in `naip_tiles_pc_4band_full/` / `_delta/` are historical only.
+
+- **The bug:** `download_tile()` (used for all tiles since 2026-09-01) read one NAIP quarter-quad with a window that could run past the image edge. rasterio clipped the read and the clipped data was stretched over the whole 2 km tile. **219 of 417 tiles** (every site whose square crosses a quarter-quad edge) were shifted by up to ~500 m and distorted. Overlays always looked right because boxes were drawn on the same distorted tile -- nobody could see it by eye on one farm.
+- **How it was found:** the full-dataset gallery (`notebooks/03_full_dataset.ipynb`) showed outlines over fields beside real houses; copies of the same barn from two overlapping tiles sat a median 68 m apart; tiles cut from the *same* source image disagreed by 160-225 m; checking stored tiles against the source warped onto their own grid gave offsets of 200-500 m (corr 0.54-0.64) on edge-crossing tiles and 0 m (corr 1.00) on the others.
+- **The fix:** `tiles.download_tile()` now warps every intersecting NAIP item onto a snapped 1 m UTM grid and mosaics them (most recent first). All 417 tiles rebuilt (0 failures). Rebuilt tiles match the source exactly; same-barn copies across tiles now sit a median **0.2 m** apart (2/170 tile pairs > 10 m).
+- **New numbers (commit 9d01f73):** 3,980 candidates -> 2,990 kept per tile -> **1,831 unique buildings** (was 2,251); farms with >=1 building 373/417 (was 377). Broiler 354/380 farms, 1,764 buildings; dairy 3/14 farms (fragments); beef 1/3; swine 0/1 (the old swine "detection" was an artifact). Broiler N check unchanged (13.8x AWTF -- it's registry-based).
+- **Still to redo on the new tiles:** R^2 vs Soroka & Duren (0.655 was computed on distorted tiles), the 35-farm precision audit, the recall/zero-detection root-cause list, the 82% MDE-inspection crosscheck, lagoon candidate positions, the 09-23 "registry points 400-860 m off" estimate (part of that offset was probably this bug), and the KMZs/field guide.
+- **Attribution caveat (unchanged, now visible):** 9 farms have detections in their own tile but 0 buildings assigned -- the barns go to a nearer permit, mostly the same owner's other permit (Randy Bui x2, Eck + Mark Eck expansion, Tomlinson x2, Weaver x2, Ball family). Building totals are right; per-farm splits are only as good as the registry points.
+- New: `geo_anom/task1/pipeline.run_pipeline()` (the full run as a function), `notebooks/03_full_dataset.ipynb` (run or load all 417 farms; map, distributions, rejection reasons, gallery of every farm, zero-detection farms).
 
 ## 2026-10-05 — pipeline streamlined into one module + notebooks; drift resolved; two numbers corrected
 

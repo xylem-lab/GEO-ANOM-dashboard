@@ -1,0 +1,37 @@
+{
+  "run_at": "2026-10-07T00:51:52",
+  "git_commit": "9d01f73",
+  "manifest": "/Users/umeshadari/XylemLab/GEO-ANOM-dashboard/data/raw/naip_tiles_pc_4band_v2/manifest.json",
+  "manifest_sha256": "10c4e32f3961a284",
+  "checkpoint": "data/models/train-all_unet_0.5_0.01_rotation_best-checkpoint.pt",
+  "checkpoint_sha256": "b4e68fd86c50cc31",
+  "device": "mps",
+  "filters": {
+    "farm": [],
+    "county": []
+  },
+  "use_road_filter": false,
+  "dedupe": true,
+  "thresholds": {
+    "AREA_MIN_M2": 500.0,
+    "AREA_MAX_M2": 7500.0,
+    "LENGTH_MIN_M": 55.0,
+    "LENGTH_MAX_M": 300.0,
+    "WIDTH_MIN_M": 10.0,
+    "WIDTH_MAX_M": 30.0,
+    "ASPECT_MIN": 2.5,
+    "ASPECT_MAX": 18.0,
+    "MIN_DIST_TO_ROAD_M": 20.0
+  },
+  "species_overrides": {
+    "cattle_includes_heifers": {
+      "LENGTH_MIN_M": 40.0,
+      "ASPECT_MIN": 2.0
+    }
+  },
+  "close_kernel": 11,
+  "tiles": 417,
+  "raw_candidates": 3980,
+  "kept_detections": 2990,
+  "unique_buildings": 1831
+}
