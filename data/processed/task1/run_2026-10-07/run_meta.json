@@ -1,6 +1,6 @@
 {
-  "run_at": "2026-10-07T00:51:52",
-  "git_commit": "9d01f73",
+  "run_at": "2026-10-07T01:22:48",
+  "git_commit": "79e4a2e",
   "manifest": "/Users/umeshadari/XylemLab/GEO-ANOM-dashboard/data/raw/naip_tiles_pc_4band_v2/manifest.json",
   "manifest_sha256": "10c4e32f3961a284",
   "checkpoint": "data/models/train-all_unet_0.5_0.01_rotation_best-checkpoint.pt",
