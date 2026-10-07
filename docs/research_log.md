@@ -310,3 +310,16 @@ Headline findings:
 Five concrete questions for the AGNR team are listed at the end of
 `docs/task1_imagery_audit_2026-09-30.md`, each tied to a specific farm and finding
 rather than a general ask.
+
+## 2026-10-05 — pipeline refactor and full rerun: drift explained, duplicates found, broiler N coefficient off ~14x
+
+Branch `refactor/task1-pipeline-notebooks-2026-10-05`. Task 1 now runs from `geo_anom/task1/` via `scripts/map_buildings.py` + `scripts/compute_supply.py`, with notebooks `01_map_buildings` / `02_supply_check` calling the same code. Refactor verified bit-identical to the old `unet_detect.py` (same mask, same polygons) on 10 farms.
+
+- **09-21 "drift" = gap, not drift.** Full rerun vs. committed file: 401/416 farms identical; 15 farms had 0 committed and detections now, all in tile block site_0151–0231. Hite (18 detections) checked by eye: all real houses. Runs are deterministic on current tiles.
+- **Cross-tile duplicates: 2,828 per-tile detections = 2,251 unique buildings.** The committed 2,726-feature file counts ~541 barns twice (overlapping 2 km tiles). Buildings are now de-duplicated (>50% overlap) and attributed to the nearest permit point (`assigned_distance_m` recorded).
+- **Cobb Pocomoke #4**: was in the gap; today 2 kept, ~7 real houses rejected because adjacent houses merge into one oversized blob. New concrete failure mode (merged-blob rejection) — candidate fix to test: split blobs by width before filtering, or a smaller close kernel only for oversized blobs. Not tried.
+- **Broiler N**: config 0.91 lb N/bird/flock x 6.5 flocks -> 300.8M lb/yr statewide vs AWTF 21.85M (2019) = 13.8x. AWTF implies ~0.08 lb/bird. Not changed — needs Lansing lab.
+- Partial-roof outlines underestimate floor area (affects the area-weighted N split).
+- Beef: 2/3 farms in a fresh run (09-21's two hand-added detections aren't reproduced).
+- Still to recheck against the new baseline: the 0.9% unexplained-miss rate and the 14-farm zero-detection root-cause list (`task1_metrics.md` §4) — some of the 14 may be gap farms.
+

@@ -1,5 +1,8 @@
 # Task 1 — Building and Lagoon Detection: Formal Accuracy Metrics
 
+> **2026-10-05 — partly superseded.** Counts below come from `full_registry_unet_tulbure_detections.geojson`, which double-counts ~20% of buildings (overlapping tiles) and is missing 15 farms. Current baseline: `data/processed/task1/run_2026-10-05/` (2,251 unique buildings). The R² and precision figures were not recomputed; the §4 recall/0.9% figure needs rechecking. See `docs/NEXT_SESSION.md`.
+
+
 Building metrics computed 2026-09-10; lagoon rebuild and audit done
 2026-09-14 (see section 5) using `geo_anom/phase1/evaluation.py`
 (unit-tested against synthetic known values — see
