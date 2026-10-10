@@ -1,0 +1,33 @@
+{
+  "ground_truth": "Soroka & Duren (2020) Delmarva poultry houses, 2016/17",
+  "farm_level_counts": {
+    "n": 147,
+    "r2": 0.5175,
+    "rmse": 3.3836,
+    "mae": 2.4286,
+    "pearson_r": 0.8705,
+    "pearson_p": 0.0,
+    "spearman_rho": 0.8008,
+    "spearman_p": 0.0
+  },
+  "object_level": {
+    "tp": 401,
+    "fp": 7,
+    "fn": 220,
+    "precision": 0.9828,
+    "recall": 0.6457,
+    "f1": 0.7794,
+    "detections": 408,
+    "ground_truth_houses": 621,
+    "median_iou_of_matches": 0.759
+  },
+  "centroid_distance_m": {
+    "median": 3.8,
+    "p90": 12.2,
+    "share_within_25m": 0.973
+  },
+  "caveats": [
+    "filter calibrated on this ground truth (not held out)",
+    "ground truth 2016/17 vs imagery 2023"
+  ]
+}

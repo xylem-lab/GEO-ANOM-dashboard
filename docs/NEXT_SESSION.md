@@ -1,8 +1,19 @@
-# Start Here — Project Status as of 2026-10-07
+# Start Here — Project Status as of 2026-10-10
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-10-10 — county-wide grid run works (Somerset); next: other Eastern Shore counties, then dark roofs
+
+`notebooks/04_poultry_by_county.ipynb` (set `COUNTY`, `RUN_FULL`) runs the detector on a 2 km grid (250 m overlap) over a whole county and grades it against the USGS hand tracing, which covers every Delmarva poultry house, registered or not. Results in `data/processed/task1/county_<name>/` (Somerset, commit 1e934f4).
+
+- **Somerset: 389 houses; precision 99%, recall 66% vs hand tracing**, outlines ~4 m from traced houses. The 5 "ours only" are houses built after 2016/17 (true precision ≈100%).
+- **Grid > registry tiles:** 384 traced houses found vs 308 by the registry run (+79, −3).
+- **81 houses >1 km from any registered permit, all real** (every one sits on a traced house; 12 checked by eye, 1–5 km from a permit). A registry-only map misses about a fifth of Somerset's houses.
+- **Misses (196) are mostly older dark/rust-roofed houses** (mean roof brightness 145 vs 175 for found; redder; 65% darker than the darkest 10% found). Biggest remaining gap — candidate fixes: retrain/fine-tune on Delmarva dark-roof examples (hand tracing gives free labels), or a second lower threshold for long house-shaped shapes, checked against the tracing.
+- Statewide plan: Eastern Shore first (~3,600 tiles, ~36 GB, ~1 h/county download); western counties have no hand tracing → by-eye sample + registry/AWTF totals. Statewide = 10,666 tiles (~107 GB).
+- `data/reference/awtf_2017_broiler_layer_inventory_by_county.csv` = AWTF Table 1a.3 (the report's printed Ag Census total omits Dorchester; noted in the file).
 
 ## 2026-10-07 (afternoon) — workshop with Rafi's lab: priorities set; read `docs/meeting_notes_2026-10-07_workshop.md`
 
