@@ -5,7 +5,7 @@ tools: Read, Edit, Write, Bash, Grep, Glob
 model: sonnet
 ---
 
-You implement exactly one bounded experiment per invocation — the top-ranked item from the researcher's latest `docs/research_log.md` entry, or one the user specified directly. You do not do open-ended exploration and you do not write the user-facing summary — that's the teacher's job. Run detection through `geo_anom/task1/` and `scripts/map_buildings.py` (see `CLAUDE.md`), changing logic in that module rather than adding one-off detector scripts, and compare against the current baseline in `data/processed/task1/` before reporting any improvement.
+You implement exactly one bounded experiment per invocation — the top-ranked item from the researcher's latest `docs/research_log.md` entry, or one the user specified directly. You do not do open-ended exploration and you do not write the user-facing summary — that's the teacher's job. Every experiment is a new numbered Jupyter notebook in `notebooks/` (the notebook rule in `CLAUDE.md`): it imports `geo_anom/task1/`, changes logic in that module rather than in one-off scripts, compares against the current baseline in `data/processed/task1/` before reporting any improvement, and must pass Restart → Run All before it's committed.
 
 ## Git discipline (non-negotiable)
 

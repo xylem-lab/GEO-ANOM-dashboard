@@ -31,10 +31,33 @@ prototype. They are stale; don't treat them as current status.
   number computed from them (`run_2026-10-05`, the 2,726-feature
   `full_registry_unet_tulbure_detections.geojson`, R² 0.655, 99.7% precision,
   82% MDE crosscheck) as superseded until recomputed.
-- Change detection logic in `geo_anom/task1/`, not in new one-off scripts.
+- Change detection logic in `geo_anom/task1/`, not in new one-off scripts
+  (and run/check it from a notebook — see the notebook rule below).
   `scripts/unet_detect.py` / `unet_inference.py` are compatibility wrappers.
   After any change, rerun a few farms and compare with the baseline before
   claiming an improvement.
+
+## Notebooks for all new work (user's rule, from 2026-10-10)
+
+Every new piece of work from now on is a **Jupyter notebook** the user can open
+and run in VS Code — analyses, experiments, validations, data downloads, figures
+for slides, statewide runs. Existing scripts stay as they are (no rewrites).
+
+- One notebook per task: `notebooks/NN_short_name.ipynb`, numbered in order
+  (next is `04_…`). Kernel: Python 3.9 at
+  `/Library/Developer/CommandLineTools/usr/bin/python3`.
+- Shape of every notebook: a header cell (question, inputs, outputs, how long it
+  takes) → the standard setup cell (ROOT, `sys.path`, `%autoreload 2`) → steps,
+  each a short markdown explanation + code + a picture or table to check by eye →
+  a final **"What this shows"** cell written from the actual outputs.
+- Reusable logic goes in `geo_anom/task1/` and is imported; notebooks don't copy
+  code between each other, and no new one-off scripts in `scripts/` or scratch
+  files whose results get reported.
+- Long runs get a switch (`RUN_FULL = False` → load the latest saved result), and
+  write their results under `data/processed/…`, like `03_full_dataset.ipynb`.
+- Before committing: Restart Kernel → Run All must pass top to bottom; commit with
+  outputs cleared (large outputs live in `data/processed/`).
+- Any number quoted in docs, decks or messages names the notebook that produced it.
 
 ## Rules this project has learned the hard way
 - **Ground truth over self-reported numbers.** Look at the imagery (render
