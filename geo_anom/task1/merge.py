@@ -47,11 +47,15 @@ def _components(n: int, pairs) -> np.ndarray:
     return np.array([find(i) for i in range(n)])
 
 
-def deduplicate(features: list[dict], sites: list[dict], min_overlap: float = 0.5) -> gpd.GeoDataFrame:
+def deduplicate(features: list[dict], sites: list[dict], min_overlap: float = 0.5,
+                prefer: str = "confidence") -> gpd.GeoDataFrame:
     """Kept detections from all tiles -> unique, farm-attributed buildings.
 
     Two detections are the same building if their intersection covers more
-    than `min_overlap` of the smaller one. Returns a GeoDataFrame (WGS84)
+    than `min_overlap` of the smaller one. The copy kept is the most confident
+    (`prefer="confidence"`, registry runs) or the largest (`prefer="area"`,
+    grid runs, where a barn cut by one tile's edge is whole in its neighbour).
+    Returns a GeoDataFrame (WGS84)
     with one row per building plus `n_detections` (how many tiles saw it),
     `assigned_farm`, `assigned_distance_m`, and the assigned permit's
     `animal_type`/`species_group`/`headcount`.
@@ -79,7 +83,8 @@ def deduplicate(features: list[dict], sites: list[dict], min_overlap: float = 0.
 
     gdf["n_detections"] = gdf.groupby("building_id")["_i"].transform("size")
     gdf["seen_from_tiles"] = gdf.groupby("building_id")["tile_path"].transform(lambda s: ",".join(sorted(set(s))))
-    best = gdf.sort_values(["mean_prob", "area_m2"], ascending=False).drop_duplicates("building_id")
+    order = ["mean_prob", "area_m2"] if prefer == "confidence" else ["area_m2", "mean_prob"]
+    best = gdf.sort_values(order, ascending=False).drop_duplicates("building_id")
     best = best.sort_values("building_id").reset_index(drop=True)
 
     # Attribute to the nearest permit point.

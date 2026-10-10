@@ -10,6 +10,7 @@ from __future__ import annotations
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon as MplPolygon
+from shapely.geometry import box
 
 KEPT_COLOR = "#2ecc40"
 REJECT_COLOR = "#ff4136"
@@ -263,3 +264,57 @@ def state_map(buildings, farms, sites: list[dict], satellite: bool = True):
     missing.add_to(m)
     folium.LayerControl(collapsed=False).add_to(m)
     return m
+
+
+def location_gallery(points, sites: list[dict], buildings=None, ground_truth=None, size_m: float = 300,
+                     cols: int = 4, size: float = 4.0, titles: list[str] | None = None, suptitle: str = ""):
+    """Crops around arbitrary locations from whichever tile covers them.
+
+    points: GeoSeries (any CRS) of locations to look at. Each crop is
+    size_m x size_m, from the site whose tile centre is nearest (tiles are
+    2 km wide, so the nearest centre always contains the point). Our
+    buildings are drawn green, ground-truth houses orange.
+    """
+    import rasterio
+    from pyproj import Transformer
+    from rasterio.windows import from_bounds
+
+    from geo_anom.task1.tiles import tile_path
+
+    pts = points.to_crs("EPSG:4326")
+    if not len(pts):
+        print("Nothing to show.")
+        return None
+    centres = np.array([(s["lon"], s["lat"]) for s in sites])
+    rows = int(np.ceil(len(pts) / cols))
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * size, rows * size))
+    axes = np.atleast_1d(axes).ravel()
+    for k, (ax, p) in enumerate(zip(axes, pts)):
+        s = sites[int(np.argmin(((centres - (p.x, p.y)) ** 2).sum(1)))]
+        with rasterio.open(tile_path(s)) as src:
+            x, y = Transformer.from_crs("EPSG:4326", src.crs, always_xy=True).transform(p.x, p.y)
+            h = size_m / 2
+            win = from_bounds(x - h, y - h, x + h, y + h, src.transform).round_offsets().round_lengths()
+            img = np.moveaxis(src.read([1, 2, 3], window=win, boundless=True, fill_value=0), 0, -1)
+            wt = src.window_transform(win)
+            crs = src.crs
+        ax.imshow(stretch(img))
+        frame = box(x - h, y - h, x + h, y + h)
+        for layer, color, lw in ((ground_truth, "#ff9f1c", 2.5), (buildings, "#2ecc40", 1.5)):
+            if layer is None:
+                continue
+            for g in layer.to_crs(crs).geometry:
+                if g is None or not g.intersects(frame):
+                    continue
+                for poly in ([g] if g.geom_type == "Polygon" else g.geoms):
+                    xy = np.array([~wt * c[:2] for c in poly.exterior.coords])
+                    ax.add_patch(MplPolygon(xy, closed=True, fill=False, ec=color, lw=lw))
+        ax.plot(img.shape[1] / 2, img.shape[0] / 2, "+", color="yellow", ms=12, mew=2)
+        ax.set_xlim(0, img.shape[1]); ax.set_ylim(img.shape[0], 0); ax.set_axis_off()
+        ax.set_title(titles[k] if titles else s.get("grid_id", s["farm_name"]), fontsize=9)
+    for ax in axes[len(pts):]:
+        ax.set_axis_off()
+    if suptitle:
+        fig.suptitle(suptitle, fontsize=13)
+    fig.tight_layout()
+    return fig

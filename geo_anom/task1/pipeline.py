@@ -69,6 +69,7 @@ def run_pipeline(
     download_missing: bool = False,
     use_road_filter: bool = False,
     dedupe: bool = True,
+    prefer: str = "confidence",
     filters: dict | None = None,
     progress: Callable[[Iterable], Iterable] | None = None,
     log: Callable[[str], None] = print,
@@ -120,7 +121,7 @@ def run_pipeline(
         buildings_fc = kept
         n_unique = len(kept)
     else:
-        buildings = deduplicate(kept, manifest)
+        buildings = deduplicate(kept, manifest, prefer=prefer)
         buildings_fc = json.loads(buildings.to_json(drop_id=True))["features"]
         n_unique = len(buildings)
         per_farm = buildings.groupby("assigned_site_id").agg(
@@ -150,6 +151,7 @@ def run_pipeline(
         "filters": filters or {"farm": [], "county": []},
         "use_road_filter": use_road_filter,
         "dedupe": dedupe,
+        "dedupe_prefer": prefer,
         "thresholds": detect.filter_thresholds(),
         "species_overrides": detect.SPECIES_FILTER_OVERRIDES,
         "close_kernel": detect.CLOSE_KERNEL,

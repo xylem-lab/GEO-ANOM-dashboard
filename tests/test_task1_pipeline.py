@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 from pyproj import Transformer
 from shapely.geometry import box, mapping
+import numpy as np
 from shapely.ops import transform
 
 from geo_anom.task1.detect import filter_reasons, passes_tulbure_filter, polygon_stats
@@ -120,3 +121,33 @@ def test_farm_overview_pin_sits_on_barns_not_registry_point():
     assert abs(pin.x - (X0 + 60)) < 5 and abs(pin.y - (Y0 + 27.5)) < 5   # centre of the two houses
     assert 550 < ov.iloc[0]["registry_point_distance_m"] < 700
     assert ov.iloc[0]["maps_url"].startswith("https://www.google.com/maps/@")
+
+
+class TestGrid:
+    def test_tiles_cover_area_with_overlap(self):
+        from geo_anom.task1 import region
+        import geopandas as gpd
+        # 10 km x 6 km rectangle of "land"
+        area = gpd.GeoDataFrame(geometry=[box(X0, Y0, X0 + 10_000, Y0 + 6_000)], crs="EPSG:32618")
+        sites = region.grid_sites(area, "Test County", tile_dir=None)
+        assert len(sites) == len({s["grid_id"] for s in sites})          # unique ids
+        xs = sorted({round(TO_UTM(s["lon"], s["lat"])[0]) for s in sites})
+        steps = np.diff(xs)
+        assert np.allclose(steps, region.STRIDE_M, atol=2)               # 1,750 m apart -> 250 m overlap
+        assert all(s["tile_path"].startswith("data/raw/naip_grid/test_county/") for s in sites)
+
+    def test_mostly_water_tiles_skipped(self):
+        from geo_anom.task1 import region
+        import geopandas as gpd
+        # a thin 50 m strip of land: tiles over it have < 5% land
+        area = gpd.GeoDataFrame(geometry=[box(X0, Y0, X0 + 6_000, Y0 + 50)], crs="EPSG:32618")
+        assert region.grid_sites(area, "Strip") == []
+
+
+def test_grid_dedupe_keeps_largest_outline():
+    whole, cut = house(length=150), house(length=110)     # same barn, cut by a tile edge
+    sites = [site("A", 60, 0)]
+    out = deduplicate([feature(whole, "t1", "A", prob=0.80), feature(cut, "t2", "A", prob=0.95)], sites, prefer="area")
+    assert len(out) == 1 and out.iloc[0]["area_m2"] == pytest.approx(150 * 15)
+    out = deduplicate([feature(whole, "t1", "A", prob=0.80), feature(cut, "t2", "A", prob=0.95)], sites)
+    assert out.iloc[0]["area_m2"] == pytest.approx(110 * 15)            # default: most confident

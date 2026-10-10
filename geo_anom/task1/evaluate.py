@@ -54,7 +54,7 @@ def _footprints(sites: list[dict], crs) -> list:
     return out
 
 
-def evaluate_run(run_dir: Path, gt: gpd.GeoDataFrame | None = None) -> dict:
+def evaluate_run(run_dir: Path, gt: gpd.GeoDataFrame | None = None, area=None) -> dict:
     run_dir = Path(run_dir)
     gt = gt if gt is not None else load_ground_truth()
     sites = json.loads((run_dir / "sites.json").read_text())
@@ -68,7 +68,10 @@ def evaluate_run(run_dir: Path, gt: gpd.GeoDataFrame | None = None) -> dict:
     farm_level = regression_metrics(d.ground_truth.tolist(), d.detected.tolist())
 
     # 2. object level, inside tiles AND the ground-truth extent
-    area = unary_union(fps).intersection(gt.unary_union.convex_hull.buffer(500))
+    covered = unary_union(fps).intersection(gt.unary_union.convex_hull.buffer(500))
+    if area is not None:  # limit to e.g. a county (GeoDataFrame/GeoSeries with a CRS)
+        covered = covered.intersection(area.to_crs(gt.crs).unary_union)
+    area = covered
     b = gpd.read_file(run_dir / "buildings.geojson").to_crs(gt.crs)
     b = b[b.centroid.within(area)].reset_index(drop=True)
     g = gt[gt.centroid.within(area)].reset_index(drop=True)
