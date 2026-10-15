@@ -14,6 +14,7 @@ from Planetary Computer's NAIP STAC collection -- public, no auth, current
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -28,6 +29,12 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 # v2 = edge-safe mosaic (2026-10-07). The older naip_tiles_pc_4band_full/ tiles
 # are distorted for 219/417 sites -- don't use them.
 DEFAULT_MANIFEST = ROOT / "data/raw/naip_tiles_pc_4band_v2/manifest.json"
+# Faster cloud-optimised GeoTIFF reads over HTTP (affects speed only, never pixel values)
+for _k, _v in {"GDAL_DISABLE_READDIR_ON_OPEN": "EMPTY_DIR", "CPL_VSIL_CURL_ALLOWED_EXTENSIONS": ".tif",
+               "GDAL_HTTP_MULTIPLEX": "YES", "GDAL_HTTP_MERGE_CONSECUTIVE_RANGES": "YES",
+               "GDAL_HTTP_VERSION": "2", "VSI_CACHE": "TRUE", "GDAL_CACHEMAX": "512"}.items():
+    os.environ.setdefault(_k, _v)
+
 STAC_SEARCH_URL = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
 BUFFER_KM = 1.0
 
@@ -115,6 +122,33 @@ def get_naip_items(ids: list[str], session: requests.Session) -> list[dict]:
     return out
 
 
+def select_items(items: list[dict], bbox: BBox) -> list[dict]:
+    """Newest-first NAIP items whose footprints cover the square, chosen from
+    STAC footprints before any pixels are read.
+
+    Without this, a square partly over open water or outside the state (no
+    pixels anywhere) made the pixel-filling loop read every older image in the
+    archive (28 for one Worcester tile, ~4 min) without ever filling it.
+    """
+    from shapely.geometry import box as _box
+    from shapely.geometry import shape as _shape
+
+    square = _box(bbox.west, bbox.south, bbox.east, bbox.north)
+    covered, chosen = None, []
+    for it in items:
+        g = _shape(it["geometry"]).intersection(square)
+        if g.is_empty:
+            continue
+        new = g if covered is None else g.difference(covered)
+        if new.area <= 0.001 * square.area:
+            continue          # adds (almost) nothing this square needs
+        chosen.append(it)
+        covered = g if covered is None else covered.union(g)
+        if covered.area >= 0.999 * square.area:
+            break
+    return chosen
+
+
 def build_mosaic(lon: float, lat: float, buffer_km: float = BUFFER_KM, item_ids: list[str] | None = None,
                  session: requests.Session | None = None):
     """A (2 * buffer_km) square, 1 m, 4-band mosaic centred on lon/lat, in memory.
@@ -134,7 +168,7 @@ def build_mosaic(lon: float, lat: float, buffer_km: float = BUFFER_KM, item_ids:
 
     session = session or requests.Session()
     bbox = BBox.from_point(lon=lon, lat=lat, buffer_km=buffer_km)
-    items = get_naip_items(item_ids, session) if item_ids else find_naip_items(bbox, session)
+    items = get_naip_items(item_ids, session) if item_ids else select_items(find_naip_items(bbox, session), bbox)
     if not items:
         return None
 
