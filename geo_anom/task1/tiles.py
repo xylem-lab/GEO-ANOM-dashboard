@@ -102,31 +102,43 @@ def find_naip_items(bbox: BBox, session: requests.Session) -> list[dict]:
     return resp.json().get("features", [])
 
 
-def download_tile(site: dict, out_path: Path, session: requests.Session | None = None) -> dict | None:
-    """Download a 2km x 2km, 1m, 4-band tile centred on site lat/lon.
+STAC_ITEM_URL = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/naip/items/{}"
+
+
+def get_naip_items(ids: list[str], session: requests.Session) -> list[dict]:
+    """STAC items by id, in the given order (for exact re-runs)."""
+    out = []
+    for i in ids:
+        r = session.get(STAC_ITEM_URL.format(i), timeout=30)
+        r.raise_for_status()
+        out.append(r.json())
+    return out
+
+
+def build_mosaic(lon: float, lat: float, buffer_km: float = BUFFER_KM, item_ids: list[str] | None = None,
+                 session: requests.Session | None = None):
+    """A (2 * buffer_km) square, 1 m, 4-band mosaic centred on lon/lat, in memory.
 
     Every NAIP image (quarter quad) touching the square is warped onto one
-    fixed 1 m UTM grid and mosaicked, most recent first. The earlier version
-    (used for every tile from 2026-09-01 to 2026-10-06) read a single image
-    with an out-of-range window: when the 2 km square crossed that image's
-    edge (219 of 417 sites), rasterio clipped the read to the image and the
-    clipped data was then stretched over the full tile -- tiles shifted by up
-    to ~500 m and distorted, while still looking self-consistent.
+    fixed 1 m UTM grid and mosaicked in order. With `item_ids` (as recorded in
+    a previous run) exactly those images are used, so a re-run gets the same
+    pixels even after newer NAIP is published; otherwise the most recent
+    images are used. Returns (data CHW uint8, profile, used STAC items) or None.
 
-    Returns the site dict with tile_path/bbox/naip_item_id(s)/naip_datetime
-    filled in, or None if no imagery was found.
+    History: until 2026-10-06 a single image was read with a window that could
+    run past its edge; rasterio clipped the read and the clipped data was
+    stretched over the whole tile (219/417 tiles shifted up to ~500 m).
     """
     from rasterio.transform import from_origin
     from rasterio.warp import reproject
 
     session = session or requests.Session()
-    bbox = BBox.from_point(lon=site["lon"], lat=site["lat"], buffer_km=BUFFER_KM)
-    items = find_naip_items(bbox, session)
+    bbox = BBox.from_point(lon=lon, lat=lat, buffer_km=buffer_km)
+    items = get_naip_items(item_ids, session) if item_ids else find_naip_items(bbox, session)
     if not items:
-        print(f"  no NAIP item found for {site['farm_name']}")
         return None
 
-    # Destination grid: the first (most recent) item's UTM CRS, snapped to 1 m.
+    # Destination grid: the first item's UTM CRS, snapped to 1 m.
     with rasterio.open(items[0]["assets"]["image"]["href"]) as first:
         dst_crs = first.crs
         count = first.count
@@ -154,27 +166,72 @@ def download_tile(site: dict, out_path: Path, session: requests.Session | None =
             mosaic[:, new] = tmp[:, new]
             used.append(item)
     if not used:
-        print(f"  empty mosaic for {site['farm_name']}")
         return None
-
-    out_path.parent.mkdir(parents=True, exist_ok=True)
     profile.update(
         height=height, width=width, transform=dst_transform, crs=dst_crs, count=count,
         driver="GTiff", compress="lzw", predictor=2, tiled=True, blockxsize=256, blockysize=256, nodata=None,
     )
-    with rasterio.open(out_path, "w", **profile) as dst:
-        dst.write(mosaic)
+    return mosaic, profile, used
 
+
+def _imagery_fields(used: list[dict], bbox_tuple) -> dict:
     return {
-        **site,
-        "tile_path": str(out_path.relative_to(ROOT)) if out_path.is_relative_to(ROOT) else str(out_path),
-        "bbox": bbox.as_tuple,
+        "bbox": bbox_tuple,
         "naip_item_id": used[0]["id"],
         "naip_item_ids": [it["id"] for it in used],
         "naip_datetime": used[0]["properties"].get("datetime"),
         "naip_datetimes": sorted({it["properties"].get("datetime", "")[:10] for it in used}),
         "tile_method": "mosaic_reproject_v2",
     }
+
+
+def download_tile(site: dict, out_path: Path, session: requests.Session | None = None) -> dict | None:
+    """Build the site's tile (see build_mosaic) and write it to out_path.
+
+    Uses the site's recorded naip_item_ids when present. Returns the site dict
+    with tile_path and imagery fields filled in, or None if no imagery.
+    """
+    got = build_mosaic(site["lon"], site["lat"], item_ids=site.get("naip_item_ids"), session=session)
+    if got is None:
+        print(f"  no NAIP imagery for {site['farm_name']}")
+        return None
+    data, profile, used = got
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with rasterio.open(out_path, "w", **profile) as dst:
+        dst.write(data)
+    bbox = BBox.from_point(lon=site["lon"], lat=site["lat"], buffer_km=BUFFER_KM)
+    return {
+        **site,
+        "tile_path": str(out_path.relative_to(ROOT)) if out_path.is_relative_to(ROOT) else str(out_path),
+        **_imagery_fields(used, bbox.as_tuple),
+    }
+
+
+def fetch_tile(site: dict, session: requests.Session | None = None):
+    """The site's tile in memory, nothing written to disk (streaming runs).
+
+    Returns (img HWC uint8, meta, site-with-imagery-fields), or None.
+    """
+    got = build_mosaic(site["lon"], site["lat"], item_ids=site.get("naip_item_ids"), session=session)
+    if got is None:
+        return None
+    data, profile, used = got
+    from rasterio.coords import BoundingBox
+    from rasterio.transform import array_bounds
+    t = profile["transform"]
+    bounds = BoundingBox(*array_bounds(profile["height"], profile["width"], t))
+    meta = {"crs": profile["crs"], "transform": t, "bounds": bounds, "res_m": t.a}
+    bbox = BBox.from_point(lon=site["lon"], lat=site["lat"], buffer_km=BUFFER_KM)
+    return np.moveaxis(data, 0, -1), meta, {**site, **_imagery_fields(used, bbox.as_tuple)}
+
+
+def fetch_window(lon: float, lat: float, size_m: float, item_ids: list[str] | None = None):
+    """A small (size_m square) RGB+NIR crop in memory, e.g. for galleries."""
+    got = build_mosaic(lon, lat, buffer_km=size_m / 2000, item_ids=item_ids)
+    if got is None:
+        return None
+    data, profile, _ = got
+    return np.moveaxis(data, 0, -1), profile["transform"], profile["crs"]
 
 
 def read_tile(path: Path) -> tuple[np.ndarray, dict]:

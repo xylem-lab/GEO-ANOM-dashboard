@@ -8,9 +8,14 @@ full run.
 |---|---|
 | `01_map_buildings.ipynb` | One farm at a time: tile → U-Net probability → mask → shapes → filter (with the reason for every rejection) → boxes on the image → your own TP/FP/FN count → KMZ by animal type |
 | `03_full_dataset.ipynb` | Run all 417 farms (or load the latest run) and look at everything: statewide map, distributions, rejection reasons, a gallery of every farm, zero-detection farms |
+| `04_poultry_by_county.ipynb` | A whole county on a tile grid: every poultry house, accuracy vs USGS hand tracing, galleries of misses / extras / houses far from permits, county totals. Runs in Colab; results to the shared drive |
 | `02_supply_check.ipynb` | N/P₂O₅ from a full run: coefficients against the AWTF report, one farm recomputed by hand, totals by species |
 
 ## Run
+
+**In Google Colab** (recommended for long runs): open a notebook from GitHub with its *Open in Colab* badge, run all. The first cell mounts your Google Drive (you need access to the GEO-ANOM shared drive), fetches the code, model and USGS labels, and writes results to `Task1_results/` on the shared drive. Aerial photos are streamed, never stored.
+
+**Locally:**
 
 ```bash
 python3 -m jupyter lab notebooks/

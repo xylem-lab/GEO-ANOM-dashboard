@@ -60,3 +60,5 @@ data/processed/*.log
 notebooks/output/
 .ipynb_checkpoints/
 data/processed/task1/*/supply_by_building.geojson
+# Per-tile partial results of resumable runs (results live on the shared drive)
+data/processed/task1/*/tiles_done/
