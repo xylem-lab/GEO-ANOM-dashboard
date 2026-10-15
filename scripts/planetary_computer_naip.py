@@ -14,107 +14,14 @@ import json
 import sys
 from pathlib import Path
 
-import numpy as np
-import rasterio
 import requests
-from rasterio.windows import from_bounds
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from geo_anom.core.geo_utils import BBox
+# Tile download now lives in geo_anom/task1/tiles.py (shared with
+# scripts/map_buildings.py --download-missing and the notebooks).
+from geo_anom.task1.tiles import BUFFER_KM, TARGET_RESOLUTION_M, download_tile, find_naip_item  # noqa: E402,F401
 
 ROOT = Path(__file__).resolve().parent.parent
-STAC_SEARCH_URL = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
-BUFFER_KM = 1.0  # matches the top-10 pilot script
-
-
-def find_naip_item(lon: float, lat: float, session: requests.Session) -> dict | None:
-    """Find the most recent NAIP STAC item covering a point."""
-    resp = session.post(
-        STAC_SEARCH_URL,
-        json={
-            "collections": ["naip"],
-            "intersects": {"type": "Point", "coordinates": [lon, lat]},
-            "limit": 5,
-            "sortby": [{"field": "properties.datetime", "direction": "desc"}],
-        },
-        timeout=30,
-    )
-    resp.raise_for_status()
-    features = resp.json().get("features", [])
-    return features[0] if features else None
-
-
-TARGET_RESOLUTION_M = 1.0  # matches Microsoft's training imagery (1m NAIP);
-# Planetary Computer serves recent MD NAIP at native 0.3m -- reading at native
-# res would make a single poultry house span 300-650px, far larger than the
-# model's 256px inference chip, which would badly degrade detection quality
-# on top of ballooning file size 10x+. Resample to 1m during the read instead.
-
-
-def download_tile(site: dict, out_path: Path, session: requests.Session) -> dict | None:
-    item = find_naip_item(site["lon"], site["lat"], session)
-    if item is None:
-        print(f"  no NAIP item found for {site['farm_name']}")
-        return None
-
-    href = item["assets"]["image"]["href"]
-    bbox = BBox.from_point(lon=site["lon"], lat=site["lat"], buffer_km=BUFFER_KM)
-
-    with rasterio.open(href) as src:
-        # Reproject bbox corners into the tile's CRS for the window read.
-        from rasterio.warp import transform_bounds
-        from rasterio.enums import Resampling
-
-        left, bottom, right, top = transform_bounds(
-            "EPSG:4326", src.crs, bbox.west, bbox.south, bbox.east, bbox.north
-        )
-        window = from_bounds(left, bottom, right, top, transform=src.transform)
-        if window.width < 10 or window.height < 10:
-            print(f"  empty/tiny window for {site['farm_name']}")
-            return None
-
-        native_res_m = src.res[0]  # assume square pixels, meters (projected CRS)
-        scale = native_res_m / TARGET_RESOLUTION_M
-        out_width = max(int(round(window.width * scale)), 1)
-        out_height = max(int(round(window.height * scale)), 1)
-
-        data = src.read(
-            window=window,
-            out_shape=(src.count, out_height, out_width),
-            resampling=Resampling.average,
-        )
-        if data.size == 0:
-            print(f"  empty read for {site['farm_name']}")
-            return None
-        # window_transform gives the native-res transform; rescale it to
-        # match the resampled (target-res) output raster.
-        native_transform = src.window_transform(window)
-        out_transform = native_transform * native_transform.scale(
-            window.width / out_width, window.height / out_height
-        )
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        profile = src.profile.copy()
-        profile.update(
-            height=data.shape[1],
-            width=data.shape[2],
-            transform=out_transform,
-            driver="GTiff",
-            compress="lzw",
-            predictor=2,
-            tiled=True,
-            blockxsize=256,
-            blockysize=256,
-        )
-        with rasterio.open(out_path, "w", **profile) as dst:
-            dst.write(data)
-
-    return {
-        **site,
-        "tile_path": str(out_path),
-        "bbox": bbox.as_tuple,
-        "naip_item_id": item["id"],
-        "naip_datetime": item["properties"].get("datetime"),
-    }
 
 
 def main():

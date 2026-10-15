@@ -1,3 +1,5 @@
+> **Stale (March 2026 dashboard prototype).** For current project status read `CLAUDE.md` and the top of `docs/NEXT_SESSION.md`.
+
 # 👋 START HERE - GEO-ANOM Quick Reference
 
 **Last Updated:** March 8, 2026

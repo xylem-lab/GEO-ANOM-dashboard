@@ -1,0 +1,28 @@
+# Source: Maryland Animal Waste Technology Assessment and Strategy Planning, Final Report (Lansing et al., Sept 2023), Table 1a.3, p.13-14:
+# "Benchmarking 2017 total broiler and layer data the 2017 USDA Agriculture Census data, and Maryland Department of Environment (MDE) concentrated animal feeding operations (CAFO) data."
+# Printed totals: Ag Census 54,567,780 (= the county rows minus Dorchester 4,998,320 and Carroll 1,060, so the report total appears to have dropped Dorchester); MDE CAFO 69,218,965 (matches the rows).
+# Blank = dash in the report (no data or no CAFO). Dorchester Ag Census printed as "4.998,320" in the PDF; read as 4,998,320.
+county,ag_census_2017_birds,mde_cafo_2017_birds
+Allegany,1090,
+Anne Arundel,2000,
+Baltimore,31270,
+Calvert,2230,
+Caroline,11423830,13401269
+Carroll,1060,451380
+Cecil,,2653790
+Charles,20020,
+Dorchester,4998320,5096420
+Frederick,72150,
+Garrett,6930,
+Harford,27360,
+Howard,5220,
+Kent,1022800,2758478
+Montgomery,2210,
+Prince George's,8040,
+Queen Anne's,4607970,5076175
+Saint Mary's,21190,
+Somerset,12451580,10112600
+Talbot,1292630,802000
+Washington,1290,
+Wicomico,10587890,13707233
+Worcester,12980080,15159620

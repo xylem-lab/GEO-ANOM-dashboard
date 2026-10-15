@@ -50,3 +50,13 @@ Thumbs.db
 # Rendered field/audit screenshots (regenerable by scripts/render_*_screenshots*.py)
 data/processed/field_screenshots/
 data/processed/species_audit_screenshots/
+
+# Task 1 pipeline (scripts/map_buildings.py) -- per-candidate output is large
+# and regenerable; buildings/farms/supply/run_meta stay tracked.
+data/processed/task1/*/candidates.geojson
+data/processed/task1/*/tiles/
+data/processed/*.log
+# Notebook scratch output (KMZs, personal audit sheets)
+notebooks/output/
+.ipynb_checkpoints/
+data/processed/task1/*/supply_by_building.geojson

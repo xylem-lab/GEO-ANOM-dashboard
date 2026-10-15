@@ -1,0 +1,14 @@
+               farms  farms_with_buildings  headcount  annual_N_lbs  annual_P2O5_lbs  share_of_N
+species_group                                                                                   
+broiler          380                   357   50853322   300,797,400      208,244,354       0.975
+poultry_other      9                     6    3618582     4,160,645        3,297,773       0.013
+dairy             14                     1      16660     2,798,880        1,599,360       0.009
+beef               3                     2       4817       602,125          419,079       0.002
+swine              1                     1       2455        58,920           44,190       0.000
+excluded           1                     1        350         0.000            0.000       0.000
+unknown            9                     9          0         0.000            0.000       0.000
+
+N located on detected buildings: 287,435,995 lbs/yr (377/417 farms); at registry point only: 20,981,975 lbs/yr
+No coefficient (zero supply): ducks_liquid_manure, horses, unknown
+
+CHECK broiler N: 300,797,400 lbs/yr here vs 21,849,000 in AWTF 2023 report (2019) -> ratio 13.8x

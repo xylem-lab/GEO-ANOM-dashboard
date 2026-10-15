@@ -1,0 +1,418 @@
+site_id,farm_name,county,animal_type,headcount,tile,naip_datetime,raw_candidates,kept_in_tile,buildings,building_area_m2,median_assign_dist_m
+data/raw/naip_tiles_pc_4band_full/site_0004.tif,"Lester C. Jones & Sons, Inc.",Kent,dairy_cattle,3300,site_0004.tif,2023-07-11T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0002.tif,"Horizon Organic Dairy, LLC",Kent,dairy_cattle,544,site_0002.tif,2023-05-27T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0003.tif,"Grand View Farm, LLC",Kent,swine_55_lbs,2455,site_0003.tif,2023-05-27T16:00:00Z,1,1,1.0,800.7,576.0
+data/raw/naip_tiles_pc_4band_full/site_0005.tif,"Bistate Feeders, LLC",Caroline,cattle_includes_heifers,3400,site_0005.tif,2023-07-11T16:00:00Z,7,7,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0011.tif,Matthew Hoff/Coldsprings Farms,Carroll,dairy_cattle,1230,site_0011.tif,2023-05-21T16:00:00Z,1,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0001.tif,"Cal-Maine Foods, Inc.-Layers",Cecil,laying_hens_dry_manure,2003838,site_0001.tif,2023-07-11T16:00:00Z,7,7,7.0,23299.5,342.0
+data/raw/naip_tiles_pc_4band_full/site_0007.tif,Dwight Brandenburg/Brandenburg Family Limited Partnership,Frederick,cattle_includes_heifers,817,site_0007.tif,2023-07-12T16:00:00Z,2,1,1.0,739.0,862.0
+data/raw/naip_tiles_pc_4band_full/site_0006.tif,Oak Bluff Dairy Farms,Frederick,dairy_cattle,1280,site_0006.tif,2023-05-21T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0008.tif,"Mason Dixon Farms, Inc",Frederick,dairy_cattle,2612,site_0008.tif,2023-07-11T16:00:00Z,1,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0014.tif,Marvin Callahan/Bartlett Farm,Queen Anne's,chickens_not_laying_hens,65000,site_0014.tif,2023-05-27T16:00:00Z,5,3,3.0,6738.200000000001,524.0
+data/raw/naip_tiles_pc_4band_full/site_0012.tif,Sheraz Chaudhry/Noor Farm,Dorchester,chickens_not_laying_hens,142400,site_0012.tif,2023-08-19T16:00:00Z,12,6,6.0,15142.3,445.0
+data/raw/naip_tiles_pc_4band_full/site_0010.tif,"Aksmah, LLC c/o Mohammad Nasir",Worcester,chickens_not_laying_hens,234000,site_0010.tif,2023-06-02T16:00:00Z,13,12,12.0,32005.800000000003,524.5
+data/raw/naip_tiles_pc_4band_full/site_0000.tif,"Teabow, Incorporated",Frederick,dairy_cattle,1764,site_0000.tif,2023-05-21T16:00:00Z,6,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0013.tif,Mizael Oliveira,Queen Anne's,chickens_not_laying_hens,37800,site_0013.tif,2023-05-27T16:00:00Z,2,1,1.0,740.2,538.0
+data/raw/naip_tiles_pc_4band_full/site_0022.tif,Kenny L. Eck,Queen Anne's,chickens_not_laying_hens,187200,site_0022.tif,2023-07-11T16:00:00Z,6,6,6.0,22292.5,264.5
+data/raw/naip_tiles_pc_4band_full/site_0021.tif,"Bryan Smith/Mar Del View Farms, LLC",Queen Anne's,chickens_not_laying_hens,43400,site_0021.tif,2023-07-11T16:00:00Z,2,2,2.0,2654.1,269.0
+data/raw/naip_tiles_pc_4band_full/site_0019.tif,David Denny/B & B Denny LLC,Queen Anne's,chickens_not_laying_hens,67000,site_0019.tif,2023-05-27T16:00:00Z,4,4,4.0,11810.6,354.5
+data/raw/naip_tiles_pc_4band_full/site_0024.tif,Andrew L. McLean/Relief Farm,Queen Anne's,chickens_not_laying_hens,180000,site_0024.tif,2023-05-27T16:00:00Z,6,6,6.0,17621.199999999997,184.5
+data/raw/naip_tiles_pc_4band_full/site_0016.tif,Jennifer Rhodes/Deerfield Farm,Queen Anne's,chickens_not_laying_hens,59100,site_0016.tif,2023-05-27T16:00:00Z,6,2,2.0,1648.5,255.0
+data/raw/naip_tiles_pc_4band_full/site_0023.tif,Christopher Wright Farm,Queen Anne's,chickens_not_laying_hens,77000,site_0023.tif,2023-05-27T16:00:00Z,4,4,4.0,5120.0,759.0
+data/raw/naip_tiles_pc_4band_full/site_0015.tif,Jennifer L. Kunes/Chick-A-Dee-Doo-Dah,Queen Anne's,chickens_not_laying_hens,75000,site_0015.tif,2023-05-27T16:00:00Z,2,2,2.0,5250.8,230.5
+data/raw/naip_tiles_pc_4band_full/site_0009.tif,"Cobb-Heritage, LLC Farms #15 &17",Somerset,chickens_not_laying_hens,36000,site_0009.tif,2023-08-19T16:00:00Z,7,4,4.0,3556.0,678.5
+data/raw/naip_tiles_pc_4band_full/site_0020.tif,"Dan Heller/Stillwater Ventures, LLC",Queen Anne's,chickens_not_laying_hens,140000,site_0020.tif,2023-05-27T16:00:00Z,12,4,4.0,5635.5,567.5
+data/raw/naip_tiles_pc_4band_full/site_0027.tif,Serenity Farm,Queen Anne's,chickens_not_laying_hens,98800,site_0027.tif,2023-05-27T16:00:00Z,6,5,5.0,14545.5,614.0
+data/raw/naip_tiles_pc_4band_full/site_0017.tif,Walter Denny/Denny Farm LLC,Queen Anne's,chickens_not_laying_hens,79000,site_0017.tif,2023-05-27T16:00:00Z,8,6,6.0,7412.400000000001,118.5
+data/raw/naip_tiles_pc_4band_full/site_0018.tif,Eric Pardee,Kent,chickens_not_laying_hens,169000,site_0018.tif,2023-05-27T16:00:00Z,11,8,8.0,15239.2,241.0
+data/raw/naip_tiles_pc_4band_full/site_0026.tif,Robert W. McCormick/Sandy Brae Farm,Queen Anne's,chickens_not_laying_hens,90000,site_0026.tif,2023-07-11T16:00:00Z,5,3,3.0,6945.7,360.0
+data/raw/naip_tiles_pc_4band_full/site_0028.tif,John Scott Dulin/S&K Farm,Queen Anne's,chickens_not_laying_hens,120000,site_0028.tif,2023-05-27T16:00:00Z,1,1,1.0,650.1,868.0
+data/raw/naip_tiles_pc_4band_full/site_0032.tif,"W. Frank Barnes, Jr./Fairfield Farm",Kent,chickens_not_laying_hens,88000,site_0032.tif,2023-05-27T16:00:00Z,5,4,4.0,8495.0,115.5
+data/raw/naip_tiles_pc_4band_full/site_0029.tif,John Cannon/Stowman Farm,Queen Anne's,chickens_not_laying_hens,121200,site_0029.tif,2023-05-27T16:00:00Z,3,3,3.0,14274.400000000001,54.0
+data/raw/naip_tiles_pc_4band_full/site_0030.tif,William R. Darling Jr./Trinity Farm,Queen Anne's,chickens_not_laying_hens,104000,site_0030.tif,2023-07-11T16:00:00Z,5,4,4.0,13341.6,425.0
+data/raw/naip_tiles_pc_4band_full/site_0034.tif,Gerard Dumsha/Go Away Acres Farm Inc.,Somerset,chickens_not_laying_hens,98800,site_0034.tif,2023-08-19T16:00:00Z,4,4,4.0,9604.4,98.5
+data/raw/naip_tiles_pc_4band_full/site_0025.tif,William Robinson/R Place Farm,Queen Anne's,chickens_not_laying_hens,306300,site_0025.tif,2023-05-27T16:00:00Z,15,11,5.0,13602.8,32.0
+data/raw/naip_tiles_pc_4band_full/site_0035.tif,Eric Bedsworth,Somerset,chickens_not_laying_hens,77600,site_0035.tif,2023-08-19T16:00:00Z,7,4,4.0,4169.5,101.5
+data/raw/naip_tiles_pc_4band_full/site_0039.tif,David Hoffman,Somerset,chickens_not_laying_hens,156400,site_0039.tif,2023-08-19T16:00:00Z,5,4,4.0,11447.0,118.0
+data/raw/naip_tiles_pc_4band_full/site_0036.tif,Bach Farm LLC/ Hung Duy Bach,Somerset,chickens_not_laying_hens,111000,site_0036.tif,2023-08-19T16:00:00Z,5,4,4.0,7262.0,255.0
+data/raw/naip_tiles_pc_4band_full/site_0031.tif,Village View Farm,Queen Anne's,chickens_not_laying_hens,60000,site_0031.tif,2023-07-11T16:00:00Z,3,2,2.0,5272.8,173.5
+data/raw/naip_tiles_pc_4band_full/site_0033.tif,Hien Tran and Minh Ma/Coco/Juki Farm,Worcester,chickens_not_laying_hens,90000,site_0033.tif,2023-07-29T16:00:00Z,4,4,4.0,8652.0,130.5
+data/raw/naip_tiles_pc_4band_full/site_0043.tif,"Roy Johnson Ring, III/Ring Farms",Somerset,chickens_not_laying_hens,38000,site_0043.tif,2023-08-19T16:00:00Z,3,2,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0041.tif,Alan Butler/A&P Farm,Somerset,chickens_not_laying_hens,114000,site_0041.tif,2023-07-29T16:00:00Z,19,14,14.0,36487.200000000004,477.0
+data/raw/naip_tiles_pc_4band_full/site_0040.tif,"Vy Tran, LLC/ Vy Tran",Somerset,chickens_not_laying_hens,170000,site_0040.tif,2023-08-19T16:00:00Z,42,36,8.0,16345.2,233.5
+data/raw/naip_tiles_pc_4band_full/site_0038.tif,Tracy Chan/Casa Grande Farm,Somerset,chickens_not_laying_hens,190000,site_0038.tif,2023-07-29T16:00:00Z,6,6,6.0,14787.0,126.0
+data/raw/naip_tiles_pc_4band_full/site_0052.tif,William Michael Dryden,Somerset,chickens_not_laying_hens,110000,site_0052.tif,2023-08-19T16:00:00Z,3,3,3.0,12345.6,635.0
+data/raw/naip_tiles_pc_4band_full/site_0045.tif,"Rondeb Family Farm, LLC/Deborah D. Love",Caroline,chickens_not_laying_hens,50000,site_0045.tif,2023-08-19T16:00:00Z,4,3,3.0,4707.5,235.0
+data/raw/naip_tiles_pc_4band_full/site_0037.tif,Lich Cao/LC Farm,Somerset,chickens_not_laying_hens,180000,site_0037.tif,2023-07-29T16:00:00Z,13,4,4.0,4337.1,200.0
+data/raw/naip_tiles_pc_4band_full/site_0042.tif,Brian Laird Farm,Somerset,chickens_not_laying_hens,77500,site_0042.tif,2023-08-19T16:00:00Z,5,1,1.0,2219.4,409.0
+data/raw/naip_tiles_pc_4band_full/site_0046.tif,Hrang LLC,Somerset,chickens_not_laying_hens,170000,site_0046.tif,2023-08-19T16:00:00Z,9,7,7.0,15944.2,58.0
+data/raw/naip_tiles_pc_4band_full/site_0058.tif,"Smithville View Farm, LLC/Howard MacDonald",Caroline,chickens_not_laying_hens,44000,site_0058.tif,2023-07-29T16:00:00Z,7,6,6.0,17222.3,766.0
+data/raw/naip_tiles_pc_4band_full/site_0048.tif,Peter and Joseph Farm Inc. c/o Peter Tran,Somerset,chickens_not_laying_hens,238400,site_0048.tif,2023-08-19T16:00:00Z,41,37,9.0,19051.7,182.0
+data/raw/naip_tiles_pc_4band_full/site_0047.tif,"Barkat Farms, LLC",Somerset,chickens_not_laying_hens,135000,site_0047.tif,2023-07-29T16:00:00Z,6,2,2.0,10120.8,824.0
+data/raw/naip_tiles_pc_4band_full/site_0044.tif,James Randall Laird/Randy Laird Farm,Somerset,chickens_not_laying_hens,72000,site_0044.tif,2023-07-29T16:00:00Z,5,5,5.0,8851.6,270.0
+data/raw/naip_tiles_pc_4band_full/site_0049.tif,Nathan Wolf/Wolf Farm,Dorchester,chickens_not_laying_hens,60000,site_0049.tif,2023-08-19T16:00:00Z,8,7,7.0,14561.699999999999,160.0
+data/raw/naip_tiles_pc_4band_full/site_0054.tif,Brock Johnson,Caroline,chickens_not_laying_hens,59000,site_0054.tif,2023-07-29T16:00:00Z,1,1,3.0,3165.4,356.0
+data/raw/naip_tiles_pc_4band_full/site_0050.tif,"M&C Vessey Farm, Inc/Cuckoo's Nest Farm",Somerset,chickens_not_laying_hens,240000,site_0050.tif,2023-07-29T16:00:00Z,20,11,10.0,24385.3,545.0
+data/raw/naip_tiles_pc_4band_full/site_0056.tif,Mark S. Callahan,Caroline,chickens_not_laying_hens,57900,site_0056.tif,2023-07-29T16:00:00Z,4,3,3.0,5066.7,144.0
+data/raw/naip_tiles_pc_4band_full/site_0060.tif,Goldsborough James Stafford III,Caroline,chickens_not_laying_hens,51000,site_0060.tif,2023-08-19T16:00:00Z,24,13,8.0,11883.1,144.0
+data/raw/naip_tiles_pc_4band_full/site_0057.tif,Martin Cheesman,Caroline,chickens_not_laying_hens,42000,site_0057.tif,2023-05-27T16:00:00Z,4,2,4.0,10187.5,493.0
+data/raw/naip_tiles_pc_4band_full/site_0053.tif,Howard Overholt/Honeysuckle Farm Inc.,Somerset,chickens_not_laying_hens,216000,site_0053.tif,2023-08-19T16:00:00Z,14,14,7.0,17464.9,110.0
+data/raw/naip_tiles_pc_4band_full/site_0051.tif,"Chinh Nguyen/A, B, C Farms",Worcester,chickens_not_laying_hens,333000,site_0051.tif,2023-07-29T16:00:00Z,20,17,10.0,23339.1,325.5
+data/raw/naip_tiles_pc_4band_full/site_0055.tif,Katie Frase/Worm Farm,Caroline,chickens_not_laying_hens,75000,site_0055.tif,2023-07-29T16:00:00Z,10,9,3.0,6593.3,169.0
+data/raw/naip_tiles_pc_4band_full/site_0066.tif,George Bowman/Hidden River Farm,Caroline,chickens_not_laying_hens,65000,site_0066.tif,2023-07-11T16:00:00Z,4,3,3.0,6580.4,296.0
+data/raw/naip_tiles_pc_4band_full/site_0064.tif,Nathan Holsey,Caroline,chickens_not_laying_hens,86000,site_0064.tif,2023-07-11T16:00:00Z,6,5,9.0,22120.1,511.0
+data/raw/naip_tiles_pc_4band_full/site_0059.tif,Alan C. Eck Farm,Queen Anne's,chickens_not_laying_hens,370500,site_0059.tif,2023-07-11T16:00:00Z,12,9,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0063.tif,Hannah Jones,Caroline,unknown,0,site_0063.tif,2023-07-29T16:00:00Z,8,8,4.0,6035.3,155.5
+data/raw/naip_tiles_pc_4band_full/site_0071.tif,Kevin Russell Fishell/K-Russ Farm,Caroline,chickens_not_laying_hens,66000,site_0071.tif,2023-08-19T16:00:00Z,4,3,6.0,11780.6,556.5
+data/raw/naip_tiles_pc_4band_full/site_0067.tif,"William R. Thomas, Jr./Three Bridges Farm",Caroline,chickens_not_laying_hens,73000,site_0067.tif,2023-05-27T16:00:00Z,6,4,5.0,19272.8,717.0
+data/raw/naip_tiles_pc_4band_full/site_0062.tif,Dale M. Harrison/Harrison Farm,Caroline,chickens_not_laying_hens,38000,site_0062.tif,2023-07-29T16:00:00Z,7,5,2.0,2933.2,201.5
+data/raw/naip_tiles_pc_4band_full/site_0065.tif,"Jack Holt, Jr.",Queen Anne's,chickens_not_laying_hens,120000,site_0065.tif,2023-07-11T16:00:00Z,13,12,13.0,32826.1,61.0
+data/raw/naip_tiles_pc_4band_full/site_0069.tif,James Donald Dulin,Caroline,chickens_not_laying_hens,57600,site_0069.tif,2023-08-19T16:00:00Z,5,5,3.0,4906.1,113.0
+data/raw/naip_tiles_pc_4band_full/site_0075.tif,Charles Matthews,Caroline,chickens_not_laying_hens,60000,site_0075.tif,2023-08-19T16:00:00Z,20,12,8.0,16568.7,1003.0
+data/raw/naip_tiles_pc_4band_full/site_0068.tif,James Gargani,Caroline,chickens_not_laying_hens,99900,site_0068.tif,2023-08-19T16:00:00Z,5,3,5.0,14102.4,366.0
+data/raw/naip_tiles_pc_4band_full/site_0061.tif,Christopher D. Harris/Home Farm,Caroline,chickens_not_laying_hens,57200,site_0061.tif,2023-07-11T16:00:00Z,4,3,3.0,3940.0,161.0
+data/raw/naip_tiles_pc_4band_full/site_0072.tif,"Lohmeyers Farm, Inc. c/o Brian Lohmeyer",Caroline,chickens_not_laying_hens,72000,site_0072.tif,2023-07-29T16:00:00Z,4,4,4.0,11310.2,100.0
+data/raw/naip_tiles_pc_4band_full/site_0078.tif,"Morgan Mill Poultry Houses, LLC/Doris Meredith",Caroline,chickens_not_laying_hens,40000,site_0078.tif,2023-08-19T16:00:00Z,9,6,1.0,1629.6,770.0
+data/raw/naip_tiles_pc_4band_full/site_0081.tif,Ishtiaq Ahmed ChaudhryGhousia Farm LLC,Dorchester,chickens_not_laying_hens,219000,site_0081.tif,2023-07-29T16:00:00Z,15,15,12.0,45600.6,721.5
+data/raw/naip_tiles_pc_4band_full/site_0080.tif,Oakland View Farms LLC,Caroline,dairy_cattle,1465,site_0080.tif,2023-07-11T16:00:00Z,4,1,1.0,711.8,615.0
+data/raw/naip_tiles_pc_4band_full/site_0074.tif,Yang Hyuk Lim/Holly Way Farm,Caroline,chickens_not_laying_hens,136500,site_0074.tif,2023-07-11T16:00:00Z,6,5,5.0,13272.9,118.0
+data/raw/naip_tiles_pc_4band_full/site_0073.tif,Dylan Palmatory,Caroline,chickens_not_laying_hens,50000,site_0073.tif,2023-07-11T16:00:00Z,2,2,2.0,4211.8,219.5
+data/raw/naip_tiles_pc_4band_full/site_0077.tif,Fazal Rehman Kayani/Minahil LLC,Caroline,chickens_not_laying_hens,47000,site_0077.tif,2023-05-27T16:00:00Z,10,4,3.0,2925.5,82.0
+data/raw/naip_tiles_pc_4band_full/site_0079.tif,Mark Monath/Mark & Brenda Monath,Caroline,chickens_not_laying_hens,114300,site_0079.tif,2023-08-19T16:00:00Z,6,6,3.0,5084.9,215.0
+data/raw/naip_tiles_pc_4band_full/site_0070.tif,Lloyd Gaugler Sr./Kanalat Farm,Caroline,chickens_not_laying_hens,78000,site_0070.tif,2023-08-19T16:00:00Z,3,3,3.0,4453.700000000001,177.0
+data/raw/naip_tiles_pc_4band_full/site_0082.tif,Zhi Sheng Lin/Sheng Lin Farm,Caroline,chickens_not_laying_hens,203000,site_0082.tif,2023-08-19T16:00:00Z,12,7,7.0,8572.9,412.0
+data/raw/naip_tiles_pc_4band_full/site_0076.tif,"Martin E. Collison, Jr./ Marzel Farm",Caroline,chickens_not_laying_hens,148800,site_0076.tif,2023-07-11T16:00:00Z,10,8,8.0,11455.2,319.5
+data/raw/naip_tiles_pc_4band_full/site_0083.tif,Paul Towers Sr./P&J Farm,Caroline,chickens_not_laying_hens,98800,site_0083.tif,2023-07-29T16:00:00Z,9,8,4.0,8314.6,150.5
+data/raw/naip_tiles_pc_4band_full/site_0084.tif,Gary Geisel/Pepper Ridge Farm,Caroline,chickens_not_laying_hens,154900,site_0084.tif,2023-07-29T16:00:00Z,10,8,4.0,13199.599999999999,163.5
+data/raw/naip_tiles_pc_4band_full/site_0085.tif,Benjamin Taylor,Caroline,chickens_not_laying_hens,120000,site_0085.tif,2023-07-29T16:00:00Z,9,5,5.0,13008.6,216.0
+data/raw/naip_tiles_pc_4band_full/site_0090.tif,"Robert A. Jester, Jr./Jester Farm",Caroline,chickens_not_laying_hens,94000,site_0090.tif,2023-08-19T16:00:00Z,18,12,12.0,42973.5,609.0
+data/raw/naip_tiles_pc_4band_full/site_0089.tif,"Possum Hill Farms, Inc.",Caroline,chickens_not_laying_hens,159000,site_0089.tif,2023-08-19T16:00:00Z,21,15,9.0,23154.9,837.0
+data/raw/naip_tiles_pc_4band_full/site_0086.tif,Dan Dan Cai/Sunny Lin Farm,Caroline,chickens_not_laying_hens,84000,site_0086.tif,2023-07-29T16:00:00Z,7,7,6.0,13121.2,252.0
+data/raw/naip_tiles_pc_4band_full/site_0093.tif,Alton Cusick,Caroline,chickens_not_laying_hens,73000,site_0093.tif,2023-07-29T16:00:00Z,10,5,5.0,8135.8,674.0
+data/raw/naip_tiles_pc_4band_full/site_0097.tif,Zeke E. Collins/Z&L Farms,Wicomico,chickens_not_laying_hens,142000,site_0097.tif,2023-08-19T16:00:00Z,11,7,7.0,14610.0,684.0
+data/raw/naip_tiles_pc_4band_full/site_0087.tif,"Schmick Farms, Inc.",Caroline,chickens_not_laying_hens,57600,site_0087.tif,2023-07-29T16:00:00Z,7,5,3.0,4941.5,257.0
+data/raw/naip_tiles_pc_4band_full/site_0098.tif,"M. David Wood, Jr./Wood Enterprise and Wood Encounter",Caroline,chickens_not_laying_hens,245600,site_0098.tif,2023-07-29T16:00:00Z,6,6,6.0,16523.2,145.5
+data/raw/naip_tiles_pc_4band_full/site_0092.tif,Joseph Parmer,Caroline,chickens_not_laying_hens,56000,site_0092.tif,2023-07-29T16:00:00Z,5,3,3.0,4149.700000000001,141.0
+data/raw/naip_tiles_pc_4band_full/site_0094.tif,Tuckahoe River Farm Poultry LLC c/o Troy Tribbett,Caroline,chickens_not_laying_hens,222600,site_0094.tif,2023-07-29T16:00:00Z,13,11,11.0,38978.8,639.0
+data/raw/naip_tiles_pc_4band_full/site_0096.tif,Bobbie Reed/Winterhawk Farm,Caroline,chickens_not_laying_hens,52200,site_0096.tif,2023-07-11T16:00:00Z,6,4,2.0,3147.3,203.0
+data/raw/naip_tiles_pc_4band_full/site_0099.tif,"Charles Nau, Jr.",Kent,chickens_not_laying_hens,42500,site_0099.tif,2023-05-27T16:00:00Z,2,2,2.0,3745.4,190.0
+data/raw/naip_tiles_pc_4band_full/site_0101.tif,"Chesapeake Chickens, LLC/Andrew Harrington",Dorchester,chickens_not_laying_hens,183000,site_0101.tif,2023-07-29T16:00:00Z,7,6,6.0,18585.6,96.5
+data/raw/naip_tiles_pc_4band_full/site_0091.tif,Dylan Patterson/Dylan Patterson Farm,Caroline,chickens_not_laying_hens,84900,site_0091.tif,2023-07-11T16:00:00Z,4,3,3.0,6914.299999999999,173.0
+data/raw/naip_tiles_pc_4band_full/site_0105.tif,Amy Tran/Wings and a Prayer Farm,Somerset,chickens_not_laying_hens,123500,site_0105.tif,2023-07-29T16:00:00Z,5,5,3.0,8268.6,556.0
+data/raw/naip_tiles_pc_4band_full/site_0100.tif,AR Farm LLC/Mohammad Rehman,Worcester,chickens_not_laying_hens,63500,site_0100.tif,2023-06-02T16:00:00Z,2,2,2.0,1405.2,22.5
+data/raw/naip_tiles_pc_4band_full/site_0107.tif,S.H.L. Anderson Inc.,Somerset,chickens_not_laying_hens,65400,site_0107.tif,2023-08-19T16:00:00Z,5,4,4.0,8326.5,152.0
+data/raw/naip_tiles_pc_4band_full/site_0095.tif,"David Tribbett, Jr./River Road Farm",Caroline,chickens_not_laying_hens,56000,site_0095.tif,2023-07-11T16:00:00Z,7,5,1.0,1351.6,148.0
+data/raw/naip_tiles_pc_4band_full/site_0106.tif,"Chaudhry Farm, LLC/Pervaiz Akhtar",Somerset,chickens_not_laying_hens,92400,site_0106.tif,2023-08-19T16:00:00Z,11,7,6.0,18454.4,317.0
+data/raw/naip_tiles_pc_4band_full/site_0108.tif,"Chaudhry Farm, LLC/Pervaiz Akhtar",Somerset,chickens_not_laying_hens,146000,site_0108.tif,2023-07-29T16:00:00Z,6,4,4.0,14739.7,580.5
+data/raw/naip_tiles_pc_4band_full/site_0110.tif,"Jadwins Farm, LLC/ John F. Williams III",Talbot,chickens_not_laying_hens,92000,site_0110.tif,2023-07-29T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0102.tif,Tuan Do/Tuan Farm,Somerset,chickens_not_laying_hens,249000,site_0102.tif,2023-08-19T16:00:00Z,32,30,6.0,16391.1,104.5
+data/raw/naip_tiles_pc_4band_full/site_0103.tif,Robin Meekins/Jews Farm,Dorchester,chickens_not_laying_hens,112000,site_0103.tif,2023-07-29T16:00:00Z,5,4,4.0,10051.1,761.5
+data/raw/naip_tiles_pc_4band_full/site_0109.tif,Aubrey Storm/First Frost Farm,Talbot,chickens_not_laying_hens,47000,site_0109.tif,2023-07-29T16:00:00Z,5,3,3.0,9493.3,467.0
+data/raw/naip_tiles_pc_4band_full/site_0104.tif,Ryan Marshall/Beech Creek Farm,Wicomico,chickens_not_laying_hens,176000,site_0104.tif,2023-06-02T16:00:00Z,19,13,6.0,20915.899999999998,593.5
+data/raw/naip_tiles_pc_4band_full/site_0088.tif,Smithville View Farm LLC,Caroline,chickens_not_laying_hens,121800,site_0088.tif,2023-08-19T16:00:00Z,21,14,19.0,34888.5,205.0
+data/raw/naip_tiles_pc_4band_full/site_0111.tif,Richard C. Hall/Hopeful Harvest & Halladise Farms,Dorchester,chickens_not_laying_hens,121000,site_0111.tif,2023-07-29T16:00:00Z,18,17,13.0,36908.6,597.0
+data/raw/naip_tiles_pc_4band_full/site_0116.tif,Rhonda Donaway/Gator Farm,Wicomico,chickens_not_laying_hens,104000,site_0116.tif,2023-06-02T16:00:00Z,12,12,30.0,85317.4,353.0
+data/raw/naip_tiles_pc_4band_full/site_0113.tif,Susan Driscoll/Blackwater Farms,Wicomico,chickens_not_laying_hens,62000,site_0113.tif,2023-08-19T16:00:00Z,2,2,2.0,3415.7000000000003,105.5
+data/raw/naip_tiles_pc_4band_full/site_0117.tif,"Conaway Farms, LLC c/o Scott Conaway/Country Time",Wicomico,chickens_not_laying_hens,130000,site_0117.tif,2023-06-02T16:00:00Z,18,12,11.0,33668.1,592.0
+data/raw/naip_tiles_pc_4band_full/site_0118.tif,"Conaway Farms, LLC c/o Scott Conaway/Country Comforts",Wicomico,chickens_not_laying_hens,90000,site_0118.tif,2023-06-02T16:00:00Z,21,11,10.0,28118.0,627.5
+data/raw/naip_tiles_pc_4band_full/site_0112.tif,Sung Park/Bethel Farm,Wicomico,chickens_not_laying_hens,72500,site_0112.tif,2023-07-29T16:00:00Z,5,2,2.0,3294.0,175.0
+data/raw/naip_tiles_pc_4band_full/site_0114.tif,Double Z Enterprises c/o Zeke E. Collins/Buck & Rut Farm,Wicomico,chickens_not_laying_hens,49400,site_0114.tif,2023-08-19T16:00:00Z,2,2,2.0,3977.5,347.5
+data/raw/naip_tiles_pc_4band_full/site_0126.tif,Barry Brent Ickes/Ickes Farm,Wicomico,chickens_not_laying_hens,122500,site_0126.tif,2023-06-02T16:00:00Z,6,2,2.0,3445.8,601.5
+data/raw/naip_tiles_pc_4band_full/site_0122.tif,David Shockley/Hardway Farm,Wicomico,chickens_not_laying_hens,112600,site_0122.tif,2023-06-02T16:00:00Z,5,4,4.0,7661.7,89.5
+data/raw/naip_tiles_pc_4band_full/site_0115.tif,Dustin Calloway/Clay Island Farm,Wicomico,unknown,0,site_0115.tif,2023-08-19T16:00:00Z,23,19,9.0,17944.0,132.0
+data/raw/naip_tiles_pc_4band_full/site_0121.tif,Jong Kil Won/Hallelujah Farm,Wicomico,chickens_not_laying_hens,98500,site_0121.tif,2023-06-02T16:00:00Z,5,3,3.0,7356.7,214.0
+data/raw/naip_tiles_pc_4band_full/site_0123.tif,Hind H. ElBaf/Hind Farm,Wicomico,chickens_not_laying_hens,103000,site_0123.tif,2023-06-02T16:00:00Z,6,5,3.0,7213.6,340.0
+data/raw/naip_tiles_pc_4band_full/site_0120.tif,Mohammad Arshad,Wicomico,chickens_not_laying_hens,132000,site_0120.tif,2023-06-02T16:00:00Z,35,32,30.0,82198.8,445.0
+data/raw/naip_tiles_pc_4band_full/site_0127.tif,William T. Marshall/MT Marshall Farm,Wicomico,chickens_not_laying_hens,88000,site_0127.tif,2023-06-02T16:00:00Z,7,7,5.0,7681.5,206.0
+data/raw/naip_tiles_pc_4band_full/site_0125.tif,Patricia Gordy/Itty Bitty Farm,Wicomico,chickens_not_laying_hens,85300,site_0125.tif,2023-06-02T16:00:00Z,5,3,2.0,3234.7,132.0
+data/raw/naip_tiles_pc_4band_full/site_0128.tif,Brian Harding,Dorchester,chickens_not_laying_hens,207600,site_0128.tif,2023-05-27T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0132.tif,Danh Tran/Danh - Loan Farm,Wicomico,chickens_not_laying_hens,100000,site_0132.tif,2023-06-02T16:00:00Z,15,10,10.0,17648.899999999998,630.0
+data/raw/naip_tiles_pc_4band_full/site_0130.tif,Timothy M. Wright/Muddy Bottom Farm,Wicomico,chickens_not_laying_hens,73200,site_0130.tif,2023-08-19T16:00:00Z,10,5,5.0,9311.699999999999,645.0
+data/raw/naip_tiles_pc_4band_full/site_0119.tif,Imtiaz Ahmed,Wicomico,chickens_not_laying_hens,91000,site_0119.tif,2023-08-19T16:00:00Z,5,5,5.0,11009.0,222.0
+data/raw/naip_tiles_pc_4band_full/site_0124.tif,"Jeannette Calloway and Edward Calloway, Sr.",Wicomico,chickens_not_laying_hens,164600,site_0124.tif,2023-08-19T16:00:00Z,16,16,8.0,19402.0,193.0
+data/raw/naip_tiles_pc_4band_full/site_0136.tif,Jason L. Sheubrooks/JACA Farm,Queen Anne's,chickens_not_laying_hens,155200,site_0136.tif,2023-05-27T16:00:00Z,5,4,4.0,9128.2,906.5
+data/raw/naip_tiles_pc_4band_full/site_0133.tif,Tim Nguyen/Nguyen Farm,Wicomico,chickens_not_laying_hens,70000,site_0133.tif,2023-06-02T16:00:00Z,2,2,2.0,6185.4,607.0
+data/raw/naip_tiles_pc_4band_full/site_0134.tif,"Hannan Farm, LLC/ Hannan Hamid (Hope 1-4 &Hope 5-7)",Wicomico,chickens_not_laying_hens,165000,site_0134.tif,2023-06-02T16:00:00Z,16,15,18.0,50468.8,152.0
+data/raw/naip_tiles_pc_4band_full/site_0137.tif,Zeke E. Collins/Penthouse Farm,Wicomico,chickens_not_laying_hens,47000,site_0137.tif,2023-07-29T16:00:00Z,6,6,8.0,19345.4,327.5
+data/raw/naip_tiles_pc_4band_full/site_0129.tif,"Esha Farm, LLC/Mohammad Ahmad",Wicomico,chickens_not_laying_hens,85600,site_0129.tif,2023-08-19T16:00:00Z,1,1,1.0,4224.1,648.0
+data/raw/naip_tiles_pc_4band_full/site_0135.tif,Michael Lembeck/The Sunrider Farm,Wicomico,chickens_not_laying_hens,67600,site_0135.tif,2023-06-02T16:00:00Z,3,1,1.0,1375.6,119.0
+data/raw/naip_tiles_pc_4band_full/site_0139.tif,Daniel Rayne/Rayne Acres,Wicomico,chickens_not_laying_hens,100000,site_0139.tif,2023-06-02T16:00:00Z,18,18,4.0,9718.5,437.0
+data/raw/naip_tiles_pc_4band_full/site_0138.tif,Matt Campbell/Buck Oliver Farm,Wicomico,chickens_not_laying_hens,40800,site_0138.tif,2023-06-02T16:00:00Z,12,10,10.0,21707.0,934.0
+data/raw/naip_tiles_pc_4band_full/site_0142.tif,Sunnyside Poultry Farms,Carroll,laying_hens_dry_manure,398980,site_0142.tif,2023-05-21T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0143.tif,Billy Tomlinson Jr./Tomlinson Farm,Wicomico,chickens_not_laying_hens,39400,site_0143.tif,2023-06-02T16:00:00Z,11,9,2.0,4178.8,616.0
+data/raw/naip_tiles_pc_4band_full/site_0140.tif,Mary Lou Brown/Maple Breeze & Beulah Winds,Dorchester,chickens_not_laying_hens,136000,site_0140.tif,2023-07-29T16:00:00Z,6,6,6.0,14535.6,59.0
+data/raw/naip_tiles_pc_4band_full/site_0150.tif,Clinton W. Davidson/Rejaco Farm,Worcester,chickens_not_laying_hens,120000,site_0150.tif,2023-06-02T16:00:00Z,9,1,1.0,847.9,932.0
+data/raw/naip_tiles_pc_4band_full/site_0141.tif,Randy Collins/Mother Hen Farm,Dorchester,chickens_not_laying_hens,67200,site_0141.tif,2023-05-27T16:00:00Z,3,3,3.0,5591.0,26.0
+data/raw/naip_tiles_pc_4band_full/site_0131.tif,Tony Pham/Tiffany and Nancy Farms,Wicomico,chickens_not_laying_hens,215100,site_0131.tif,2023-06-02T16:00:00Z,11,7,7.0,29564.5,85.0
+data/raw/naip_tiles_pc_4band_full/site_0146.tif,Roland Todd/Roland's Roaster's,Dorchester,chickens_not_laying_hens,159900,site_0146.tif,2023-05-27T16:00:00Z,13,12,12.0,36306.9,703.0
+data/raw/naip_tiles_pc_4band_full/site_0145.tif,William M. Twilley/Springdale Farm,Dorchester,chickens_not_laying_hens,70000,site_0145.tif,2023-07-29T16:00:00Z,3,3,3.0,3181.1,48.0
+data/raw/naip_tiles_pc_4band_full/site_0151.tif,Abby's Farm Inc.,Worcester,chickens_not_laying_hens,168800,site_0151.tif,2023-06-02T16:00:00Z,14,12,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0149.tif,S. Truitt Poultry c/o Samantha Truitt,Worcester,chickens_not_laying_hens,184000,site_0149.tif,2023-06-02T16:00:00Z,8,7,8.0,20150.3,954.0
+data/raw/naip_tiles_pc_4band_full/site_0147.tif,"Wheat - Ridge Farm, Inc",Dorchester,chickens_not_laying_hens,117600,site_0147.tif,2023-08-19T16:00:00Z,9,4,4.0,9002.1,176.5
+data/raw/naip_tiles_pc_4band_full/site_0144.tif,Mark Nguyen/Mark & Jayden Farm,Wicomico,chickens_not_laying_hens,239000,site_0144.tif,2023-06-02T16:00:00Z,12,8,6.0,19838.8,545.0
+data/raw/naip_tiles_pc_4band_full/site_0160.tif,Alan & Kristin Hudson,Worcester,unknown,0,site_0160.tif,2023-06-02T16:00:00Z,6,1,1.0,934.9,446.0
+data/raw/naip_tiles_pc_4band_full/site_0153.tif,"Chicken City, LTD. c/o Brian Derrickson",Worcester,chickens_not_laying_hens,213500,site_0153.tif,2023-10-28T16:00:00Z,14,12,15.0,34739.2,201.0
+data/raw/naip_tiles_pc_4band_full/site_0163.tif,Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion),Worcester,chickens_not_laying_hens,346000,site_0163.tif,2023-10-28T16:00:00Z,30,12,21.0,60704.8,606.0
+data/raw/naip_tiles_pc_4band_full/site_0157.tif,Stephen  W. Pusey/Grand Anse Farm,Worcester,chickens_not_laying_hens,100000,site_0157.tif,2023-07-29T16:00:00Z,6,5,8.0,16874.0,224.0
+data/raw/naip_tiles_pc_4band_full/site_0148.tif,Aberdeen Farm LLC,Worcester,chickens_not_laying_hens,108000,site_0148.tif,2023-10-28T16:00:00Z,21,13,9.0,30760.4,277.0
+data/raw/naip_tiles_pc_4band_full/site_0154.tif,Marbury Wilson Perdue III/Borrowed From God,Worcester,chickens_not_laying_hens,44400,site_0154.tif,2023-06-02T16:00:00Z,4,1,1.0,513.0,174.0
+data/raw/naip_tiles_pc_4band_full/site_0152.tif,Joseph E. Chisholm Jr./Big Mill Pond Farm,Worcester,chickens_not_laying_hens,65400,site_0152.tif,2023-10-28T16:00:00Z,2,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0156.tif,Cedar Livesstock Farm LLC,Worcester,chickens_not_laying_hens,290400,site_0156.tif,2023-06-02T16:00:00Z,16,9,9.0,19221.5,471.0
+data/raw/naip_tiles_pc_4band_full/site_0158.tif,"Choudery Farms, LLC c/o Shabbir Choudery",Worcester,chickens_not_laying_hens,239000,site_0158.tif,2023-06-02T16:00:00Z,9,9,9.0,15591.5,117.0
+data/raw/naip_tiles_pc_4band_full/site_0155.tif,Virgil L. Shockley/Boondock Farm,Worcester,chickens_not_laying_hens,42000,site_0155.tif,2023-06-02T16:00:00Z,3,1,1.0,833.9,169.0
+data/raw/naip_tiles_pc_4band_full/site_0167.tif,"Pham Farms, LLC/ Thoan V. Pham & Peter L. Pham",Worcester,chickens_not_laying_hens,219700,site_0167.tif,2023-06-02T16:00:00Z,17,11,26.0,69103.1,701.5
+data/raw/naip_tiles_pc_4band_full/site_0171.tif,Randy Bui/Me and My Chickens Farm,Worcester,chickens_not_laying_hens,206000,site_0171.tif,2023-06-02T16:00:00Z,14,8,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0164.tif,R & S Farm Operations LLC/Swamp Farm,Worcester,chickens_not_laying_hens,100000,site_0164.tif,2023-06-02T16:00:00Z,6,3,3.0,5434.4,217.0
+data/raw/naip_tiles_pc_4band_full/site_0166.tif,Pebble Branch Farm LLC/John P. Kelly,Worcester,chickens_not_laying_hens,400000,site_0166.tif,2023-07-29T16:00:00Z,13,11,11.0,40083.700000000004,586.0
+data/raw/naip_tiles_pc_4band_full/site_0168.tif,David Pilchard/Pilchard & Harlee's Wings Farms,Worcester,chickens_not_laying_hens,153000,site_0168.tif,2023-10-28T16:00:00Z,32,14,6.0,24779.6,795.0
+data/raw/naip_tiles_pc_4band_full/site_0159.tif,Cobb Heritage LLC/Pocomoke Farm #4,Worcester,laying_hens_dry_manure,61500,site_0159.tif,2023-06-02T16:00:00Z,8,2,2.0,4001.2999999999997,205.5
+data/raw/naip_tiles_pc_4band_full/site_0161.tif,Ricky Scott Holland/Railroad Farm,Worcester,chickens_not_laying_hens,104000,site_0161.tif,2023-10-28T16:00:00Z,24,20,10.0,25097.0,513.5
+data/raw/naip_tiles_pc_4band_full/site_0165.tif,David Nuse Sr.,Worcester,chickens_not_laying_hens,75000,site_0165.tif,2023-07-29T16:00:00Z,2,2,2.0,5480.3,127.0
+data/raw/naip_tiles_pc_4band_full/site_0169.tif,Aksmah LLC/Mahe Farm,Worcester,chickens_not_laying_hens,173500,site_0169.tif,2023-06-02T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0170.tif,Van Bawi Thawng/Mt. Moriah Farm,Worcester,chickens_not_laying_hens,112000,site_0170.tif,2023-10-28T16:00:00Z,28,22,6.0,16305.8,258.5
+data/raw/naip_tiles_pc_4band_full/site_0172.tif,Willis E. Redden Farm,Worcester,chickens_not_laying_hens,272000,site_0172.tif,2023-10-28T16:00:00Z,14,7,6.0,18119.2,534.5
+data/raw/naip_tiles_pc_4band_full/site_0162.tif,Onley Road LLC/Far Nasir,Worcester,chickens_not_laying_hens,114800,site_0162.tif,2023-06-02T16:00:00Z,14,8,5.0,6599.5,241.0
+data/raw/naip_tiles_pc_4band_full/site_0173.tif,Gregory P. Wilkins/Runaway Farm (Expansion),Worcester,chickens_not_laying_hens,228000,site_0173.tif,2023-06-02T16:00:00Z,7,6,8.0,24917.1,249.0
+data/raw/naip_tiles_pc_4band_full/site_0174.tif,Levinh Farm LLC c/o Minh Vinh,Worcester,chickens_not_laying_hens,232300,site_0174.tif,2023-06-02T16:00:00Z,16,16,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0176.tif,Minh Vinh,Worcester,chickens_not_laying_hens,595000,site_0176.tif,2023-06-02T16:00:00Z,18,14,14.0,76971.40000000001,403.0
+data/raw/naip_tiles_pc_4band_full/site_0177.tif,Gilbert Thompson Jr.,Worcester,chickens_not_laying_hens,175200,site_0177.tif,2023-06-02T16:00:00Z,7,6,6.0,9203.8,378.5
+data/raw/naip_tiles_pc_4band_full/site_0178.tif,"Todd Hite/Hite Farms, LLC",Worcester,chickens_not_laying_hens,85400,site_0178.tif,2023-10-28T16:00:00Z,21,18,22.0,48894.1,249.5
+data/raw/naip_tiles_pc_4band_full/site_0181.tif,Beverly Farm Partnership/ Arthur Shettle,Worcester,chickens_not_laying_hens,75000,site_0181.tif,2023-07-29T16:00:00Z,3,3,3.0,5854.099999999999,189.0
+data/raw/naip_tiles_pc_4band_full/site_0179.tif,Long Nguyen/Bithao & Minh Quang Farm,Worcester,chickens_not_laying_hens,120000,site_0179.tif,2023-07-29T16:00:00Z,14,11,4.0,7146.099999999999,216.0
+data/raw/naip_tiles_pc_4band_full/site_0184.tif,Patricia Collins/Brisk Wind Farms,Caroline,chickens_not_laying_hens,48000,site_0184.tif,2023-05-27T16:00:00Z,3,3,6.0,18391.2,323.0
+data/raw/naip_tiles_pc_4band_full/site_0180.tif,Tue D. Nguyen,Worcester,chickens_not_laying_hens,168000,site_0180.tif,2023-10-28T16:00:00Z,22,18,6.0,12576.1,351.5
+data/raw/naip_tiles_pc_4band_full/site_0182.tif,Joshua Kurtz/Home Farm,Worcester,chickens_not_laying_hens,52000,site_0182.tif,2023-06-02T16:00:00Z,2,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0175.tif,Successful Farm Inc,Worcester,chickens_not_laying_hens,113000,site_0175.tif,2023-06-02T16:00:00Z,10,9,4.0,8299.8,130.5
+data/raw/naip_tiles_pc_4band_full/site_0186.tif,Maurice Blake,Wicomico,chickens_not_laying_hens,68000,site_0186.tif,2023-06-02T16:00:00Z,15,11,5.0,5477.1,115.0
+data/raw/naip_tiles_pc_4band_full/site_0187.tif,William Cottman/Cottman Farm,Somerset,chickens_not_laying_hens,86000,site_0187.tif,2023-08-19T16:00:00Z,11,6,6.0,9689.0,501.5
+data/raw/naip_tiles_pc_4band_full/site_0190.tif,"Ramsay Family Farm, Inc.",Somerset,chickens_not_laying_hens,117500,site_0190.tif,2023-07-29T16:00:00Z,20,11,4.0,3693.1,519.5
+data/raw/naip_tiles_pc_4band_full/site_0188.tif,Joshua Thang/ Thang Family Farm,Worcester,chickens_not_laying_hens,210000,site_0188.tif,2023-10-28T16:00:00Z,11,10,10.0,22521.1,875.5
+data/raw/naip_tiles_pc_4band_full/site_0183.tif,Hieu Vu,Wicomico,chickens_not_laying_hens,123700,site_0183.tif,2023-06-02T16:00:00Z,17,16,14.0,37603.1,194.5
+data/raw/naip_tiles_pc_4band_full/site_0189.tif,"Dean Murray/Murray Farms, Inc./Dividing Road & Kelrin Farms",Wicomico,chickens_not_laying_hens,44400,site_0189.tif,2023-08-19T16:00:00Z,12,10,6.0,8789.4,134.5
+data/raw/naip_tiles_pc_4band_full/site_0195.tif,Joshua Cole McCafferty,Caroline,chickens_not_laying_hens,87000,site_0195.tif,2023-07-11T16:00:00Z,6,4,4.0,6787.4,154.0
+data/raw/naip_tiles_pc_4band_full/site_0193.tif,Van Hmun and Lily Sui/Fox Run & Little Blackwater,Dorchester,chickens_not_laying_hens,144800,site_0193.tif,2023-07-29T16:00:00Z,9,8,8.0,14820.8,246.0
+data/raw/naip_tiles_pc_4band_full/site_0185.tif,"Charles E. Ball, Jr./Ball Farm",Caroline,chickens_not_laying_hens,54600,site_0185.tif,2023-07-29T16:00:00Z,8,7,5.0,11519.0,226.0
+data/raw/naip_tiles_pc_4band_full/site_0194.tif,Garrett Luthy,Dorchester,chickens_not_laying_hens,80000,site_0194.tif,2023-07-29T16:00:00Z,9,8,8.0,12123.1,511.0
+data/raw/naip_tiles_pc_4band_full/site_0199.tif,Justin Tomlinson/Maddie and Will Farm,Wicomico,chickens_not_laying_hens,42000,site_0199.tif,2023-06-02T16:00:00Z,9,7,10.0,16070.7,1047.5
+data/raw/naip_tiles_pc_4band_full/site_0198.tif,Harry Nagel,Caroline,chickens_not_laying_hens,48000,site_0198.tif,2023-08-19T16:00:00Z,21,14,13.0,38978.8,718.0
+data/raw/naip_tiles_pc_4band_full/site_0192.tif,Edward Lewton Warren/Motel Chix,Worcester,chickens_not_laying_hens,88400,site_0192.tif,2023-06-02T16:00:00Z,5,2,2.0,3013.0,152.5
+data/raw/naip_tiles_pc_4band_full/site_0200.tif,James Byron Beauchamp,Somerset,chickens_not_laying_hens,95000,site_0200.tif,2023-08-19T16:00:00Z,9,7,7.0,19171.7,237.0
+data/raw/naip_tiles_pc_4band_full/site_0197.tif,Oscar T. Rentschler Jr./Black Lab Acres,Somerset,chickens_not_laying_hens,142000,site_0197.tif,2023-07-29T16:00:00Z,5,4,4.0,12054.7,276.5
+data/raw/naip_tiles_pc_4band_full/site_0191.tif,"Milton Lee West, Jr./Doris West",Worcester,chickens_not_laying_hens,73000,site_0191.tif,2023-06-02T16:00:00Z,13,3,2.0,1623.1999999999998,290.5
+data/raw/naip_tiles_pc_4band_full/site_0203.tif,Robert Family LLC/Robert Thawng,Wicomico,chickens_not_laying_hens,173000,site_0203.tif,2023-06-02T16:00:00Z,6,5,5.0,14706.7,254.0
+data/raw/naip_tiles_pc_4band_full/site_0205.tif,Van Lian/Sang Sang's Family Farm,Worcester,chickens_not_laying_hens,176400,site_0205.tif,2023-06-02T16:00:00Z,6,6,8.0,19457.6,439.0
+data/raw/naip_tiles_pc_4band_full/site_0196.tif,Ghazanffer Ali,Somerset,chickens_not_laying_hens,160000,site_0196.tif,2023-07-29T16:00:00Z,7,5,5.0,11954.2,148.0
+data/raw/naip_tiles_pc_4band_full/site_0210.tif,Bawi Hlun/ Chan UK,Somerset,unknown,0,site_0210.tif,2023-08-19T16:00:00Z,11,9,9.0,23315.100000000002,247.0
+data/raw/naip_tiles_pc_4band_full/site_0201.tif,Michelle Littleton/Bethards Farm,Worcester,chickens_not_laying_hens,72000,site_0201.tif,2023-06-02T16:00:00Z,2,2,2.0,4142.9,661.0
+data/raw/naip_tiles_pc_4band_full/site_0209.tif,"Luu Hoang/Golden Chicken Farm, LLC",Somerset,chickens_not_laying_hens,200000,site_0209.tif,2023-08-19T16:00:00Z,9,7,9.0,17366.5,422.0
+data/raw/naip_tiles_pc_4band_full/site_0202.tif,Sabrina Fishell,Caroline,chickens_not_laying_hens,70000,site_0202.tif,2023-05-27T16:00:00Z,4,3,6.0,18184.0,119.0
+data/raw/naip_tiles_pc_4band_full/site_0204.tif,Cock Spur Farm LLC/Gregory Todd Higgs,Queen Anne's,chickens_not_laying_hens,63000,site_0204.tif,2023-05-27T16:00:00Z,10,7,6.0,8316.0,335.0
+data/raw/naip_tiles_pc_4band_full/site_0212.tif,Tu Do/Chelsea Farm,Somerset,chickens_not_laying_hens,270000,site_0212.tif,2023-08-19T16:00:00Z,11,8,11.0,27966.9,229.0
+data/raw/naip_tiles_pc_4band_full/site_0207.tif,Marc R. Clopper/Clopper Farms,Caroline,chickens_not_laying_hens,54400,site_0207.tif,2023-07-29T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0211.tif,"Moore Farms, Inc. c/o William A. Moore Jr.",Talbot,chickens_not_laying_hens,179500,site_0211.tif,2023-07-29T16:00:00Z,7,6,6.0,19466.6,264.5
+data/raw/naip_tiles_pc_4band_full/site_0216.tif,"Sunny Apartments, LLC (Mohammed Ahmad)",Dorchester,chickens_not_laying_hens,80000,site_0216.tif,2023-08-19T16:00:00Z,7,5,5.0,12000.400000000001,231.0
+data/raw/naip_tiles_pc_4band_full/site_0221.tif,"C & M Ellingsworth, Inc./Clyde Ellingsworth",Queen Anne's,chickens_not_laying_hens,40000,site_0221.tif,2023-07-11T16:00:00Z,8,4,4.0,7052.099999999999,561.5
+data/raw/naip_tiles_pc_4band_full/site_0215.tif,Christopher Both,Caroline,chickens_not_laying_hens,315000,site_0215.tif,2023-05-27T16:00:00Z,12,12,12.0,31508.9,221.5
+data/raw/naip_tiles_pc_4band_full/site_0217.tif,Jason Dryden Farms Inc. c/o Jason Dryden/Pop Pop Elmo Farm,Somerset,chickens_not_laying_hens,167000,site_0217.tif,2023-08-19T16:00:00Z,21,14,18.0,53797.299999999996,200.0
+data/raw/naip_tiles_pc_4band_full/site_0223.tif,"Rose Farm, LLC c/o Sarfraz Ahmad",Wicomico,chickens_not_laying_hens,190000,site_0223.tif,2023-06-02T16:00:00Z,13,8,10.0,32408.0,220.0
+data/raw/naip_tiles_pc_4band_full/site_0218.tif,Randy Collins/Home Farm,Caroline,chickens_not_laying_hens,84000,site_0218.tif,2023-08-19T16:00:00Z,11,7,7.0,16749.5,531.0
+data/raw/naip_tiles_pc_4band_full/site_0220.tif,Charles Laird/Charles Laird Farm,Somerset,chickens_not_laying_hens,90000,site_0220.tif,2023-07-29T16:00:00Z,2,1,1.0,1572.1,481.0
+data/raw/naip_tiles_pc_4band_full/site_0208.tif,Jin S. Heo/Matthew Farm,Wicomico,chickens_not_laying_hens,108800,site_0208.tif,2023-06-02T16:00:00Z,6,4,5.0,6633.1,99.0
+data/raw/naip_tiles_pc_4band_full/site_0214.tif,"Hussain Farm, LLC/Samar Abbas",Wicomico,chickens_not_laying_hens,89900,site_0214.tif,2023-06-02T16:00:00Z,16,14,10.0,15002.9,397.0
+data/raw/naip_tiles_pc_4band_full/site_0219.tif,Kevin Pham/Danny&Kenny Farm,Somerset,chickens_not_laying_hens,96000,site_0219.tif,2023-08-19T16:00:00Z,24,21,16.0,34298.3,139.5
+data/raw/naip_tiles_pc_4band_full/site_0206.tif,Ray A. Lewis/Ray Lewis Farm,Wicomico,chickens_not_laying_hens,63000,site_0206.tif,2023-06-02T16:00:00Z,1,1,1.0,2505.2,538.0
+data/raw/naip_tiles_pc_4band_full/site_0229.tif,"Anthony E. Balcerzak, Jr./White Haven Farm",Wicomico,chickens_not_laying_hens,40000,site_0229.tif,2023-08-19T16:00:00Z,2,1,1.0,2024.0,615.0
+data/raw/naip_tiles_pc_4band_full/site_0225.tif,Jabar Rahim,Dorchester,chickens_not_laying_hens,297000,site_0225.tif,2023-07-29T16:00:00Z,9,6,6.0,14763.8,1017.0
+data/raw/naip_tiles_pc_4band_full/site_0234.tif,Robert Rosado/Northwind Farm,Wicomico,unknown,0,site_0234.tif,2023-07-29T16:00:00Z,5,4,4.0,11643.0,1164.5
+data/raw/naip_tiles_pc_4band_full/site_0227.tif,Quyen Nguyen/Lam Farm,Worcester,chickens_not_laying_hens,132700,site_0227.tif,2023-06-02T16:00:00Z,11,8,7.0,9443.6,161.0
+data/raw/naip_tiles_pc_4band_full/site_0232.tif,"William Moore, III",Caroline,chickens_not_laying_hens,62200,site_0232.tif,2023-07-11T16:00:00Z,8,5,4.0,7347.5,80.5
+data/raw/naip_tiles_pc_4band_full/site_0228.tif,"Weaver Farms, LLC/Richard Weaver",Queen Anne's,chickens_not_laying_hens,114000,site_0228.tif,2023-07-11T16:00:00Z,5,4,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0235.tif,Hai Xuan Ha/Ha Nguyen,Worcester,chickens_not_laying_hens,240000,site_0235.tif,2023-06-02T16:00:00Z,10,6,6.0,22756.2,899.0
+data/raw/naip_tiles_pc_4band_full/site_0230.tif,"Zachary Loller/William Loller Farm, LLC",Kent,chickens_not_laying_hens,270000,site_0230.tif,2023-05-27T16:00:00Z,15,5,5.0,8731.7,304.0
+data/raw/naip_tiles_pc_4band_full/site_0224.tif,Scot Beauchamp/Home and Dad's Farms,Somerset,chickens_not_laying_hens,128100,site_0224.tif,2023-08-19T16:00:00Z,7,5,5.0,7743.9,970.0
+data/raw/naip_tiles_pc_4band_full/site_0222.tif,Samuel W. Hall/East Ridge Farm,Somerset,chickens_not_laying_hens,56300,site_0222.tif,2023-08-19T16:00:00Z,9,6,6.0,6756.1,203.5
+data/raw/naip_tiles_pc_4band_full/site_0226.tif,Glenn S. Ains/The Farm at Heron's Pond,Somerset,chickens_not_laying_hens,89400,site_0226.tif,2023-08-19T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0233.tif,Stephen L. Stoltzfus,Kent,chickens_not_laying_hens,75000,site_0233.tif,2023-05-27T16:00:00Z,6,4,4.0,8171.9,196.5
+data/raw/naip_tiles_pc_4band_full/site_0231.tif,"Rowland Farms, LLC",Worcester,chickens_not_laying_hens,95000,site_0231.tif,2023-10-28T16:00:00Z,6,3,3.0,8317.300000000001,229.0
+data/raw/naip_tiles_pc_4band_full/site_0241.tif,Michael Lembeck/Rocking L. Ranch,Wicomico,chickens_not_laying_hens,65000,site_0241.tif,2023-06-02T16:00:00Z,17,14,2.0,3289.4,149.0
+data/raw/naip_tiles_pc_4band_full/site_0240.tif,Jason Powell/Jason Powell Farms Inc.,Wicomico,chickens_not_laying_hens,58600,site_0240.tif,2023-06-02T16:00:00Z,5,4,8.0,13891.5,185.0
+data/raw/naip_tiles_pc_4band_full/site_0213.tif,Newton Bui/Vina Cao,Worcester,chickens_not_laying_hens,354500,site_0213.tif,2023-08-19T16:00:00Z,22,16,16.0,47975.5,838.0
+data/raw/naip_tiles_pc_4band_full/site_0242.tif,Stroble Farm LLC c/o Gary Stroble,Worcester,chickens_not_laying_hens,104000,site_0242.tif,2023-06-02T16:00:00Z,9,1,1.0,562.1,242.0
+data/raw/naip_tiles_pc_4band_full/site_0243.tif,"Justin Humphreys/Humphreys Farms, LLC/Somerset Farm",Somerset,chickens_not_laying_hens,122000,site_0243.tif,2023-08-19T16:00:00Z,5,1,1.0,4271.9,567.0
+data/raw/naip_tiles_pc_4band_full/site_0238.tif,"Bunting Farms, Inc",Worcester,chickens_not_laying_hens,162000,site_0238.tif,2023-10-28T16:00:00Z,27,20,14.0,31459.0,313.0
+data/raw/naip_tiles_pc_4band_full/site_0245.tif,Stephen Pusey/Sunset Cielo Farm,Worcester,chickens_not_laying_hens,60000,site_0245.tif,2023-06-02T16:00:00Z,1,1,1.0,682.0,740.0
+data/raw/naip_tiles_pc_4band_full/site_0236.tif,Lawrence Lembeck II,Wicomico,chickens_not_laying_hens,154400,site_0236.tif,2023-06-02T16:00:00Z,20,15,8.0,17895.8,468.0
+data/raw/naip_tiles_pc_4band_full/site_0246.tif,Philip L. Meck/Meck Farm,Cecil,chickens_not_laying_hens,88000,site_0246.tif,2023-07-11T16:00:00Z,3,2,2.0,11976.6,781.0
+data/raw/naip_tiles_pc_4band_full/site_0252.tif,Isaac Martin,Washington,ducks_liquid_manure,9800,site_0252.tif,2023-07-12T16:00:00Z,1,1,1.0,1498.8,72.0
+data/raw/naip_tiles_pc_4band_full/site_0250.tif,Benjamin D. Sowers,Frederick,chickens_not_laying_hens,17000,site_0250.tif,2023-07-12T16:00:00Z,3,1,1.0,1896.9,535.0
+data/raw/naip_tiles_pc_4band_full/site_0247.tif,Rhonda Donaway,Worcester,chickens_not_laying_hens,94600,site_0247.tif,2023-06-02T16:00:00Z,5,3,2.0,2854.4,76.0
+data/raw/naip_tiles_pc_4band_full/site_0253.tif,Adam Stanley/Deathly Hollows,Somerset,unknown,0,site_0253.tif,2023-07-29T16:00:00Z,7,7,11.0,34498.4,292.0
+data/raw/naip_tiles_pc_4band_full/site_0249.tif,Arbaugh's Flowering Springs Inc./Home Farm,Carroll,dairy_cattle,300,site_0249.tif,2023-05-21T16:00:00Z,1,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0248.tif,"My Lady's Manor Farm, Inc.",Baltimore,dairy_cattle,775,site_0248.tif,2023-05-25T16:00:00Z,2,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0239.tif,Justin Humphreys/Rizzi's Roost,Somerset,chickens_not_laying_hens,69000,site_0239.tif,2023-08-19T16:00:00Z,13,12,3.0,5085.2,320.0
+data/raw/naip_tiles_pc_4band_full/site_0244.tif,Luan Ngoc Nguyen,Somerset,chickens_not_laying_hens,156000,site_0244.tif,2023-07-29T16:00:00Z,3,3,3.0,5882.2,78.0
+data/raw/naip_tiles_pc_4band_full/site_0237.tif,William T. Calloway III/Tommy and Dee's Farm,Wicomico,chickens_not_laying_hens,71000,site_0237.tif,2023-08-19T16:00:00Z,19,16,5.0,11025.3,151.0
+data/raw/naip_tiles_pc_4band_full/site_0254.tif,"Patterson Farms, Inc/Home Farm",Kent,dairy_cattle,680,site_0254.tif,2023-05-27T16:00:00Z,1,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0260.tif,Lance E. Brown / Lance Brown Farm,Caroline,chickens_not_laying_hens,114000,site_0260.tif,2023-07-29T16:00:00Z,3,3,3.0,11178.2,719.0
+data/raw/naip_tiles_pc_4band_full/site_0261.tif,Aaron Dennis/Carr's Creek Farm,Caroline,chickens_not_laying_hens,56800,site_0261.tif,2023-07-29T16:00:00Z,3,2,3.0,4120.9,154.0
+data/raw/naip_tiles_pc_4band_full/site_0256.tif,Adam Stanley Farm,Somerset,chickens_not_laying_hens,46000,site_0256.tif,2023-07-29T16:00:00Z,3,3,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0267.tif,Barry Spedden Farm,Dorchester,chickens_not_laying_hens,129000,site_0267.tif,2023-08-19T16:00:00Z,2,2,2.0,3763.4,621.5
+data/raw/naip_tiles_pc_4band_full/site_0258.tif,"William Robert Thomas, Jr. / Preston Farm",Caroline,chickens_not_laying_hens,108000,site_0258.tif,2023-07-29T16:00:00Z,13,12,14.0,31289.8,590.0
+data/raw/naip_tiles_pc_4band_full/site_0262.tif,Robert Edwin Love/Bobby Love Farm,Caroline,chickens_not_laying_hens,49000,site_0262.tif,2023-08-19T16:00:00Z,16,14,10.0,21427.5,627.0
+data/raw/naip_tiles_pc_4band_full/site_0255.tif,"Tina L. Johnson/Little Chicks, LLC",Queen Anne's,chickens_not_laying_hens,216000,site_0255.tif,2023-05-27T16:00:00Z,6,6,6.0,13834.2,573.0
+data/raw/naip_tiles_pc_4band_full/site_0259.tif,"William R.Thomas, Jr. / Bilden Farm",Caroline,chickens_not_laying_hens,79000,site_0259.tif,2023-07-29T16:00:00Z,11,9,6.0,11731.5,162.0
+data/raw/naip_tiles_pc_4band_full/site_0265.tif,Paul Aaron Hutchison Sr./Home Farm,Talbot,chickens_not_laying_hens,86200,site_0265.tif,2023-07-29T16:00:00Z,2,2,2.0,4820.5,982.0
+data/raw/naip_tiles_pc_4band_full/site_0257.tif,"Deerspring Dairy Farm, LLC",Frederick,dairy_cattle,705,site_0257.tif,2023-05-21T16:00:00Z,1,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0263.tif,Kaleem Ullah (Rahim Farm),Dorchester,chickens_not_laying_hens,134400,site_0263.tif,2023-05-27T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0268.tif,Phuong Tran/Blue Bonnet Farm,Wicomico,chickens_not_laying_hens,110000,site_0268.tif,2023-08-19T16:00:00Z,7,3,3.0,6423.0,952.0
+data/raw/naip_tiles_pc_4band_full/site_0264.tif,Jon Sewell/Tuscarora Farms,Frederick,turkeys,46000,site_0264.tif,2023-10-11T16:00:00Z,15,3,3.0,8549.400000000001,311.0
+data/raw/naip_tiles_pc_4band_full/site_0251.tif,"Sam's Farm, Incorporated",Worcester,chickens_not_laying_hens,257000,site_0251.tif,2023-06-02T16:00:00Z,14,12,24.0,97349.6,437.0
+data/raw/naip_tiles_pc_4band_full/site_0274.tif,Mohammad Iqbal/Pinewood Ranch,Worcester,chickens_not_laying_hens,240000,site_0274.tif,2023-06-02T16:00:00Z,9,8,8.0,26976.0,159.0
+data/raw/naip_tiles_pc_4band_full/site_0266.tif,Ronnie Schrock/Breezewood Poultry Farm,Somerset,chickens_not_laying_hens,50000,site_0266.tif,2023-08-19T16:00:00Z,11,5,5.0,9115.400000000001,348.0
+data/raw/naip_tiles_pc_4band_full/site_0272.tif,QuangTran Farm,Somerset,chickens_not_laying_hens,210000,site_0272.tif,2023-08-19T16:00:00Z,39,34,2.0,4861.8,266.5
+data/raw/naip_tiles_pc_4band_full/site_0269.tif,Ariann Le/Phat Chix Farm,Wicomico,chickens_not_laying_hens,260000,site_0269.tif,2023-06-02T16:00:00Z,9,9,13.0,29112.600000000002,275.0
+data/raw/naip_tiles_pc_4band_full/site_0275.tif,Ricky T. Holland/Colona Farm,Worcester,chickens_not_laying_hens,87000,site_0275.tif,2023-07-29T16:00:00Z,10,10,6.0,9542.6,666.5
+data/raw/naip_tiles_pc_4band_full/site_0276.tif,"Moon Farm, LLC/ Hassan Waheed",Somerset,chickens_not_laying_hens,320000,site_0276.tif,2023-08-19T16:00:00Z,13,8,8.0,18113.2,139.0
+data/raw/naip_tiles_pc_4band_full/site_0283.tif,"Bartenfelder Poultry Farm, LLC / Andrew Joseph Bartenfelder",Dorchester,chickens_not_laying_hens,48000,site_0283.tif,2023-07-29T16:00:00Z,11,9,9.0,27018.5,819.0
+data/raw/naip_tiles_pc_4band_full/site_0284.tif,Dream Journey Inc.,Somerset,chickens_not_laying_hens,152000,site_0284.tif,2023-10-28T16:00:00Z,11,8,8.0,30383.6,564.5
+data/raw/naip_tiles_pc_4band_full/site_0279.tif,Michael A. Lesniowski/H.D. Myles/Barclay Farm,Queen Anne's,chickens_not_laying_hens,268600,site_0279.tif,2023-07-11T16:00:00Z,17,16,16.0,42287.5,207.0
+data/raw/naip_tiles_pc_4band_full/site_0270.tif,Dennett Alan Butler/Maurice White Farm,Somerset,chickens_not_laying_hens,88000,site_0270.tif,2023-07-29T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0273.tif,"Marbeth Farm, LLC/David M. Clark III",Queen Anne's,chickens_not_laying_hens,73000,site_0273.tif,2023-05-27T16:00:00Z,10,9,3.0,6331.200000000001,421.0
+data/raw/naip_tiles_pc_4band_full/site_0281.tif,Jeffrey Pettitt/Krastel Farm,Kent,chickens_not_laying_hens,216000,site_0281.tif,2023-05-27T16:00:00Z,7,6,6.0,18543.0,302.5
+data/raw/naip_tiles_pc_4band_full/site_0278.tif,Phat H. Nguyen,Worcester,chickens_not_laying_hens,186000,site_0278.tif,2023-10-28T16:00:00Z,29,24,6.0,18705.6,118.0
+data/raw/naip_tiles_pc_4band_full/site_0282.tif,Liem Nguyen,Wicomico,chickens_not_laying_hens,183000,site_0282.tif,2023-08-19T16:00:00Z,41,30,6.0,17063.5,226.0
+data/raw/naip_tiles_pc_4band_full/site_0287.tif,One More Haul Farm,Caroline,chickens_not_laying_hens,156000,site_0287.tif,2023-07-29T16:00:00Z,11,9,9.0,19831.7,329.0
+data/raw/naip_tiles_pc_4band_full/site_0280.tif,Andrew F. Jones/ Jones Farm,Wicomico,chickens_not_laying_hens,120000,site_0280.tif,2023-06-02T16:00:00Z,3,3,3.0,11556.8,273.0
+data/raw/naip_tiles_pc_4band_full/site_0289.tif,"Beyla Farm, LLC",Caroline,chickens_not_laying_hens,240000,site_0289.tif,2023-07-11T16:00:00Z,8,7,7.0,23125.2,360.0
+data/raw/naip_tiles_pc_4band_full/site_0294.tif,"ESA Farm, LLC (Imran Asghar Farm)",Caroline,chickens_not_laying_hens,134600,site_0294.tif,2023-08-19T16:00:00Z,4,4,4.0,10575.6,154.5
+data/raw/naip_tiles_pc_4band_full/site_0288.tif,Model Farm LLC/Choudhry Asif,Wicomico,chickens_not_laying_hens,190000,site_0288.tif,2023-06-02T16:00:00Z,5,5,12.0,45558.6,535.0
+data/raw/naip_tiles_pc_4band_full/site_0285.tif,Ronnie Schrock Inc./Mason Farms,Somerset,chickens_not_laying_hens,160000,site_0285.tif,2023-08-19T16:00:00Z,7,4,4.0,8414.6,227.5
+data/raw/naip_tiles_pc_4band_full/site_0271.tif,Linda Trimble/Rounds Road Farm,Wicomico,chickens_not_laying_hens,60000,site_0271.tif,2023-06-02T16:00:00Z,7,5,2.0,5611.9,382.0
+data/raw/naip_tiles_pc_4band_full/site_0293.tif,David Phan,Dorchester,chickens_not_laying_hens,230000,site_0293.tif,2023-07-29T16:00:00Z,7,7,7.0,33996.7,673.0
+data/raw/naip_tiles_pc_4band_full/site_0291.tif,Shane Cohee,Dorchester,chickens_not_laying_hens,135000,site_0291.tif,2023-05-27T16:00:00Z,3,3,3.0,9483.5,305.0
+data/raw/naip_tiles_pc_4band_full/site_0290.tif,Bruce Nossick/Bruce Nossick Farm,Dorchester,chickens_not_laying_hens,144000,site_0290.tif,2023-05-27T16:00:00Z,7,7,4.0,14310.0,233.0
+data/raw/naip_tiles_pc_4band_full/site_0295.tif,Greg Harris Farm,Caroline,chickens_not_laying_hens,140400,site_0295.tif,2023-08-19T16:00:00Z,14,11,9.0,18261.9,166.0
+data/raw/naip_tiles_pc_4band_full/site_0286.tif,Fiaz Munir (Modification),Worcester,chickens_not_laying_hens,310400,site_0286.tif,2023-10-28T16:00:00Z,17,13,4.0,13009.5,433.0
+data/raw/naip_tiles_pc_4band_full/site_0277.tif,"Justin Humphreys/Humphreys Farms, LLC",Somerset,chickens_not_laying_hens,65000,site_0277.tif,2023-08-19T16:00:00Z,3,3,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0302.tif,Chasin Dreams Farm,Queen Anne's,unknown,0,site_0302.tif,2023-05-27T16:00:00Z,7,2,1.0,3830.9,91.0
+data/raw/naip_tiles_pc_4band_full/site_0292.tif,"Angel's Legacy, LLC",Wicomico,chickens_not_laying_hens,155000,site_0292.tif,2023-07-29T16:00:00Z,9,6,4.0,10989.0,232.0
+data/raw/naip_tiles_pc_4band_full/site_0297.tif,Charles Hickman/Late Start LLC,Wicomico,chickens_not_laying_hens,85000,site_0297.tif,2023-06-02T16:00:00Z,3,2,2.0,6365.9,424.0
+data/raw/naip_tiles_pc_4band_full/site_0299.tif,Jacob Thomas,Caroline,chickens_not_laying_hens,257400,site_0299.tif,2023-05-27T16:00:00Z,6,6,6.0,23177.6,142.0
+data/raw/naip_tiles_pc_4band_full/site_0300.tif,William James Robinette/Way More Farm (New Construction),Caroline,chickens_not_laying_hens,263400,site_0300.tif,2023-08-19T16:00:00Z,15,15,15.0,65426.0,344.0
+data/raw/naip_tiles_pc_4band_full/site_0307.tif,"Boi & Nawl Farm, LLC",Worcester,chickens_not_laying_hens,208600,site_0307.tif,2023-06-02T16:00:00Z,3,2,2.0,9671.1,834.0
+data/raw/naip_tiles_pc_4band_full/site_0301.tif,Kris Cohee/Earl Cohee Farm,Caroline,chickens_not_laying_hens,138000,site_0301.tif,2023-07-29T16:00:00Z,7,7,2.0,5638.9,286.0
+data/raw/naip_tiles_pc_4band_full/site_0296.tif,Mohammad Nasir/Aksmah LLC,Worcester,chickens_not_laying_hens,234000,site_0296.tif,2023-06-02T16:00:00Z,10,9,9.0,30543.7,286.0
+data/raw/naip_tiles_pc_4band_full/site_0310.tif,Michael Lesniowski,Queen Anne's,chickens_not_laying_hens,268800,site_0310.tif,2023-05-27T16:00:00Z,10,8,8.0,30176.2,804.5
+data/raw/naip_tiles_pc_4band_full/site_0306.tif,Gujrat Farms LLC,Caroline,chickens_not_laying_hens,248000,site_0306.tif,2023-07-29T16:00:00Z,10,8,8.0,32269.3,184.5
+data/raw/naip_tiles_pc_4band_full/site_0305.tif,"Weaver Farms, LLC/Barclay Road Farm (Organic, New Construction)",Queen Anne's,chickens_not_laying_hens,240975,site_0305.tif,2023-07-11T16:00:00Z,0,0,4.0,15496.0,305.0
+data/raw/naip_tiles_pc_4band_full/site_0304.tif,Long Pham/Megan Farm,Wicomico,chickens_not_laying_hens,256000,site_0304.tif,2023-08-19T16:00:00Z,11,8,8.0,24457.800000000003,318.5
+data/raw/naip_tiles_pc_4band_full/site_0311.tif,Quan Bui,Wicomico,chickens_not_laying_hens,151800,site_0311.tif,2023-06-02T16:00:00Z,16,12,12.0,35512.6,436.5
+data/raw/naip_tiles_pc_4band_full/site_0309.tif,Jacob Gibbons/C.O.D. Farm,Worcester,chickens_not_laying_hens,200000,site_0309.tif,2023-06-02T16:00:00Z,5,4,4.0,9777.1,212.0
+data/raw/naip_tiles_pc_4band_full/site_0312.tif,"Crescent, Inc./Athar Warraich",Wicomico,chickens_not_laying_hens,228000,site_0312.tif,2023-08-19T16:00:00Z,13,9,11.0,34498.4,316.0
+data/raw/naip_tiles_pc_4band_full/site_0308.tif,Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction),Dorchester,chickens_not_laying_hens,352000,site_0308.tif,2023-08-19T16:00:00Z,6,6,6.0,16587.2,901.5
+data/raw/naip_tiles_pc_4band_full/site_0317.tif,Muhammad Wahla,Wicomico,chickens_not_laying_hens,162500,site_0317.tif,2023-06-02T16:00:00Z,23,19,15.0,52725.0,232.0
+data/raw/naip_tiles_pc_4band_full/site_0315.tif,"Ishfaq Ahmed/APNA Farms, LLC (New Construction)",Worcester,chickens_not_laying_hens,328000,site_0315.tif,2023-06-02T16:00:00Z,10,5,5.0,22987.5,627.0
+data/raw/naip_tiles_pc_4band_full/site_0298.tif,Ijaz Ahmad/Prime Farm,Caroline,chickens_not_laying_hens,131200,site_0298.tif,2023-08-19T16:00:00Z,23,11,11.0,43065.1,551.0
+data/raw/naip_tiles_pc_4band_full/site_0318.tif,"Hasnain Hamid/HHR Farm, LLC",Wicomico,chickens_not_laying_hens,178800,site_0318.tif,2023-06-02T16:00:00Z,6,6,8.0,17491.4,662.0
+data/raw/naip_tiles_pc_4band_full/site_0326.tif,"Christian Rhodes/Blackdog Family Farms, LLC",Queen Anne's,chickens_not_laying_hens,144000,site_0326.tif,2023-07-29T16:00:00Z,3,1,1.0,794.6,1365.0
+data/raw/naip_tiles_pc_4band_full/site_0303.tif,Matthew P. Manship,Caroline,chickens_not_laying_hens,148000,site_0303.tif,2023-07-29T16:00:00Z,6,2,0.0,0.0,
+data/raw/naip_tiles_pc_4band_full/site_0316.tif,Galen Horst/Zion Acres Poultry LLC,Cecil,chickens_not_laying_hens,151000,site_0316.tif,2023-05-27T16:00:00Z,6,5,5.0,10771.9,429.0
+data/raw/naip_tiles_pc_4band_full/site_0324.tif,INJA LLC/Iftikhar Farooqui,Wicomico,chickens_not_laying_hens,280000,site_0324.tif,2023-06-02T16:00:00Z,19,12,17.0,54374.2,561.0
+data/raw/naip_tiles_pc_4band_full/site_0314.tif,"Wasey's Poultry Palace, LLC",Wicomico,chickens_not_laying_hens,105000,site_0314.tif,2023-06-02T16:00:00Z,14,13,5.0,9218.4,262.0
+data/raw/naip_tiles_pc_4band_full/site_0323.tif,"Andre Rance/JamaicaDra, LLC",Caroline,chickens_not_laying_hens,86800,site_0323.tif,2023-05-27T16:00:00Z,4,4,4.0,9078.0,373.0
+data/raw/naip_tiles_pc_4band_full/site_0321.tif,Marlin Sensenig,Caroline,chickens_not_laying_hens,156400,site_0321.tif,2023-07-29T16:00:00Z,7,1,1.0,1353.4,309.0
+data/raw/naip_tiles_pc_4band_full/site_0313.tif,Gerald Lewis,Wicomico,chickens_not_laying_hens,78600,site_0313.tif,2023-06-02T16:00:00Z,2,2,4.0,10043.0,414.5
+data/raw/naip_tiles_pc_4band_full/site_0320.tif,Al Barkat Farms LLC,Wicomico,chickens_not_laying_hens,262400,site_0320.tif,2023-08-19T16:00:00Z,11,9,9.0,28803.899999999998,116.0
+data/raw/naip_tiles_pc_4band_full/site_0319.tif,"Cam Tu Pham/P&N Farm, LLC",Wicomico,chickens_not_laying_hens,304000,site_0319.tif,2023-08-19T16:00:00Z,8,8,8.0,26849.8,297.5
+data/raw/naip_tiles_pc_4band_full/site_0322.tif,Randal C. Hambrick,Caroline,chickens_not_laying_hens,216000,site_0322.tif,2023-07-11T16:00:00Z,6,6,6.0,19349.0,239.0
+data/raw/naip_tiles_pc_4band_full/site_0327.tif,"Levi Hayman/Makin' Memories Farm, LLC",Caroline,chickens_not_laying_hens,144000,site_0327.tif,2023-07-11T16:00:00Z,6,2,2.0,2184.8,244.0
+data/raw/naip_tiles_pc_4band_full/site_0328.tif,David Meulenberg/Nods Forest LLC (New Construction),Cecil,chickens_not_laying_hens,72400,site_0328.tif,2023-05-27T16:00:00Z,2,2,2.0,4844.3,175.5
+data/raw/naip_tiles_pc_4band_full/site_0325.tif,Freddy Massey/Hidden Hill Farm,Wicomico,chickens_not_laying_hens,116800,site_0325.tif,2023-06-02T16:00:00Z,8,6,6.0,16792.3,960.0
+data/raw/naip_tiles_pc_4band_delta/site_0002.tif,Randy Bui/Me and My Chickens,Worcester,chickens_not_laying_hens,206000,site_0002.tif,2023-06-02T16:00:00Z,14,8,8.0,15079.5,697.5
+data/raw/naip_tiles_pc_4band_delta/site_0009.tif,Donald Howard/Donald Howard Farm,Somerset,chickens_not_laying_hens,75000,site_0009.tif,2023-07-29T16:00:00Z,7,7,6.0,12148.2,356.0
+data/raw/naip_tiles_pc_4band_delta/site_0010.tif,H&H Family Farm LLC/Mohammed Ahmed,Dorchester,chickens_not_laying_hens,90000,site_0010.tif,2023-08-19T16:00:00Z,5,1,1.0,1814.5,311.0
+data/raw/naip_tiles_pc_4band_delta/site_0004.tif,Justin Tomlinson,Wicomico,chickens_not_laying_hens,42000,site_0004.tif,2023-06-02T16:00:00Z,9,7,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0003.tif,William Gary Marvel/Hidden Acres Farm,Caroline,chickens_not_laying_hens,94000,site_0003.tif,2023-07-29T16:00:00Z,4,4,4.0,7776.4,193.5
+data/raw/naip_tiles_pc_4band_delta/site_0005.tif,Ryan Aydelotte/Peace & Plenty Farm,Worcester,chickens_not_laying_hens,96000,site_0005.tif,2023-10-28T16:00:00Z,14,14,4.0,8642.9,171.5
+data/raw/naip_tiles_pc_4band_delta/site_0001.tif,Robert Messner,Caroline,chickens_not_laying_hens,56000,site_0001.tif,2023-07-11T16:00:00Z,5,3,3.0,6785.200000000001,912.0
+data/raw/naip_tiles_pc_4band_delta/site_0013.tif,Zachary Hudson Farm,Wicomico,chickens_not_laying_hens,82000,site_0013.tif,2023-06-02T16:00:00Z,6,5,1.0,1199.3,253.0
+data/raw/naip_tiles_pc_4band_delta/site_0006.tif,Sarah T. Chisholm/Pullet Downs Farm,Worcester,chickens_not_laying_hens,66000,site_0006.tif,2023-08-19T16:00:00Z,3,1,1.0,801.1,389.0
+data/raw/naip_tiles_pc_4band_delta/site_0007.tif,VALO BioMedia North America LLC (New Construction),Carroll,laying_hens_dry_manure,52440,site_0007.tif,2023-05-21T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0008.tif,"Edward Robinson/Robinson Farms, LLC",Caroline,chickens_not_laying_hens,44000,site_0008.tif,2023-07-11T16:00:00Z,7,5,1.0,2057.4,874.0
+data/raw/naip_tiles_pc_4band_delta/site_0000.tif,"MD Jockey Club of Baltimore City, Inc./Pimlico Race Course",Baltimore City,horses,350,site_0000.tif,2023-05-25T16:00:00Z,13,4,4.0,5565.9,562.5
+data/raw/naip_tiles_pc_4band_delta/site_0015.tif,Thomas Robert Leager Jr./T & L Leager,Queen Anne's,chickens_not_laying_hens,172000,site_0015.tif,2023-05-27T16:00:00Z,4,4,4.0,13750.0,250.5
+data/raw/naip_tiles_pc_4band_delta/site_0012.tif,Jeff Green/Jeremiah Farm,Somerset,chickens_not_laying_hens,48000,site_0012.tif,2023-07-29T16:00:00Z,9,6,6.0,7315.8,474.5
+data/raw/naip_tiles_pc_4band_delta/site_0016.tif,Van Boi,Dorchester,chickens_not_laying_hens,113200,site_0016.tif,2023-08-19T16:00:00Z,6,3,3.0,4961.4,472.0
+data/raw/naip_tiles_pc_4band_delta/site_0019.tif,Larry Nagel Farm,Caroline,chickens_not_laying_hens,61000,site_0019.tif,2023-08-19T16:00:00Z,9,6,5.0,8534.5,363.0
+data/raw/naip_tiles_pc_4band_delta/site_0018.tif,Sansi & Virk LLC c/o Rizwan Zafar,Caroline,chickens_not_laying_hens,254700,site_0018.tif,2023-07-11T16:00:00Z,9,9,9.0,19693.7,580.0
+data/raw/naip_tiles_pc_4band_delta/site_0011.tif,"Justin Murphy/Murphy's Crusting & Uniloader Service, Inc.",Dorchester,chickens_not_laying_hens,320000,site_0011.tif,2023-08-19T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0014.tif,"Cal-Maine Foods, LLC Pullets",Kent,laying_hens_dry_manure,352512,site_0014.tif,2023-07-11T16:00:00Z,3,2,2.0,3251.5,869.5
+data/raw/naip_tiles_pc_4band_delta/site_0024.tif,"Rich Levels Poultry, Inc.",Kent,chickens_not_laying_hens,191667,site_0024.tif,2023-07-11T16:00:00Z,6,6,6.0,15768.0,646.0
+data/raw/naip_tiles_pc_4band_delta/site_0017.tif,Dustin Calloway/D & W Farm,Wicomico,chickens_not_laying_hens,125000,site_0017.tif,2023-08-19T16:00:00Z,18,16,17.0,42304.6,559.0
+data/raw/naip_tiles_pc_4band_delta/site_0025.tif,"Whitelyn Farms, Inc.",Baltimore,dairy_cattle,400,site_0025.tif,2023-05-25T16:00:00Z,6,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0022.tif,Mark Eck/Eck Farm (Expansion),Caroline,chickens_not_laying_hens,188000,site_0022.tif,2023-07-11T16:00:00Z,12,9,9.0,21252.9,624.0
+data/raw/naip_tiles_pc_4band_delta/site_0023.tif,Eldwin Martin/Airview Farm,Wicomico,unknown,0,site_0023.tif,2023-06-02T16:00:00Z,7,7,7.0,14604.7,376.0
+data/raw/naip_tiles_pc_4band_delta/site_0027.tif,"William Beauchamp, III",Worcester,chickens_not_laying_hens,70000,site_0027.tif,2023-08-19T16:00:00Z,3,3,3.0,7591.0,231.0
+data/raw/naip_tiles_pc_4band_delta/site_0021.tif,Hien Tran and Minh Ma/Green Farm,Worcester,chickens_not_laying_hens,96000,site_0021.tif,2023-06-02T16:00:00Z,5,4,4.0,6374.700000000001,321.5
+data/raw/naip_tiles_pc_4band_delta/site_0031.tif,Bruce J. Twilley/Twilley Farm,Dorchester,chickens_not_laying_hens,58000,site_0031.tif,2023-07-29T16:00:00Z,6,4,4.0,11335.7,595.0
+data/raw/naip_tiles_pc_4band_delta/site_0035.tif,Panora Acres Inc./Stacy Sellers,Carroll,cattle_includes_heifers,600,site_0035.tif,2023-05-25T16:00:00Z,2,1,1.0,753.1,423.0
+data/raw/naip_tiles_pc_4band_delta/site_0020.tif,Haroonali Chaudhry/Langrial Farm,Caroline,chickens_not_laying_hens,72000,site_0020.tif,2023-08-19T16:00:00Z,12,9,4.0,7873.7,377.5
+data/raw/naip_tiles_pc_4band_delta/site_0028.tif,Rockawalkin Ridge Road LLC,Wicomico,chickens_not_laying_hens,90000,site_0028.tif,2023-08-19T16:00:00Z,16,9,2.0,6172.8,61.0
+data/raw/naip_tiles_pc_4band_delta/site_0026.tif,Henry Hall/Ginny Lee Farm,Wicomico,chickens_not_laying_hens,65000,site_0026.tif,2023-08-19T16:00:00Z,2,2,2.0,3618.8,227.0
+data/raw/naip_tiles_pc_4band_delta/site_0029.tif,Michael A. Lesniowski/H.D. Myles Farms,Queen Anne's,chickens_not_laying_hens,252000,site_0029.tif,2023-05-27T16:00:00Z,8,8,6.0,17196.6,278.5
+data/raw/naip_tiles_pc_4band_delta/site_0032.tif,David Pyle/Cow Comfort Inn Dairy,Carroll,dairy_cattle,555,site_0032.tif,2023-05-21T16:00:00Z,5,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0033.tif,"Homegrown Farms, LLC/Dale Leslie Wright, Jr.",Caroline,chickens_not_laying_hens,160000,site_0033.tif,2023-08-19T16:00:00Z,4,4,4.0,7952.6,203.5
+data/raw/naip_tiles_pc_4band_delta/site_0036.tif,Dustin Calloway/Salt Life Farm,Wicomico,chickens_not_laying_hens,72000,site_0036.tif,2023-08-19T16:00:00Z,5,3,3.0,4542.8,614.0
+data/raw/naip_tiles_pc_4band_delta/site_0044.tif,Hasnain Hamid/Hasnain Farm LLC,Wicomico,chickens_not_laying_hens,198000,site_0044.tif,2023-06-02T16:00:00Z,7,6,6.0,27140.5,889.5
+data/raw/naip_tiles_pc_4band_delta/site_0030.tif,Rantz William Purcell/RWP Farm,Somerset,chickens_not_laying_hens,120000,site_0030.tif,2023-08-19T16:00:00Z,8,7,3.0,7360.5,715.0
+data/raw/naip_tiles_pc_4band_delta/site_0034.tif,Beth Ball,Caroline,chickens_not_laying_hens,72100,site_0034.tif,2023-07-29T16:00:00Z,7,7,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0039.tif,"Harry J. West, III/West Acres",Wicomico,chickens_not_laying_hens,42500,site_0039.tif,2023-07-29T16:00:00Z,2,2,4.0,9530.1,388.5
+data/raw/naip_tiles_pc_4band_delta/site_0042.tif,Kristen Perdue/Answered Prayers Farm,Wicomico,chickens_not_laying_hens,76500,site_0042.tif,2023-06-02T16:00:00Z,12,9,5.0,13605.800000000001,97.0
+data/raw/naip_tiles_pc_4band_delta/site_0050.tif,"Cal-Maine Foods, Inc.- Layers",Kent,laying_hens_dry_manure,676512,site_0050.tif,2023-07-11T16:00:00Z,5,4,4.0,16389.7,776.5
+data/raw/naip_tiles_pc_4band_delta/site_0041.tif,Ronald A. Rogala/Auction Acres,Caroline,chickens_not_laying_hens,62500,site_0041.tif,2023-05-27T16:00:00Z,12,10,7.0,14281.4,677.0
+data/raw/naip_tiles_pc_4band_delta/site_0037.tif,"Corner Haven Farms, LLC",Caroline,chickens_not_laying_hens,65600,site_0037.tif,2023-07-11T16:00:00Z,6,4,2.0,3145.4,310.5
+data/raw/naip_tiles_pc_4band_delta/site_0048.tif,Hoa Tran/Morning Sun LLC,Wicomico,chickens_not_laying_hens,98000,site_0048.tif,2023-06-02T16:00:00Z,15,14,7.0,15204.3,97.0
+data/raw/naip_tiles_pc_4band_delta/site_0049.tif,"Matthew Fry/Fair Hill Farms, Inc",Kent,dairy_cattle,1050,site_0049.tif,2023-05-27T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0040.tif,"Mohammed Chaudhry/Faisal Farm, LLC",Caroline,chickens_not_laying_hens,75000,site_0040.tif,2023-08-19T16:00:00Z,6,6,6.0,7612.2,290.5
+data/raw/naip_tiles_pc_4band_delta/site_0038.tif,Martin Vitelli/Knew Farm,Somerset,chickens_not_laying_hens,180000,site_0038.tif,2023-08-19T16:00:00Z,7,6,6.0,15114.4,242.5
+data/raw/naip_tiles_pc_4band_delta/site_0045.tif,Trina North/Tycon Farm,Caroline,chickens_not_laying_hens,63200,site_0045.tif,2023-07-29T16:00:00Z,5,4,2.0,3064.8,311.0
+data/raw/naip_tiles_pc_4band_delta/site_0043.tif,Roland Young,Caroline,chickens_not_laying_hens,108000,site_0043.tif,2023-05-27T16:00:00Z,11,7,7.0,7620.5,175.0
+data/raw/naip_tiles_pc_4band_delta/site_0052.tif,"Bonnie Lewis/A & B Lewis, LLC.",Worcester,chickens_not_laying_hens,50000,site_0052.tif,2023-06-02T16:00:00Z,10,3,3.0,5398.1,730.0
+data/raw/naip_tiles_pc_4band_delta/site_0046.tif,"Muhammad Usman/H & N Farm, LLC",Wicomico,unknown,0,site_0046.tif,2023-06-02T16:00:00Z,4,4,4.0,10288.300000000001,320.0
+data/raw/naip_tiles_pc_4band_delta/site_0047.tif,Mark Eck/Dad's Farm,Caroline,chickens_not_laying_hens,71000,site_0047.tif,2023-05-27T16:00:00Z,2,2,2.0,4755.6,584.5
+data/raw/naip_tiles_pc_4band_delta/site_0056.tif,"Ideal Farm, Inc./Choudhry Asif",Wicomico,chickens_not_laying_hens,285000,site_0056.tif,2023-06-02T16:00:00Z,11,11,10.0,30254.0,604.0
+data/raw/naip_tiles_pc_4band_delta/site_0054.tif,William T. Calloway III/Double T Farm,Wicomico,chickens_not_laying_hens,63000,site_0054.tif,2023-08-19T16:00:00Z,20,19,5.0,16566.1,333.0
+data/raw/naip_tiles_pc_4band_delta/site_0053.tif,Thu Huynh,Wicomico,chickens_not_laying_hens,300000,site_0053.tif,2023-06-02T16:00:00Z,7,5,5.0,20097.9,393.0
+data/raw/naip_tiles_pc_4band_delta/site_0055.tif,Clifton G Taylor III/Third and Dead End Farms,Somerset,chickens_not_laying_hens,108000,site_0055.tif,2023-08-19T16:00:00Z,4,3,6.0,14574.7,557.0
+data/raw/naip_tiles_pc_4band_delta/site_0051.tif,"Ladian Farms, LLC",Somerset,chickens_not_laying_hens,142000,site_0051.tif,2023-07-29T16:00:00Z,5,4,4.0,11126.4,156.0
+data/raw/naip_tiles_pc_4band_delta/site_0065.tif,Eli del Solar/Stepping Stone Farm,Worcester,chickens_not_laying_hens,120000,site_0065.tif,2023-06-02T16:00:00Z,3,2,2.0,5242.5,366.0
+data/raw/naip_tiles_pc_4band_delta/site_0062.tif,George and Brenda Young Chicks Farm,Worcester,chickens_not_laying_hens,60120,site_0062.tif,2023-08-19T16:00:00Z,5,3,7.0,14103.5,634.0
+data/raw/naip_tiles_pc_4band_delta/site_0058.tif,Clay R. Littleton/Wide Loop Farm,Wicomico,chickens_not_laying_hens,70500,site_0058.tif,2023-06-02T16:00:00Z,4,3,3.0,2375.5,164.0
+data/raw/naip_tiles_pc_4band_delta/site_0059.tif,Ryan S. Rhodes,Queen Anne's,chickens_not_laying_hens,102400,site_0059.tif,2023-05-27T16:00:00Z,9,7,1.0,2032.4,535.0
+data/raw/naip_tiles_pc_4band_delta/site_0057.tif,Anthony E. Balcerzak Jr./Big Bivalve,Wicomico,chickens_not_laying_hens,38000,site_0057.tif,2023-07-29T16:00:00Z,4,2,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0070.tif,Nhan Cao Dang,Wicomico,chickens_not_laying_hens,240000,site_0070.tif,2023-06-02T16:00:00Z,16,13,14.0,49371.1,458.5
+data/raw/naip_tiles_pc_4band_delta/site_0064.tif,Brian C. Jones / B-Boy Farms,Wicomico,chickens_not_laying_hens,120000,site_0064.tif,2023-07-29T16:00:00Z,5,3,3.0,6656.6,201.0
+data/raw/naip_tiles_pc_4band_delta/site_0060.tif,Tiny Angels LLC,Somerset,chickens_not_laying_hens,270000,site_0060.tif,2023-08-19T16:00:00Z,12,11,8.0,13696.5,296.0
+data/raw/naip_tiles_pc_4band_delta/site_0066.tif,Mohammad J. Sheikh/Kun Farm LLC,Somerset,chickens_not_laying_hens,117200,site_0066.tif,2023-08-19T16:00:00Z,4,4,4.0,9513.3,745.0
+data/raw/naip_tiles_pc_4band_delta/site_0061.tif,Kathy A. Green/Fulton Acres Farm,Somerset,chickens_not_laying_hens,78000,site_0061.tif,2023-08-19T16:00:00Z,11,9,3.0,6103.799999999999,107.0
+data/raw/naip_tiles_pc_4band_delta/site_0063.tif,Chien B. Le/ Michelle and Le Ban Farm,Worcester,chickens_not_laying_hens,240000,site_0063.tif,2023-10-28T16:00:00Z,16,11,9.0,21253.3,284.0
+data/raw/naip_tiles_pc_4band_delta/site_0072.tif,Brooks Brittingham/B & K Farm,Worcester,chickens_not_laying_hens,120000,site_0072.tif,2023-06-02T16:00:00Z,5,5,3.0,7590.599999999999,234.0
+data/raw/naip_tiles_pc_4band_delta/site_0074.tif,Ernest Adkins Jr./Viola's Acres,Wicomico,chickens_not_laying_hens,400000,site_0074.tif,2023-06-02T16:00:00Z,4,0,7.0,23362.2,668.0
+data/raw/naip_tiles_pc_4band_delta/site_0067.tif,Jagomar Farms LLC/Marissa Benjamin,Somerset,chickens_not_laying_hens,312000,site_0067.tif,2023-08-19T16:00:00Z,6,6,6.0,22081.9,177.0
+data/raw/naip_tiles_pc_4band_delta/site_0068.tif,"Jason Dryden Farms, Inc./William Jason Dryden",Somerset,chickens_not_laying_hens,115000,site_0068.tif,2023-08-19T16:00:00Z,23,21,8.0,27566.199999999997,226.5
+data/raw/naip_tiles_pc_4band_delta/site_0071.tif,Zachary C. Blough,Caroline,chickens_not_laying_hens,140000,site_0071.tif,2023-08-19T16:00:00Z,19,13,7.0,8937.1,218.0
+data/raw/naip_tiles_pc_4band_delta/site_0078.tif,"Derek Caraballo/Caraballo Farms, LLC",Caroline,chickens_not_laying_hens,211600,site_0078.tif,2023-07-29T16:00:00Z,4,4,4.0,14992.5,454.0
+data/raw/naip_tiles_pc_4band_delta/site_0077.tif,"Keith/ Aydelotte/Silver Bullet Farm, LLC",Worcester,chickens_not_laying_hens,120000,site_0077.tif,2023-10-28T16:00:00Z,9,8,15.0,51312.700000000004,405.0
+data/raw/naip_tiles_pc_4band_delta/site_0076.tif,"Fraizer Rhode, LLC",Caroline,chickens_not_laying_hens,228960,site_0076.tif,2023-07-29T16:00:00Z,8,6,5.0,15770.699999999999,477.0
+data/raw/naip_tiles_pc_4band_delta/site_0069.tif,Hoa Tran/Morning Sun LLC/Tranquility Farm,Worcester,chickens_not_laying_hens,255000,site_0069.tif,2023-06-02T16:00:00Z,7,6,7.0,18425.6,276.0
+data/raw/naip_tiles_pc_4band_delta/site_0083.tif,Alex Moore,Queen Anne's,chickens_not_laying_hens,112000,site_0083.tif,2023-05-27T16:00:00Z,14,13,10.0,25033.2,396.0
+data/raw/naip_tiles_pc_4band_delta/site_0075.tif,Jason Lambertson/Grace Ridge Farm LLC,Worcester,chickens_not_laying_hens,180000,site_0075.tif,2023-10-28T16:00:00Z,6,4,4.0,16070.0,196.5
+data/raw/naip_tiles_pc_4band_delta/site_0080.tif,Duy Pham,Somerset,chickens_not_laying_hens,207000,site_0080.tif,2023-08-19T16:00:00Z,40,34,6.0,15074.7,144.5
+data/raw/naip_tiles_pc_4band_delta/site_0073.tif,KC Farms LLC,Queen Anne's,chickens_not_laying_hens,288000,site_0073.tif,2023-07-11T16:00:00Z,18,16,16.0,51036.9,309.0
+data/raw/naip_tiles_pc_4band_delta/site_0085.tif,L & B Farms LLC/Troy Tribbett,Caroline,chickens_not_laying_hens,138000,site_0085.tif,2023-07-29T16:00:00Z,19,16,5.0,11889.5,1211.0
+data/raw/naip_tiles_pc_4band_delta/site_0082.tif,"J. Farm, LLC ""Red Dirt Road""/Stephen J. Stoltzfus",Caroline,chickens_not_laying_hens,144000,site_0082.tif,2023-07-29T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0087.tif,Eldwin D. Martin,Washington,ducks_liquid_manure,17000,site_0087.tif,2023-07-12T16:00:00Z,0,0,0.0,0.0,
+data/raw/naip_tiles_pc_4band_delta/site_0081.tif,"Daniels Poultry Farm, Inc./Stanley A. Daniels Jr.",Somerset,chickens_not_laying_hens,160000,site_0081.tif,2023-08-19T16:00:00Z,23,22,15.0,44504.0,328.0
+data/raw/naip_tiles_pc_4band_delta/site_0079.tif,Tyler Aydelotte/Roasters and Roses Farm,Worcester,chickens_not_laying_hens,89200,site_0079.tif,2023-10-28T16:00:00Z,15,14,4.0,7457.7,457.5
+data/raw/naip_tiles_pc_4band_delta/site_0086.tif,Nazma Chishty,Queen Anne's,chickens_not_laying_hens,248000,site_0086.tif,2023-07-11T16:00:00Z,16,13,8.0,15838.8,150.5
+data/raw/naip_tiles_pc_4band_delta/site_0084.tif,Garey Quidas\Chapel Hill Farm,Caroline,chickens_not_laying_hens,81600,site_0084.tif,2023-07-29T16:00:00Z,5,5,5.0,10926.8,217.0

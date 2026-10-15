@@ -1,8 +1,53 @@
-# Start Here — Project Status as of 2026-09-23
+# Start Here — Project Status as of 2026-10-10
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-10-10 — county-wide grid run works (Somerset); next: other Eastern Shore counties, then dark roofs
+
+`notebooks/04_poultry_by_county.ipynb` (set `COUNTY`, `RUN_FULL`) runs the detector on a 2 km grid (250 m overlap) over a whole county and grades it against the USGS hand tracing, which covers every Delmarva poultry house, registered or not. Results in `data/processed/task1/county_<name>/` (Somerset, commit 1e934f4).
+
+- **Somerset: 389 houses; precision 99%, recall 66% vs hand tracing**, outlines ~4 m from traced houses. The 5 "ours only" are houses built after 2016/17 (true precision ≈100%).
+- **Grid > registry tiles:** 384 traced houses found vs 308 by the registry run (+79, −3).
+- **81 houses >1 km from any registered permit, all real** (every one sits on a traced house; 12 checked by eye, 1–5 km from a permit). A registry-only map misses about a fifth of Somerset's houses.
+- **Misses (196) are mostly older dark/rust-roofed houses** (mean roof brightness 145 vs 175 for found; redder; 65% darker than the darkest 10% found). Biggest remaining gap — candidate fixes: retrain/fine-tune on Delmarva dark-roof examples (hand tracing gives free labels), or a second lower threshold for long house-shaped shapes, checked against the tracing.
+- Statewide plan: Eastern Shore first (~3,600 tiles, ~36 GB, ~1 h/county download); western counties have no hand tracing → by-eye sample + registry/AWTF totals. Statewide = 10,666 tiles (~107 GB).
+- `data/reference/awtf_2017_broiler_layer_inventory_by_county.csv` = AWTF Table 1a.3 (the report's printed Ag Census total omits Dorchester; noted in the file).
+
+## 2026-10-07 (afternoon) — workshop with Rafi's lab: priorities set; read `docs/meeting_notes_2026-10-07_workshop.md`
+
+- **Next priority: poultry statewide**, county by county (not only registry farms), with per-county metrics and a density map; other species after. Soroka & Duren hand-labelled *all* Delmarva poultry houses, registered or not, so it can grade a registry-independent run directly.
+- **N/P for poultry**: treat all poultry houses as broilers; get birds/house and litter/house from Extension (Ginny Rhodes, John Moyle — Stephanie is scheduling); report a long-run annual average; then compare county totals with the AWTF appendix (birds per county).
+- **Dairy ideas**: wider-barn width band (~35–65 m); barns + lagoon + corn fields as a combined rule; search for lagoons next to detected barns; Washington County dairy list + NASS counts.
+- **Privacy**: no farm names in anything public; consider offset/aggregated locations before publishing.
+
+## 2026-10-07 — tile georeferencing bug found and fixed; every building number before today is superseded
+
+**Use `data/processed/task1/run_2026-10-07/` (1,831 unique buildings) and tiles in `data/raw/naip_tiles_pc_4band_v2/`.** `run_2026-10-05/` and every tile in `naip_tiles_pc_4band_full/` / `_delta/` are historical only.
+
+- **The bug:** `download_tile()` (used for all tiles since 2026-09-01) read one NAIP quarter-quad with a window that could run past the image edge. rasterio clipped the read and the clipped data was stretched over the whole 2 km tile. **219 of 417 tiles** (every site whose square crosses a quarter-quad edge) were shifted by up to ~500 m and distorted. Overlays always looked right because boxes were drawn on the same distorted tile -- nobody could see it by eye on one farm.
+- **How it was found:** the full-dataset gallery (`notebooks/03_full_dataset.ipynb`) showed outlines over fields beside real houses; copies of the same barn from two overlapping tiles sat a median 68 m apart; tiles cut from the *same* source image disagreed by 160-225 m; checking stored tiles against the source warped onto their own grid gave offsets of 200-500 m (corr 0.54-0.64) on edge-crossing tiles and 0 m (corr 1.00) on the others.
+- **The fix:** `tiles.download_tile()` now warps every intersecting NAIP item onto a snapped 1 m UTM grid and mosaics them (most recent first). All 417 tiles rebuilt (0 failures). Rebuilt tiles match the source exactly; same-barn copies across tiles now sit a median **0.2 m** apart (2/170 tile pairs > 10 m).
+- **New numbers (commit 9d01f73):** 3,980 candidates -> 2,990 kept per tile -> **1,831 unique buildings** (was 2,251); farms with >=1 building 373/417 (was 377). Broiler 354/380 farms, 1,764 buildings; dairy 3/14 farms (fragments); beef 1/3; swine 0/1 (the old swine "detection" was an artifact). Broiler N check unchanged (13.8x AWTF -- it's registry-based).
+- **Still to redo on the new tiles:** R^2 vs Soroka & Duren (0.655 was computed on distorted tiles), the 35-farm precision audit, the recall/zero-detection root-cause list, the 82% MDE-inspection crosscheck, lagoon candidate positions, the 09-23 "registry points 400-860 m off" estimate (part of that offset was probably this bug), and the KMZs/field guide.
+- **Attribution caveat (unchanged, now visible):** 9 farms have detections in their own tile but 0 buildings assigned -- the barns go to a nearer permit, mostly the same owner's other permit (Randy Bui x2, Eck + Mark Eck expansion, Tomlinson x2, Weaver x2, Ball family). Building totals are right; per-farm splits are only as good as the registry points.
+- New: `geo_anom/task1/pipeline.run_pipeline()` (the full run as a function), `notebooks/03_full_dataset.ipynb` (run or load all 417 farms; map, distributions, rejection reasons, gallery of every farm, zero-detection farms).
+
+## 2026-10-05 — pipeline streamlined into one module + notebooks; drift resolved; two numbers corrected
+
+(Branched from `main`; the 2026-10-01 MDE/AWTF crosscheck entry and the vision-first supply work are on their own unmerged branches.)
+
+**How to run Task 1 now** (`notebooks/README.md`):
+`scripts/map_buildings.py` (tiles -> U-Net + filter -> de-duplicated, permit-attributed buildings -> KMZ by animal type -> `run_meta.json` with commit/checkpoint/manifest hashes), then `scripts/compute_supply.py <run_dir>` (N/P per farm/building/species). All code lives in `geo_anom/task1/`; `notebooks/01_map_buildings.ipynb` and `02_supply_check.ipynb` call the same functions step by step. Old `unet_inference.py`/`unet_detect.py`/`planetary_computer_naip.py` are now thin wrappers. Refactor verified bit-identical to the old code (same mask, same polygons) on 10 farms. New baseline: `data/processed/task1/run_2026-10-05/`.
+
+- **The 2026-09-21 "drift" is resolved -- it was a gap in the committed run, not drift.** Full rerun vs. committed file: 401/416 farms identical detection-for-detection; the other 15 all had 0 committed and detections today, all in one tile-index block (site_0151-0231), none decreased. Hite (18) checked by eye: all real houses. Fresh runs are deterministic on the current tiles.
+- **20% of the committed "buildings" are duplicates.** Neighbouring 2 km tiles overlap; 2,828 per-tile detections today = **2,251 unique buildings** (committed file: 2,726 features, ~541 duplicated). Statewide building counts must use the de-duplicated layer; per-farm counts in the old file include neighbours' barns.
+- **Cobb Heritage Pocomoke #4 is not an unexplained miss**: it was in the gap (2 kept today), and its other houses are rejected because adjacent houses merge into one oversized blob. The 0.9% "unexplained miss" figure and the 14-farm zero-detection root-cause list in `task1_metrics.md` §4 need rechecking against the new baseline -- some of those 14 may be gap farms.
+- **Broiler N coefficient is ~12x too high.** `configs/maryland.yaml` uses 0.91 lb N per bird per flock x 6.5 flocks; the AWTF 2023 report (p.23: 21.85M lb N from broiler litter, 2019) implies ~0.08. Statewide broiler N comes out 300.8M lb/yr = 13.8x AWTF. **Do not present any N/P total** until the coefficients are checked with Stephanie's lab (AWTF Table 1a.1 is the obvious reference). Not changed in config -- it's a domain call.
+- Mask outlines often cover only part of a roof (e.g. Sheng Lin #0), so floor area -- used to split N/P across a farm's barns -- is underestimated, unevenly.
+- Beef shows 2/3 farms with buildings in the new layer (was 3/3): the two hand-added beef detections from 09-21 aren't in a fresh run, and attribution is now by nearest permit. Recheck in notebook 01 (`FARM = "Panora"`, `"Brandenburg"`).
+- Farm names aren't unique (two separate Chaudhry Farm permits, 13 km apart) and tile file names repeat across `naip_tiles_pc_4band_full/` and `_delta/` (site_0000-0087), so the old file's `tile` field is ambiguous; everything is now keyed on full tile path.
 
 ## 2026-09-23 — looked at the imagery for the first time; read this before citing any lagoon or dairy number
 

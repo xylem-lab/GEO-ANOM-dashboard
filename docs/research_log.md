@@ -310,3 +310,24 @@ Headline findings:
 Five concrete questions for the AGNR team are listed at the end of
 `docs/task1_imagery_audit_2026-09-30.md`, each tied to a specific farm and finding
 rather than a general ask.
+
+## 2026-10-05 — pipeline refactor and full rerun: drift explained, duplicates found, broiler N coefficient off ~14x
+
+Branch `refactor/task1-pipeline-notebooks-2026-10-05`. Task 1 now runs from `geo_anom/task1/` via `scripts/map_buildings.py` + `scripts/compute_supply.py`, with notebooks `01_map_buildings` / `02_supply_check` calling the same code. Refactor verified bit-identical to the old `unet_detect.py` (same mask, same polygons) on 10 farms.
+
+- **09-21 "drift" = gap, not drift.** Full rerun vs. committed file: 401/416 farms identical; 15 farms had 0 committed and detections now, all in tile block site_0151–0231. Hite (18 detections) checked by eye: all real houses. Runs are deterministic on current tiles.
+- **Cross-tile duplicates: 2,828 per-tile detections = 2,251 unique buildings.** The committed 2,726-feature file counts ~541 barns twice (overlapping 2 km tiles). Buildings are now de-duplicated (>50% overlap) and attributed to the nearest permit point (`assigned_distance_m` recorded).
+- **Cobb Pocomoke #4**: was in the gap; today 2 kept, ~7 real houses rejected because adjacent houses merge into one oversized blob. New concrete failure mode (merged-blob rejection) — candidate fix to test: split blobs by width before filtering, or a smaller close kernel only for oversized blobs. Not tried.
+- **Broiler N**: config 0.91 lb N/bird/flock x 6.5 flocks -> 300.8M lb/yr statewide vs AWTF 21.85M (2019) = 13.8x. AWTF implies ~0.08 lb/bird. Not changed — needs Lansing lab.
+- Partial-roof outlines underestimate floor area (affects the area-weighted N split).
+- Beef: 2/3 farms in a fresh run (09-21's two hand-added detections aren't reproduced).
+- Still to recheck against the new baseline: the 0.9% unexplained-miss rate and the 14-farm zero-detection root-cause list (`task1_metrics.md` §4) — some of the 14 may be gap farms.
+
+## 2026-10-07 — 53% of tiles were shifted/stretched by a download bug; fixed, all tiles rebuilt, new baseline 1,831 buildings
+
+See `docs/NEXT_SESSION.md` 2026-10-07 for the full account. Root cause: windowed read past a NAIP quarter-quad edge, clipped then stretched over the full tile (219/417 tiles, offsets up to ~500 m). Fix: warp + mosaic all intersecting items onto a fixed 1 m grid (`tiles.download_tile`). Verification: stored-vs-source offset 0 m on rebuilt tiles; same-barn cross-tile distance median 0.2 m (was 68 m). Every number computed on `naip_tiles_pc_4band_full/` tiles (R^2 0.655, 99.7% precision, 0.9% unexplained-miss, 82% MDE crosscheck, lagoon positions, registry-offset estimates) needs recomputing before it is cited again. Lesson: a per-farm overlay can't reveal a georeferencing error because image and boxes share it -- cross-tile consistency (same object, two tiles) and comparison with the source are the checks that catch it.
+
+## 2026-10-10 — Somerset county grid run (notebook 04): registry-independent detection works; dark roofs are the main miss
+
+Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, registered or not): P 99% / R 66% / F1 0.79; grid finds 79 more traced houses than registry-centred tiles. 81 houses >1 km from any permit are all real. Misses are concentrated in dark/rust roofs (brightness 145 vs 175; R−B +5 vs −10). Next experiment candidates: (1) fine-tune the U-Net on Delmarva dark-roof houses using the hand tracing as labels (held-out counties for testing); (2) dual threshold — accept lower-probability shapes only if long/narrow and house-sized — measured on Somerset before/after. Do (2) first: cheap, no training.
+
