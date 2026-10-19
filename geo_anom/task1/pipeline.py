@@ -239,7 +239,11 @@ def run_pipeline(
     return meta
 
 
-def latest_run(base: Path = ROOT / "data/processed/task1") -> Path | None:
-    """Most recent complete run directory (has run_meta.json)."""
-    runs = sorted((p for p in base.glob("*/run_meta.json")), key=lambda p: p.stat().st_mtime)
+def latest_run(base: Path = ROOT / "data/processed/task1", pattern: str = "run_*") -> Path | None:
+    """Most recent complete registry run (run_<date>/ with run_meta.json).
+
+    County grid runs (county_<name>/) are excluded by default: they have no
+    farm headcounts, so notebooks 02/03 can't use them. Pass pattern="*" for any.
+    """
+    runs = sorted((p for p in base.glob(f"{pattern}/run_meta.json")), key=lambda p: p.stat().st_mtime)
     return runs[-1].parent if runs else None
