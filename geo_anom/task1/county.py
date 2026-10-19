@@ -68,7 +68,8 @@ def run_county(name: str, stream: bool = True, max_workers: int = 8, progress=No
     """Map every building in one county. Resumable: re-running continues."""
     county = region.county_boundary(name)
     sites = region.grid_sites(county, name)
-    return run_pipeline(sites, county_out(name, root), manifest=tiles.load_registry(), prefer="area",
+    return run_pipeline(sites, county_out(name, root), manifest=tiles.load_registry(),
+                        manifest_path=tiles.REGISTRY_SNAPSHOT, prefer="area",
                         stream=stream, max_workers=max_workers, progress=progress, log=log,
                         filters={"farm": [], "county": [name]})
 
