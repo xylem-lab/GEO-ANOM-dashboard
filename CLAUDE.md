@@ -44,8 +44,24 @@ and run in VS Code — analyses, experiments, validations, data downloads, figur
 for slides, statewide runs. Existing scripts stay as they are (no rewrites).
 
 - One notebook per task: `notebooks/NN_short_name.ipynb`, numbered in order
-  (next is `04_…`). Kernel: Python 3.9 at
+  (next is `05_…`). Locally: kernel Python 3.9 at
   `/Library/Developer/CommandLineTools/usr/bin/python3`.
+- **Reproducible and shareable (from 2026-10-15):** code lives in git; every
+  notebook also runs in **Google Colab** (Open-in-Colab badge in the header);
+  **results go to the shared drive folder `Task1_results`** via
+  `env.results_root()` (found by its marker file; local fallback
+  `data/processed/task1/`); **aerial photos are streamed** (`STREAM = True`,
+  `tiles.fetch_tile`) and never stored; the model and USGS labels are
+  downloaded and SHA-256-checked by `geo_anom/task1/env.py`. Use the setup cell
+  from `notebooks/04_poultry_by_county.ipynb` verbatim as the first code cell
+  (it mounts Drive, clones the repo at `CODE_VERSION`, installs
+  `requirements-colab.txt`). Runs record code commit, model hash, NAIP item
+  IDs and package versions in `run_meta.json`; long runs are resumable via
+  `tiles_done/`. A new setup (e.g. Colab GPU) is checked once against the
+  Somerset baseline (389 houses, P 99% / R 66%) before its numbers are used.
+- **Privacy:** outputs that name farms or give building locations go to the
+  shared drive, not to git (the repo is public). Git keeps code, notebooks
+  (outputs cleared) and anonymous summaries.
 - Shape of every notebook: a header cell (question, inputs, outputs, how long it
   takes) → the standard setup cell (ROOT, `sys.path`, `%autoreload 2`) → steps,
   each a short markdown explanation + code + a picture or table to check by eye →
@@ -79,7 +95,8 @@ for slides, statewide runs. Existing scripts stay as they are (no rewrites).
 - Git: work on a branch (`experiment/…`, `research/…`, `refactor/…`), open a
   PR, never commit straight to `main`, never auto-merge. No `gh` CLI on the
   user's laptop — give the user the PR URL.
-- Compute: this laptop (Apple Silicon, MPS, Python 3.9 — no 3.10+ syntax at
-  runtime). Never provision cloud compute or spend funds without asking.
+- Compute: Google Colab or this laptop (Apple Silicon, MPS, Python 3.9 — keep
+  code 3.9-compatible). Never provision paid cloud compute or spend funds
+  without asking.
 - Document as you go: prepend a dated section to `docs/NEXT_SESSION.md` and
   append to `docs/research_log.md` in the same branch as the work.

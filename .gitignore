@@ -60,3 +60,9 @@ data/processed/*.log
 notebooks/output/
 .ipynb_checkpoints/
 data/processed/task1/*/supply_by_building.geojson
+# Per-tile partial results of resumable runs (results live on the shared drive)
+data/processed/task1/*/tiles_done/
+# County / statewide results name farms and locate buildings -> shared drive, not this public repo
+# (already-tracked files, e.g. county_somerset/, are left as they are)
+data/processed/task1/county_*/
+data/processed/task1/statewide/

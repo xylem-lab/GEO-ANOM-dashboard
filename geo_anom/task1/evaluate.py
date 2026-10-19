@@ -43,14 +43,28 @@ GROUND_TRUTH = ROOT / "data/raw/external/soroka_duren/Delmarva_PL_House_Final/De
 
 
 def load_ground_truth(path: Path = GROUND_TRUTH) -> gpd.GeoDataFrame:
+    if path == GROUND_TRUTH and not Path(path).exists():
+        from geo_anom.task1.env import ensure_ground_truth  # USGS ScienceBase, SHA-256 checked
+        path = ensure_ground_truth()
     return gpd.read_file(path).explode(index_parts=False).reset_index(drop=True)
 
 
 def _footprints(sites: list[dict], crs) -> list:
+    """Each tile's footprint: from the tile file when on disk, else from the
+    site's recorded WGS84 bbox (streaming runs keep no tile files)."""
     out = []
     for s in sites:
-        with rasterio.open(tile_path(s)) as src:
-            out.append(gpd.GeoSeries([box(*src.bounds)], crs=src.crs).to_crs(crs).iloc[0])
+        p = tile_path(s) if s.get("tile_path") else None
+        if p is not None and p.exists():
+            with rasterio.open(p) as src:
+                out.append(gpd.GeoSeries([box(*src.bounds)], crs=src.crs).to_crs(crs).iloc[0])
+        else:
+            bb = s.get("bbox")
+            if bb is None:  # older site lists: rebuild the 2 km square from the centre
+                from geo_anom.core.geo_utils import BBox
+                from geo_anom.task1.tiles import BUFFER_KM
+                bb = BBox.from_point(lon=s["lon"], lat=s["lat"], buffer_km=BUFFER_KM).as_tuple
+            out.append(gpd.GeoSeries([box(*bb)], crs="EPSG:4326").to_crs(crs).iloc[0])
     return out
 
 
@@ -65,7 +79,8 @@ def evaluate_run(run_dir: Path, gt: gpd.GeoDataFrame | None = None, area=None) -
     n_gt = [int(gt.intersects(fp).sum()) for fp in fps]
     d = pd.DataFrame({"detected": farms["kept_in_tile"].values, "ground_truth": n_gt})
     d = d[d.ground_truth > 0]
-    farm_level = regression_metrics(d.ground_truth.tolist(), d.detected.tolist())
+    # needs >= 2 tiles with hand-traced houses (small subsets may have fewer)
+    farm_level = regression_metrics(d.ground_truth.tolist(), d.detected.tolist()) if len(d) >= 2 else {"n": len(d)}
 
     # 2. object level, inside tiles AND the ground-truth extent
     covered = unary_union(fps).intersection(gt.unary_union.convex_hull.buffer(500))

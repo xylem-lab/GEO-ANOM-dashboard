@@ -121,6 +121,9 @@ def load_model(checkpoint_path: Path = CHECKPOINT_PATH, device: torch.device | N
         in_channels=4,
         classes=2,
     )
+    if checkpoint_path == CHECKPOINT_PATH and not Path(checkpoint_path).exists():
+        from geo_anom.task1.env import ensure_checkpoint  # downloads Microsoft's release, checks SHA-256
+        ensure_checkpoint()
     ckpt = torch.load(checkpoint_path, map_location="cpu")
     model.load_state_dict(ckpt["model_checkpoint"])
     model = model.to(device)
@@ -316,13 +319,16 @@ class SiteResult:
 
 
 def detect_site(site: dict, model, device, use_road_filter: bool = False,
-                osm_cache_dir: Path = ROOT / "data/cache/osm") -> SiteResult:
+                osm_cache_dir: Path = ROOT / "data/cache/osm", img: np.ndarray | None = None,
+                meta: dict | None = None) -> SiteResult:
     """Run the full pipeline on one manifest entry.
 
     Each candidate dict: {"poly" (tile CRS), "stats", "dist_to_road_m",
-    "reasons", "kept", "feature" (GeoJSON, WGS84)}.
+    "reasons", "kept", "feature" (GeoJSON, WGS84)}. Pass `img`/`meta` (from
+    tiles.fetch_tile) to run on an image in memory instead of the tile file.
     """
-    img, meta = read_tile(tile_path(site))
+    if img is None:
+        img, meta = read_tile(tile_path(site))
     scores = predict_class_scores(model, device, img)
     prob, mask = scores[1], scores_to_mask(scores)
     polys = mask_to_polygons(mask, meta["transform"])

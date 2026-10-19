@@ -1,0 +1,10 @@
+# Extra packages for running notebooks/ in Google Colab (Colab already ships torch,
+# numpy, pandas, geopandas, shapely, pyproj, matplotlib, scipy, requests, tqdm).
+# Versions are the ones the Somerset baseline ran with locally; every run records
+# the versions it actually used in run_meta.json -> "environment".
+segmentation-models-pytorch==0.5.0
+rasterio>=1.4,<1.5
+geopandas>=1.0
+shapely>=2.0
+pyproj>=3.6
+folium>=0.17

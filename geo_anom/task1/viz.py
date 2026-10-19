@@ -291,13 +291,20 @@ def location_gallery(points, sites: list[dict], buildings=None, ground_truth=Non
     axes = np.atleast_1d(axes).ravel()
     for k, (ax, p) in enumerate(zip(axes, pts)):
         s = sites[int(np.argmin(((centres - (p.x, p.y)) ** 2).sum(1)))]
-        with rasterio.open(tile_path(s)) as src:
-            x, y = Transformer.from_crs("EPSG:4326", src.crs, always_xy=True).transform(p.x, p.y)
-            h = size_m / 2
-            win = from_bounds(x - h, y - h, x + h, y + h, src.transform).round_offsets().round_lengths()
-            img = np.moveaxis(src.read([1, 2, 3], window=win, boundless=True, fill_value=0), 0, -1)
-            wt = src.window_transform(win)
-            crs = src.crs
+        h = size_m / 2
+        tp = tile_path(s) if s.get("tile_path") else None
+        if tp is not None and tp.exists():
+            with rasterio.open(tp) as src:
+                x, y = Transformer.from_crs("EPSG:4326", src.crs, always_xy=True).transform(p.x, p.y)
+                win = from_bounds(x - h, y - h, x + h, y + h, src.transform).round_offsets().round_lengths()
+                img = np.moveaxis(src.read([1, 2, 3], window=win, boundless=True, fill_value=0), 0, -1)
+                wt = src.window_transform(win)
+                crs = src.crs
+        else:  # streaming run: no tile on disk -> fetch just this crop, same imagery ids as the run
+            from geo_anom.task1.tiles import fetch_window
+            img4, wt, crs = fetch_window(p.x, p.y, size_m, item_ids=s.get("naip_item_ids"))
+            img = img4[..., :3]
+            x, y = Transformer.from_crs("EPSG:4326", crs, always_xy=True).transform(p.x, p.y)
         ax.imshow(stretch(img))
         frame = box(x - h, y - h, x + h, y + h)
         for layer, color, lw in ((ground_truth, "#ff9f1c", 2.5), (buildings, "#2ecc40", 1.5)):

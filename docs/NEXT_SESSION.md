@@ -1,8 +1,18 @@
-# Start Here — Project Status as of 2026-10-10
+# Start Here — Project Status as of 2026-10-15
 
 Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
+
+## 2026-10-15 — notebooks run in Colab, results on the shared drive; all-county run ready (notebook 05)
+
+- **Setup:** code in git; every notebook runs in Colab or locally with the same first cell; results go to `Task1_results/` on the GEO-ANOM shared drive (`geo_anom/task1/env.py`, marker file); imagery streamed, never stored; model + USGS labels downloaded and SHA-256-checked; runs record code commit, NAIP item IDs and package versions. Verified: in-memory tiles pixel-identical to stored tiles; streamed detections identical on Somerset's busiest tiles; resume skips finished tiles.
+- **All counties:** `notebooks/05_all_counties.ipynb` (+ `geo_anom/task1/county.py`, shared with 04). Eastern Shore first; resumable; county table with pooled accuracy, statewide GeoJSON/KMZ.
+- **Run it in Colab.** The laptop's connection reads ~0.6 MB/s from Planetary Computer (West Europe); a tile is ~40–60 MB at full resolution → ~4 min/tile, ~500 GB / days statewide. A laptop attempt was stopped after Worcester's first tiles.
+- **Fixed:** coastal/border tiles read every older NAIP image (28 for one Worcester tile) trying to fill water pixels; images are now chosen from STAC footprints first (`tiles.select_items`). Pixel-identical on 6 Somerset tiles incl. 4 that are 94% water.
+- **Waiting on the user:** merge the PR (Colab runs `main`); Colab test of notebook 04 Somerset with RUN_FULL=True (expect 389 houses, P 99% / R 66%); then notebook 05 in Colab.
+- Repo is public and still holds farm-named outputs from earlier runs — user chose to leave them for now; new county/statewide outputs are git-ignored.
+- Possible speed-up (not done, would change pixels → needs re-validation): read NAIP's built-in 0.6 m overview instead of 0.3 m (~4× less data).
 
 ## 2026-10-10 — county-wide grid run works (Somerset); next: other Eastern Shore counties, then dark roofs
 

@@ -151,3 +151,20 @@ def test_grid_dedupe_keeps_largest_outline():
     assert len(out) == 1 and out.iloc[0]["area_m2"] == pytest.approx(150 * 15)
     out = deduplicate([feature(whole, "t1", "A", prob=0.80), feature(cut, "t2", "A", prob=0.95)], sites)
     assert out.iloc[0]["area_m2"] == pytest.approx(110 * 15)            # default: most confident
+
+
+def test_results_root_override_and_local_fallback(tmp_path, monkeypatch):
+    from geo_anom.task1 import env
+    monkeypatch.setenv("GEO_ANOM_RESULTS", str(tmp_path))
+    assert env.results_root() == tmp_path
+    monkeypatch.delenv("GEO_ANOM_RESULTS")
+    monkeypatch.setattr(env, "_drive_candidates", lambda: [])
+    assert env.results_root() == env.ROOT / "data/processed/task1"
+    monkeypatch.setattr(env, "_drive_candidates", lambda: [str(tmp_path / "Task1_results" / env.RESULTS_MARKER)])
+    assert env.results_root() == tmp_path / "Task1_results"
+
+
+def test_checkpoint_on_disk_matches_published_hash():
+    from geo_anom.task1 import env
+    if env.CHECKPOINT["path"].exists():
+        assert env.sha256(env.CHECKPOINT["path"]) == env.CHECKPOINT["sha256"]

@@ -21,7 +21,7 @@ from typing import Callable, Iterable
 
 import pandas as pd
 
-from geo_anom.task1 import detect, tiles
+from geo_anom.task1 import detect, env, tiles
 from geo_anom.task1.kmz import write_kmz
 from geo_anom.task1.merge import deduplicate, farm_overview
 
@@ -73,6 +73,8 @@ def run_pipeline(
     filters: dict | None = None,
     progress: Callable[[Iterable], Iterable] | None = None,
     log: Callable[[str], None] = print,
+    stream: bool = False,
+    max_workers: int = 8,
 ) -> dict:
     """Run the whole mapping step and write every output. Returns run_meta.
 
@@ -80,38 +82,97 @@ def run_pipeline(
     used to attribute buildings -- pass the full registry even when `sites`
     is a subset, so a barn near an unselected neighbour is attributed to it.
     `progress` wraps the per-tile loop (e.g. tqdm).
+
+    `stream=True`: tiles are built in memory from Planetary Computer
+    (`max_workers` in parallel) and never written to disk.
+
+    Resumable either way: each finished tile is saved as
+    out_dir/tiles_done/<tile>.json; a re-run skips tiles already there.
+    Results are always assembled in `sites` order, so they don't depend on
+    download timing.
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    shard_dir = out_dir / "tiles_done"
+    shard_dir.mkdir(exist_ok=True)
     manifest = manifest if manifest is not None else tiles.load_manifest(manifest_path)
 
-    # Tiles
-    ready = []
-    for i, s in enumerate(sites):
-        if s.get("tile_path") and tiles.tile_path(s).exists():
-            ready.append(s)
-        elif download_missing:
-            got = tiles.download_tile(s, out_dir / "tiles" / f"site_{i:04d}.tif")
-            if got:
-                ready.append(got)
-        else:
-            log(f"  no tile on disk for {s['farm_name']} (use download_missing)")
-    (out_dir / "sites.json").write_text(json.dumps(ready, indent=2))
+    def shard_path(site):
+        return shard_dir / (tiles.site_id(site).replace("/", "__").replace(" ", "_") + ".json")
 
-    # Detect
+    # Tiles on disk (non-streaming only)
+    if not stream:
+        ready = []
+        for i, s in enumerate(sites):
+            if shard_path(s).exists() or (s.get("tile_path") and tiles.tile_path(s).exists()):
+                ready.append(s)
+            elif download_missing:
+                got = tiles.download_tile(s, out_dir / "tiles" / f"site_{i:04d}.tif")
+                if got:
+                    ready.append(got)
+            else:
+                log(f"  no tile on disk for {s['farm_name']} (use download_missing or stream=True)")
+        sites = ready
+
     model, device = detect.load_model()
-    log(f"Model on {device}; {len(ready)} tiles")
-    candidates, farm_rows = [], []
-    loop = progress(ready) if progress else ready
-    for i, s in enumerate(loop):
-        r = detect.detect_site(s, model, device, use_road_filter=use_road_filter)
-        candidates += r.features(include_rejected=True)
-        farm_rows.append({"site_id": tiles.site_id(s), "farm_name": s["farm_name"], "county": s.get("county"),
-                          "animal_type": s.get("animal_type"), "headcount": s.get("headcount"),
-                          "tile": Path(s["tile_path"]).name, "naip_datetime": s.get("naip_datetime"),
-                          "raw_candidates": len(r.candidates), "kept_in_tile": len(r.kept)})
-        if not progress:
-            log(f"[{i + 1}/{len(ready)}] {s['farm_name'][:45]:<45} raw={len(r.candidates):<4} kept={len(r.kept)}")
+    todo = [s for s in sites if not shard_path(s).exists()]
+    log(f"Model on {device}; {len(sites)} tiles, {len(sites) - len(todo)} already done, "
+        f"{len(todo)} to run{' (streaming)' if stream else ''}")
+
+    def process(site, img=None, meta=None):
+        r = detect.detect_site(site, model, device, use_road_filter=use_road_filter, img=img, meta=meta)
+        row = {"site_id": tiles.site_id(site), "farm_name": site["farm_name"], "county": site.get("county"),
+               "animal_type": site.get("animal_type"), "headcount": site.get("headcount"),
+               "tile": Path(site["tile_path"]).name if site.get("tile_path") else None,
+               "naip_datetime": site.get("naip_datetime"),
+               "raw_candidates": len(r.candidates), "kept_in_tile": len(r.kept)}
+        shard_path(site).write_text(json.dumps({"site": site, "farm_row": row,
+                                                "features": r.features(include_rejected=True)}))
+        return row
+
+    n = 0
+    if stream and todo:
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        with ThreadPoolExecutor(max_workers=max_workers) as ex:
+            futs = {ex.submit(tiles.fetch_tile, s): s for s in todo}
+            it = as_completed(futs)
+            for f in (progress(it, total=len(futs)) if progress else it):
+                s = futs[f]
+                try:
+                    got = f.result()
+                except Exception as e:  # one bad read shouldn't stop a county; re-run picks it up
+                    log(f"  FAILED {s['farm_name']}: {type(e).__name__}: {e}")
+                    continue
+                if got is None:
+                    log(f"  no imagery for {s['farm_name']}")
+                    continue
+                img, meta, s_full = got
+                row = process(s_full, img, meta)
+                n += 1
+                if not progress:
+                    log(f"[{n}/{len(todo)}] {s['farm_name'][:45]:<45} raw={row['raw_candidates']:<4} kept={row['kept_in_tile']}")
+    else:
+        for s in (progress(todo) if progress else todo):
+            row = process(s)
+            n += 1
+            if not progress:
+                log(f"[{n}/{len(todo)}] {s['farm_name'][:45]:<45} raw={row['raw_candidates']:<4} kept={row['kept_in_tile']}")
+
+    # Assemble from the per-tile files, in sites order
+    candidates, farm_rows, done_sites = [], [], []
+    for s in sites:
+        sp = shard_path(s)
+        if not sp.exists():
+            continue
+        d = json.loads(sp.read_text())
+        done_sites.append(d["site"])
+        farm_rows.append(d["farm_row"])
+        candidates += d["features"]
+    missing = len(sites) - len(done_sites)
+    if missing:
+        log(f"  {missing} tiles not done (failed or no imagery) -- re-run to retry them")
+    ready = done_sites
+    (out_dir / "sites.json").write_text(json.dumps(ready, indent=2))
 
     kept = [f for f in candidates if f["properties"]["kept"]]
     write_geojson(out_dir / "candidates.geojson", candidates)
@@ -148,6 +209,7 @@ def run_pipeline(
         "checkpoint": str(detect.CHECKPOINT_PATH.relative_to(ROOT)),
         "checkpoint_sha256": sha256(detect.CHECKPOINT_PATH),
         "device": str(device),
+        "environment": env.environment(),
         "filters": filters or {"farm": [], "county": []},
         "use_road_filter": use_road_filter,
         "dedupe": dedupe,
@@ -155,6 +217,8 @@ def run_pipeline(
         "thresholds": detect.filter_thresholds(),
         "species_overrides": detect.SPECIES_FILTER_OVERRIDES,
         "close_kernel": detect.CLOSE_KERNEL,
+        "stream": stream,
+        "tiles_requested": len(sites),
         "tiles": len(ready),
         "raw_candidates": len(candidates),
         "kept_detections": len(kept),
@@ -169,7 +233,7 @@ def run_pipeline(
         (out_dir / "accuracy.json").write_text(json.dumps(acc, indent=2))
         o = acc["object_level"]
         log(f"Accuracy vs Soroka & Duren: precision {o['precision']:.2f}, recall {o['recall']:.2f}, "
-            f"F1 {o['f1']:.2f}; farm-count R^2 {acc['farm_level_counts']['r2']:.2f}")
+            f"F1 {o['f1']:.2f}; farm-count R^2 {acc['farm_level_counts'].get('r2', float('nan')):.2f}")
     log(f"\n{len(kept)} kept detections -> {n_unique} unique buildings")
     log(f"Outputs in {out_dir}")
     return meta
