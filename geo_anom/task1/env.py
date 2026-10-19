@@ -93,7 +93,9 @@ def sha256(path: Path) -> str:
 def _fetch(url: str, dest: Path, expected_sha: str):
     dest.parent.mkdir(parents=True, exist_ok=True)
     tmp = dest.with_suffix(dest.suffix + ".part")
-    with requests.get(url, stream=True, timeout=120) as r:
+    # some servers (USGS ScienceBase) refuse requests from cloud machines that don't look like a browser
+    with requests.get(url, stream=True, timeout=120,
+                      headers={"User-Agent": "Mozilla/5.0 (GEO-ANOM research, University of Maryland)"}) as r:
         r.raise_for_status()
         with open(tmp, "wb") as f:
             for chunk in r.iter_content(1 << 20):
@@ -120,8 +122,20 @@ def ensure_ground_truth() -> Path:
     """USGS hand-traced poultry houses, downloaded once, verified and unzipped."""
     z, d = GROUND_TRUTH["zip"], GROUND_TRUTH["dir"]
     if not z.exists():
-        print(f"Downloading hand-traced houses ({GROUND_TRUTH['source']}) ...")
-        _fetch(GROUND_TRUTH["url"], z, GROUND_TRUTH["sha256"])
+        on_drive = results_root() / z.name        # a copy uploaded to Task1_results/ (fallback if USGS refuses)
+        if on_drive.exists():
+            z.parent.mkdir(parents=True, exist_ok=True)
+            z.write_bytes(on_drive.read_bytes())
+        else:
+            print(f"Downloading hand-traced houses ({GROUND_TRUTH['source']}) ...")
+            try:
+                _fetch(GROUND_TRUTH["url"], z, GROUND_TRUTH["sha256"])
+            except requests.HTTPError as e:
+                raise RuntimeError(f"USGS ScienceBase refused the download ({e}). Upload {z.name} "
+                                   f"(531 KB, from {GROUND_TRUTH['url']}) into {RESULTS_DRIVE_URL} and run again.") from e
+        if sha256(z) != GROUND_TRUTH["sha256"]:
+            z.unlink()
+            raise RuntimeError(f"{z.name} isn't the published USGS file (SHA-256 mismatch)")
     if not any(d.glob("*.shp")):
         d.mkdir(parents=True, exist_ok=True)
         with zipfile.ZipFile(z) as zf:
