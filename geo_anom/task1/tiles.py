@@ -49,6 +49,19 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> list[dict]:
     return json.loads(Path(path).read_text())
 
 
+REGISTRY_SNAPSHOT = ROOT / "data/reference/mde_afo_registry_snapshot.json"
+
+
+def load_registry() -> list[dict]:
+    """The MDE permit list (public registry snapshot committed in git).
+
+    Same 417 sites and order as the registry run's manifest, minus the imagery
+    fields, so it's available everywhere (Colab included) and every machine
+    attributes buildings to permits identically.
+    """
+    return json.loads(REGISTRY_SNAPSHOT.read_text())["sites"]
+
+
 def tile_path(site: dict) -> Path:
     """Manifest tile paths are stored relative to the repo root."""
     p = Path(site["tile_path"])

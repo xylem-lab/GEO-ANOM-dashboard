@@ -204,8 +204,9 @@ def run_pipeline(
     meta = {
         "run_at": dt.datetime.now().isoformat(timespec="seconds"),
         "git_commit": git_commit(),
-        "manifest": str(manifest_path),
-        "manifest_sha256": sha256(Path(manifest_path)),
+        "manifest": str(manifest_path) if Path(manifest_path).exists() else f"in memory ({len(manifest)} sites)",
+        "manifest_sha256": (sha256(Path(manifest_path)) if Path(manifest_path).exists() else
+                            hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest()[:16]),
         "checkpoint": str(detect.CHECKPOINT_PATH.relative_to(ROOT)),
         "checkpoint_sha256": sha256(detect.CHECKPOINT_PATH),
         "device": str(device),

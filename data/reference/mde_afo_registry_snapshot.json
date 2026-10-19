@@ -1,0 +1,4187 @@
+{
+ "source": "Maryland Department of the Environment, AFO/CAFO public registry (Maryland Open Data, dataset s4e3-7tuu: https://opendata.maryland.gov/resource/s4e3-7tuu.json)",
+ "snapshot": "active permits as pulled for the 2026-09-01 registry run; same 417 sites, same order, as data/raw/naip_tiles_pc_4band_v2/manifest.json",
+ "fields": [
+  "farm_name",
+  "county",
+  "animal_type",
+  "headcount",
+  "status",
+  "lat",
+  "lon",
+  "tile_path"
+ ],
+ "note": "tile_path is only an identifier (keeps building-to-permit ids identical across machines); the tiles themselves are not in git.",
+ "sites": [
+  {
+   "farm_name": "Horizon Organic Dairy, LLC",
+   "county": "Kent",
+   "animal_type": "dairy_cattle",
+   "headcount": 544,
+   "status": "Issued",
+   "lat": 39.29127183,
+   "lon": -76.00922239,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0001.tif"
+  },
+  {
+   "farm_name": "Bistate Feeders, LLC",
+   "county": "Caroline",
+   "animal_type": "cattle_includes_heifers",
+   "headcount": 3400,
+   "status": "Issued",
+   "lat": 38.965702,
+   "lon": -75.768863,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0003.tif"
+  },
+  {
+   "farm_name": "Grand View Farm, LLC",
+   "county": "Kent",
+   "animal_type": "swine_55_lbs",
+   "headcount": 2455,
+   "status": "Issued",
+   "lat": 39.30590906,
+   "lon": -75.94728291,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0002.tif"
+  },
+  {
+   "farm_name": "Matthew Hoff/Coldsprings Farms",
+   "county": "Carroll",
+   "animal_type": "dairy_cattle",
+   "headcount": 1230,
+   "status": "Issued",
+   "lat": 39.5346716,
+   "lon": -77.13598023,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0004.tif"
+  },
+  {
+   "farm_name": "Marvin Callahan/Bartlett Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65000,
+   "status": "Issued",
+   "lat": 38.940726,
+   "lon": -76.03364563,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0009.tif"
+  },
+  {
+   "farm_name": "Dwight Brandenburg/Brandenburg Family Limited Partnership",
+   "county": "Frederick",
+   "animal_type": "cattle_includes_heifers",
+   "headcount": 817,
+   "status": "Issued",
+   "lat": 39.40760658,
+   "lon": -77.6317816,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0006.tif"
+  },
+  {
+   "farm_name": "Cal-Maine Foods, Inc.-Layers",
+   "county": "Cecil",
+   "animal_type": "laying_hens_dry_manure",
+   "headcount": 2003838,
+   "status": "Issued",
+   "lat": 39.41030574,
+   "lon": -75.80827072,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0005.tif"
+  },
+  {
+   "farm_name": "Lester C. Jones & Sons, Inc.",
+   "county": "Kent",
+   "animal_type": "dairy_cattle",
+   "headcount": 3300,
+   "status": "Issued",
+   "lat": 39.32205216,
+   "lon": -75.80896511,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0000.tif"
+  },
+  {
+   "farm_name": "Sheraz Chaudhry/Noor Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 142400,
+   "status": "Issued",
+   "lat": 38.68039271,
+   "lon": -75.76123311,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0010.tif"
+  },
+  {
+   "farm_name": "Mason Dixon Farms, Inc",
+   "county": "Frederick",
+   "animal_type": "dairy_cattle",
+   "headcount": 2612,
+   "status": "Issued",
+   "lat": 39.725,
+   "lon": -77.2875,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0008.tif"
+  },
+  {
+   "farm_name": "Oak Bluff Dairy Farms",
+   "county": "Frederick",
+   "animal_type": "dairy_cattle",
+   "headcount": 1280,
+   "status": "Issued",
+   "lat": 39.52346893,
+   "lon": -77.29351303,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0007.tif"
+  },
+  {
+   "farm_name": "Teabow, Incorporated",
+   "county": "Frederick",
+   "animal_type": "dairy_cattle",
+   "headcount": 1764,
+   "status": "Issued",
+   "lat": 39.5149411,
+   "lon": -77.34465988,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0012.tif"
+  },
+  {
+   "farm_name": "Aksmah, LLC c/o Mohammad Nasir",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 234000,
+   "status": "Issued",
+   "lat": 38.09533267,
+   "lon": -75.46861182,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0011.tif"
+  },
+  {
+   "farm_name": "Kenny L. Eck",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 187200,
+   "status": "Issued",
+   "lat": 39.13333481,
+   "lon": -75.86851055,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0014.tif"
+  },
+  {
+   "farm_name": "Bryan Smith/Mar Del View Farms, LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 43400,
+   "status": "Issued",
+   "lat": 39.19677326,
+   "lon": -75.75811512,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0015.tif"
+  },
+  {
+   "farm_name": "Andrew L. McLean/Relief Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 180000,
+   "status": "Issued",
+   "lat": 39.03841948,
+   "lon": -75.92888738,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0017.tif"
+  },
+  {
+   "farm_name": "Jennifer Rhodes/Deerfield Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 59100,
+   "status": "Issued",
+   "lat": 39.074236,
+   "lon": -76.04821525,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0018.tif"
+  },
+  {
+   "farm_name": "David Denny/B & B Denny LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 67000,
+   "status": "Issued",
+   "lat": 38.94383944,
+   "lon": -76.01756739,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0016.tif"
+  },
+  {
+   "farm_name": "Cobb-Heritage, LLC Farms #15 &17",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 36000,
+   "status": "Issued",
+   "lat": 38.19942801,
+   "lon": -75.73314574,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0021.tif"
+  },
+  {
+   "farm_name": "Serenity Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 98800,
+   "status": "Issued",
+   "lat": 39.03075446,
+   "lon": -76.1234623,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0023.tif"
+  },
+  {
+   "farm_name": "Dan Heller/Stillwater Ventures, LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 140000,
+   "status": "Issued",
+   "lat": 39.09636425,
+   "lon": -75.95723724,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0022.tif"
+  },
+  {
+   "farm_name": "Mizael Oliveira",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 37800,
+   "status": "Issued",
+   "lat": 39.16699404,
+   "lon": -75.93225022,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0013.tif"
+  },
+  {
+   "farm_name": "Robert W. McCormick/Sandy Brae Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 90000,
+   "status": "Issued",
+   "lat": 39.14951779,
+   "lon": -75.77872131,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0026.tif"
+  },
+  {
+   "farm_name": "Jennifer L. Kunes/Chick-A-Dee-Doo-Dah",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 39.21164302,
+   "lon": -75.91028748,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0020.tif"
+  },
+  {
+   "farm_name": "Walter Denny/Denny Farm LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 79000,
+   "status": "Issued",
+   "lat": 38.97344378,
+   "lon": -75.96940582,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0024.tif"
+  },
+  {
+   "farm_name": "Christopher Wright Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 77000,
+   "status": "Issued",
+   "lat": 39.15751854,
+   "lon": -75.88538703,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0019.tif"
+  },
+  {
+   "farm_name": "W. Frank Barnes, Jr./Fairfield Farm",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 88000,
+   "status": "Issued",
+   "lat": 39.22717847,
+   "lon": -76.1788403,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0028.tif"
+  },
+  {
+   "farm_name": "John Scott Dulin/S&K Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 39.0448,
+   "lon": -76.0664,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0027.tif"
+  },
+  {
+   "farm_name": "Eric Pardee",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 169000,
+   "status": "Issued",
+   "lat": 39.23752583,
+   "lon": -75.96200128,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0025.tif"
+  },
+  {
+   "farm_name": "Gerard Dumsha/Go Away Acres Farm Inc.",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 98800,
+   "status": "Issued",
+   "lat": 38.17697076,
+   "lon": -75.68243555,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0031.tif"
+  },
+  {
+   "farm_name": "William Robinson/R Place Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 306300,
+   "status": "Issued",
+   "lat": 39.13370938,
+   "lon": -75.90958555,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0032.tif"
+  },
+  {
+   "farm_name": "William R. Darling Jr./Trinity Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 104000,
+   "status": "Issued",
+   "lat": 39.18301343,
+   "lon": -75.80541188,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0030.tif"
+  },
+  {
+   "farm_name": "John Cannon/Stowman Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 121200,
+   "status": "Issued",
+   "lat": 39.08660233,
+   "lon": -76.05793266,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0029.tif"
+  },
+  {
+   "farm_name": "David Hoffman",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 156400,
+   "status": "Issued",
+   "lat": 38.08787028,
+   "lon": -75.58507347,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0034.tif"
+  },
+  {
+   "farm_name": "Village View Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 60000,
+   "status": "Issued",
+   "lat": 39.14371713,
+   "lon": -75.85873495,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0036.tif"
+  },
+  {
+   "farm_name": "Bach Farm LLC/ Hung Duy Bach",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 111000,
+   "status": "Issued",
+   "lat": 38.23360517,
+   "lon": -75.7602758,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0035.tif"
+  },
+  {
+   "farm_name": "Alan Butler/A&P Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 114000,
+   "status": "Issued",
+   "lat": 38.00465504,
+   "lon": -75.6401911,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0039.tif"
+  },
+  {
+   "farm_name": "Vy Tran, LLC/ Vy Tran",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 170000,
+   "status": "Issued",
+   "lat": 38.21546777,
+   "lon": -75.651634,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0040.tif"
+  },
+  {
+   "farm_name": "Eric Bedsworth",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 77600,
+   "status": "Issued",
+   "lat": 38.21127136,
+   "lon": -75.78303459,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0033.tif"
+  },
+  {
+   "farm_name": "Roy Johnson Ring, III/Ring Farms",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 38000,
+   "status": "Issued",
+   "lat": 38.12843002,
+   "lon": -75.73617194,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0038.tif"
+  },
+  {
+   "farm_name": "Hien Tran and Minh Ma/Coco/Juki Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 90000,
+   "status": "Issued",
+   "lat": 38.01399063,
+   "lon": -75.60141015,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0037.tif"
+  },
+  {
+   "farm_name": "William Michael Dryden",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 110000,
+   "status": "Issued",
+   "lat": 38.06883193,
+   "lon": -75.62700725,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0042.tif"
+  },
+  {
+   "farm_name": "Rondeb Family Farm, LLC/Deborah D. Love",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 50000,
+   "status": "Issued",
+   "lat": 38.80637828,
+   "lon": -75.80204027,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0043.tif"
+  },
+  {
+   "farm_name": "Tracy Chan/Casa Grande Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 190000,
+   "status": "Issued",
+   "lat": 37.98305493,
+   "lon": -75.8288529,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0041.tif"
+  },
+  {
+   "farm_name": "Brian Laird Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 77500,
+   "status": "Issued",
+   "lat": 38.19297203,
+   "lon": -75.77651809,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0045.tif"
+  },
+  {
+   "farm_name": "Smithville View Farm, LLC/Howard MacDonald",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 44000,
+   "status": "Issued",
+   "lat": 38.81415384,
+   "lon": -75.78629424,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0047.tif"
+  },
+  {
+   "farm_name": "Lich Cao/LC Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 180000,
+   "status": "Issued",
+   "lat": 38.00844989,
+   "lon": -75.77403125,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0044.tif"
+  },
+  {
+   "farm_name": "Nathan Wolf/Wolf Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 60000,
+   "status": "Issued",
+   "lat": 38.61890097,
+   "lon": -75.78110181,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0051.tif"
+  },
+  {
+   "farm_name": "Hrang LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 170000,
+   "status": "Issued",
+   "lat": 38.17800157,
+   "lon": -75.8027818,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0046.tif"
+  },
+  {
+   "farm_name": "M&C Vessey Farm, Inc/Cuckoo's Nest Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240000,
+   "status": "Issued",
+   "lat": 38.05351183,
+   "lon": -75.65275693,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0053.tif"
+  },
+  {
+   "farm_name": "Peter and Joseph Farm Inc. c/o Peter Tran",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 238400,
+   "status": "Issued",
+   "lat": 38.21871665,
+   "lon": -75.6502387,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0048.tif"
+  },
+  {
+   "farm_name": "Brock Johnson",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 59000,
+   "status": "Issued",
+   "lat": 38.71072123,
+   "lon": -75.93533383,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0052.tif"
+  },
+  {
+   "farm_name": "Howard Overholt/Honeysuckle Farm Inc.",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 216000,
+   "status": "Issued",
+   "lat": 38.08005171,
+   "lon": -75.64716707,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0057.tif"
+  },
+  {
+   "farm_name": "Goldsborough James Stafford III",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 51000,
+   "status": "Issued",
+   "lat": 38.7780311,
+   "lon": -75.74618639,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0055.tif"
+  },
+  {
+   "farm_name": "Barkat Farms, LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 135000,
+   "status": "Issued",
+   "lat": 38.22228548,
+   "lon": -75.6229005,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0049.tif"
+  },
+  {
+   "farm_name": "Mark S. Callahan",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 57900,
+   "status": "Issued",
+   "lat": 38.92077334,
+   "lon": -75.89974003,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0054.tif"
+  },
+  {
+   "farm_name": "James Randall Laird/Randy Laird Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72000,
+   "status": "Issued",
+   "lat": 37.96949315,
+   "lon": -75.82790258,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0050.tif"
+  },
+  {
+   "farm_name": "Martin Cheesman",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 42000,
+   "status": "Issued",
+   "lat": 38.72289764,
+   "lon": -75.81526932,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0056.tif"
+  },
+  {
+   "farm_name": "Chinh Nguyen/A, B, C Farms",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 333000,
+   "status": "Issued",
+   "lat": 38.05155848,
+   "lon": -75.57985102,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0058.tif"
+  },
+  {
+   "farm_name": "Katie Frase/Worm Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 38.78671984,
+   "lon": -75.90659211,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0059.tif"
+  },
+  {
+   "farm_name": "Alan C. Eck Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 370500,
+   "status": "Issued",
+   "lat": 39.08932054,
+   "lon": -75.85078381,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0062.tif"
+  },
+  {
+   "farm_name": "Nathan Holsey",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 86000,
+   "status": "Issued",
+   "lat": 39.12812708,
+   "lon": -75.77464955,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0061.tif"
+  },
+  {
+   "farm_name": "James Donald Dulin",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 57600,
+   "status": "Issued",
+   "lat": 38.78404021,
+   "lon": -75.78915508,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0068.tif"
+  },
+  {
+   "farm_name": "Jack Holt, Jr.",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 39.13244682,
+   "lon": -75.80073036,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0067.tif"
+  },
+  {
+   "farm_name": "Hannah Jones",
+   "county": "Caroline",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.90793312,
+   "lon": -75.7752353,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0063.tif"
+  },
+  {
+   "farm_name": "George Bowman/Hidden River Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65000,
+   "status": "Issued",
+   "lat": 38.9436657,
+   "lon": -75.82044507,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0060.tif"
+  },
+  {
+   "farm_name": "William R. Thomas, Jr./Three Bridges Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 73000,
+   "status": "Issued",
+   "lat": 38.73917163,
+   "lon": -75.81488655,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0065.tif"
+  },
+  {
+   "farm_name": "Charles Matthews",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 60000,
+   "status": "Issued",
+   "lat": 38.73555472,
+   "lon": -75.81102225,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0069.tif"
+  },
+  {
+   "farm_name": "Dale M. Harrison/Harrison Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 38000,
+   "status": "Issued",
+   "lat": 38.70721925,
+   "lon": -75.92059429,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0066.tif"
+  },
+  {
+   "farm_name": "James Gargani",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 99900,
+   "status": "Issued",
+   "lat": 38.7606816,
+   "lon": -75.77791374,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0070.tif"
+  },
+  {
+   "farm_name": "Kevin Russell Fishell/K-Russ Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 66000,
+   "status": "Issued",
+   "lat": 38.75813949,
+   "lon": -75.80624047,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0064.tif"
+  },
+  {
+   "farm_name": "Morgan Mill Poultry Houses, LLC/Doris Meredith",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 40000,
+   "status": "Issued",
+   "lat": 38.7519355,
+   "lon": -75.78666174,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0073.tif"
+  },
+  {
+   "farm_name": "Lohmeyers Farm, Inc. c/o Brian Lohmeyer",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72000,
+   "status": "Issued",
+   "lat": 38.91378949,
+   "lon": -75.7447563,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0072.tif"
+  },
+  {
+   "farm_name": "Dylan Palmatory",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 50000,
+   "status": "Issued",
+   "lat": 39.03631057,
+   "lon": -75.84449458,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0077.tif"
+  },
+  {
+   "farm_name": "Ishtiaq Ahmed ChaudhryGhousia Farm LLC",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 219000,
+   "status": "Issued",
+   "lat": 38.56109808,
+   "lon": -75.92089876,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0074.tif"
+  },
+  {
+   "farm_name": "Christopher D. Harris/Home Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 57200,
+   "status": "Issued",
+   "lat": 39.10658098,
+   "lon": -75.79934148,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0071.tif"
+  },
+  {
+   "farm_name": "Yang Hyuk Lim/Holly Way Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 136500,
+   "status": "Issued",
+   "lat": 38.91958407,
+   "lon": -75.85586268,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0076.tif"
+  },
+  {
+   "farm_name": "Mark Monath/Mark & Brenda Monath",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 114300,
+   "status": "Issued",
+   "lat": 38.77749637,
+   "lon": -75.80774319,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0079.tif"
+  },
+  {
+   "farm_name": "Zhi Sheng Lin/Sheng Lin Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 203000,
+   "status": "Issued",
+   "lat": 38.69861735,
+   "lon": -75.74187766,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0081.tif"
+  },
+  {
+   "farm_name": "Oakland View Farms LLC",
+   "county": "Caroline",
+   "animal_type": "dairy_cattle",
+   "headcount": 1465,
+   "status": "Issued",
+   "lat": 39.00935792,
+   "lon": -75.86743537,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0075.tif"
+  },
+  {
+   "farm_name": "Paul Towers Sr./P&J Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 98800,
+   "status": "Issued",
+   "lat": 38.90854337,
+   "lon": -75.77289082,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0083.tif"
+  },
+  {
+   "farm_name": "Martin E. Collison, Jr./ Marzel Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 148800,
+   "status": "Issued",
+   "lat": 38.97237418,
+   "lon": -75.77062793,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0082.tif"
+  },
+  {
+   "farm_name": "Fazal Rehman Kayani/Minahil LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 47000,
+   "status": "Issued",
+   "lat": 38.70730368,
+   "lon": -75.8186128,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0078.tif"
+  },
+  {
+   "farm_name": "Benjamin Taylor",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.72186022,
+   "lon": -75.88825547,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0085.tif"
+  },
+  {
+   "farm_name": "Gary Geisel/Pepper Ridge Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 154900,
+   "status": "Issued",
+   "lat": 38.8884529,
+   "lon": -75.77179442,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0084.tif"
+  },
+  {
+   "farm_name": "Robert A. Jester, Jr./Jester Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 94000,
+   "status": "Issued",
+   "lat": 38.77237394,
+   "lon": -75.75818483,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0086.tif"
+  },
+  {
+   "farm_name": "Possum Hill Farms, Inc.",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 159000,
+   "status": "Issued",
+   "lat": 38.77753253,
+   "lon": -75.74356002,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0087.tif"
+  },
+  {
+   "farm_name": "Dan Dan Cai/Sunny Lin Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 84000,
+   "status": "Issued",
+   "lat": 38.83016391,
+   "lon": -75.75805905,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0088.tif"
+  },
+  {
+   "farm_name": "Zeke E. Collins/Z&L Farms",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 142000,
+   "status": "Issued",
+   "lat": 38.43473279,
+   "lon": -75.64563011,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0090.tif"
+  },
+  {
+   "farm_name": "Schmick Farms, Inc.",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 57600,
+   "status": "Issued",
+   "lat": 38.69998431,
+   "lon": -75.92383002,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0091.tif"
+  },
+  {
+   "farm_name": "Lloyd Gaugler Sr./Kanalat Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 78000,
+   "status": "Issued",
+   "lat": 38.717602,
+   "lon": -75.77338173,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0080.tif"
+  },
+  {
+   "farm_name": "Charles Nau, Jr.",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 42500,
+   "status": "Issued",
+   "lat": 39.32616529,
+   "lon": -75.96747789,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0096.tif"
+  },
+  {
+   "farm_name": "Alton Cusick",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 73000,
+   "status": "Issued",
+   "lat": 38.75113599,
+   "lon": -75.96188493,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0089.tif"
+  },
+  {
+   "farm_name": "Joseph Parmer",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 56000,
+   "status": "Issued",
+   "lat": 38.74023094,
+   "lon": -75.90947552,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0093.tif"
+  },
+  {
+   "farm_name": "Tuckahoe River Farm Poultry LLC c/o Troy Tribbett",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 222600,
+   "status": "Issued",
+   "lat": 38.84460064,
+   "lon": -75.90424331,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0094.tif"
+  },
+  {
+   "farm_name": "Dylan Patterson/Dylan Patterson Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 84900,
+   "status": "Issued",
+   "lat": 39.08032918,
+   "lon": -75.77055467,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0098.tif"
+  },
+  {
+   "farm_name": "Bobbie Reed/Winterhawk Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 52200,
+   "status": "Issued",
+   "lat": 38.95251924,
+   "lon": -75.76675465,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0095.tif"
+  },
+  {
+   "farm_name": "Chesapeake Chickens, LLC/Andrew Harrington",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 183000,
+   "status": "Issued",
+   "lat": 38.50811244,
+   "lon": -76.08057891,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0097.tif"
+  },
+  {
+   "farm_name": "M. David Wood, Jr./Wood Enterprise and Wood Encounter",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 245600,
+   "status": "Issued",
+   "lat": 38.85762747,
+   "lon": -75.88340369,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0092.tif"
+  },
+  {
+   "farm_name": "Amy Tran/Wings and a Prayer Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 123500,
+   "status": "Issued",
+   "lat": 38.06176466,
+   "lon": -75.70120352,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0099.tif"
+  },
+  {
+   "farm_name": "Chaudhry Farm, LLC/Pervaiz Akhtar",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 92400,
+   "status": "Issued",
+   "lat": 38.06748485,
+   "lon": -75.69499505,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0103.tif"
+  },
+  {
+   "farm_name": "S.H.L. Anderson Inc.",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65400,
+   "status": "Issued",
+   "lat": 38.19664997,
+   "lon": -75.80480301,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0101.tif"
+  },
+  {
+   "farm_name": "Jadwins Farm, LLC/ John F. Williams III",
+   "county": "Talbot",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 92000,
+   "status": "Issued",
+   "lat": 38.84045108,
+   "lon": -75.93904467,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0105.tif"
+  },
+  {
+   "farm_name": "AR Farm LLC/Mohammad Rehman",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 63500,
+   "status": "Issued",
+   "lat": 38.06973665,
+   "lon": -75.45526925,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0100.tif"
+  },
+  {
+   "farm_name": "Robin Meekins/Jews Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 112000,
+   "status": "Issued",
+   "lat": 38.47296585,
+   "lon": -76.07148211,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0107.tif"
+  },
+  {
+   "farm_name": "David Tribbett, Jr./River Road Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 56000,
+   "status": "Issued",
+   "lat": 38.96006595,
+   "lon": -75.85772451,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0102.tif"
+  },
+  {
+   "farm_name": "Tuan Do/Tuan Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 249000,
+   "status": "Issued",
+   "lat": 38.21792584,
+   "lon": -75.64487312,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0106.tif"
+  },
+  {
+   "farm_name": "Chaudhry Farm, LLC/Pervaiz Akhtar",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 146000,
+   "status": "Issued",
+   "lat": 37.99208982,
+   "lon": -75.81516095,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0104.tif"
+  },
+  {
+   "farm_name": "Richard C. Hall/Hopeful Harvest & Halladise Farms",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 121000,
+   "status": "Issued",
+   "lat": 38.56150908,
+   "lon": -75.91062138,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0111.tif"
+  },
+  {
+   "farm_name": "Ryan Marshall/Beech Creek Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 176000,
+   "status": "Issued",
+   "lat": 38.31963954,
+   "lon": -75.42383122,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0109.tif"
+  },
+  {
+   "farm_name": "Rhonda Donaway/Gator Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 104000,
+   "status": "Issued",
+   "lat": 38.42709038,
+   "lon": -75.37039159,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0112.tif"
+  },
+  {
+   "farm_name": "Smithville View Farm LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 121800,
+   "status": "Issued",
+   "lat": 38.77597765,
+   "lon": -75.74959621,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0110.tif"
+  },
+  {
+   "farm_name": "Aubrey Storm/First Frost Farm",
+   "county": "Talbot",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 47000,
+   "status": "Issued",
+   "lat": 38.83371263,
+   "lon": -76.00136398,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0108.tif"
+  },
+  {
+   "farm_name": "Conaway Farms, LLC c/o Scott Conaway/Country Time",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 130000,
+   "status": "Issued",
+   "lat": 38.39424322,
+   "lon": -75.50447964,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0114.tif"
+  },
+  {
+   "farm_name": "Barry Brent Ickes/Ickes Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 122500,
+   "status": "Issued",
+   "lat": 38.30884676,
+   "lon": -75.370819,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0118.tif"
+  },
+  {
+   "farm_name": "Sung Park/Bethel Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72500,
+   "status": "Issued",
+   "lat": 38.30366923,
+   "lon": -75.60250677,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0116.tif"
+  },
+  {
+   "farm_name": "Susan Driscoll/Blackwater Farms",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 62000,
+   "status": "Issued",
+   "lat": 38.45534322,
+   "lon": -75.66463569,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0113.tif"
+  },
+  {
+   "farm_name": "David Shockley/Hardway Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 112600,
+   "status": "Issued",
+   "lat": 38.4043046,
+   "lon": -75.47297867,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0119.tif"
+  },
+  {
+   "farm_name": "Jong Kil Won/Hallelujah Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 98500,
+   "status": "Issued",
+   "lat": 38.40375488,
+   "lon": -75.40577637,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0121.tif"
+  },
+  {
+   "farm_name": "Dustin Calloway/Clay Island Farm",
+   "county": "Wicomico",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.4297906,
+   "lon": -75.78840239,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0120.tif"
+  },
+  {
+   "farm_name": "Conaway Farms, LLC c/o Scott Conaway/Country Comforts",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 90000,
+   "status": "Issued",
+   "lat": 38.39842919,
+   "lon": -75.50255276,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0115.tif"
+  },
+  {
+   "farm_name": "William T. Marshall/MT Marshall Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 88000,
+   "status": "Issued",
+   "lat": 38.33189609,
+   "lon": -75.40600591,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0124.tif"
+  },
+  {
+   "farm_name": "Mohammad Arshad",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 132000,
+   "status": "Issued",
+   "lat": 38.45116276,
+   "lon": -75.38454228,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0123.tif"
+  },
+  {
+   "farm_name": "Imtiaz Ahmed",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 91000,
+   "status": "Issued",
+   "lat": 38.41925866,
+   "lon": -75.76127587,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0129.tif"
+  },
+  {
+   "farm_name": "Brian Harding",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 207600,
+   "status": "Issued",
+   "lat": 38.53443763,
+   "lon": -75.86298515,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0126.tif"
+  },
+  {
+   "farm_name": "Timothy M. Wright/Muddy Bottom Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 73200,
+   "status": "Issued",
+   "lat": 38.45530409,
+   "lon": -75.69507092,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0128.tif"
+  },
+  {
+   "farm_name": "Danh Tran/Danh - Loan Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 100000,
+   "status": "Issued",
+   "lat": 38.40837723,
+   "lon": -75.32831578,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0127.tif"
+  },
+  {
+   "farm_name": "Hind H. ElBaf/Hind Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 103000,
+   "status": "Issued",
+   "lat": 38.40399891,
+   "lon": -75.43158987,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0122.tif"
+  },
+  {
+   "farm_name": "Jason L. Sheubrooks/JACA Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 155200,
+   "status": "Issued",
+   "lat": 39.14184167,
+   "lon": -75.93361387,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0131.tif"
+  },
+  {
+   "farm_name": "Hannan Farm, LLC/ Hannan Hamid (Hope 1-4 &Hope 5-7)",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 165000,
+   "status": "Issued",
+   "lat": 38.44328676,
+   "lon": -75.38573485,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0133.tif"
+  },
+  {
+   "farm_name": "Tim Nguyen/Nguyen Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 70000,
+   "status": "Issued",
+   "lat": 38.42831176,
+   "lon": -75.49709312,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0132.tif"
+  },
+  {
+   "farm_name": "Patricia Gordy/Itty Bitty Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 85300,
+   "status": "Issued",
+   "lat": 38.34517813,
+   "lon": -75.48376436,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0125.tif"
+  },
+  {
+   "farm_name": "Jeannette Calloway and Edward Calloway, Sr.",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 164600,
+   "status": "Issued",
+   "lat": 38.42519309,
+   "lon": -75.78592654,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0130.tif"
+  },
+  {
+   "farm_name": "Matt Campbell/Buck Oliver Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 40800,
+   "status": "Issued",
+   "lat": 38.45052679,
+   "lon": -75.47711393,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0138.tif"
+  },
+  {
+   "farm_name": "Sunnyside Poultry Farms",
+   "county": "Carroll",
+   "animal_type": "laying_hens_dry_manure",
+   "headcount": 398980,
+   "status": "Issued",
+   "lat": 39.64662871,
+   "lon": -76.97058113,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0139.tif"
+  },
+  {
+   "farm_name": "Michael Lembeck/The Sunrider Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 67600,
+   "status": "Issued",
+   "lat": 38.34577035,
+   "lon": -75.33645764,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0136.tif"
+  },
+  {
+   "farm_name": "Esha Farm, LLC/Mohammad Ahmad",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 85600,
+   "status": "Issued",
+   "lat": 38.49823564,
+   "lon": -75.74946067,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0135.tif"
+  },
+  {
+   "farm_name": "Daniel Rayne/Rayne Acres",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 100000,
+   "status": "Issued",
+   "lat": 38.42257521,
+   "lon": -75.36042079,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0137.tif"
+  },
+  {
+   "farm_name": "Zeke E. Collins/Penthouse Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 47000,
+   "status": "Issued",
+   "lat": 38.4423941,
+   "lon": -75.6013421,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0134.tif"
+  },
+  {
+   "farm_name": "Billy Tomlinson Jr./Tomlinson Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 39400,
+   "status": "Issued",
+   "lat": 38.358481,
+   "lon": -75.47416646,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0140.tif"
+  },
+  {
+   "farm_name": "Clinton W. Davidson/Rejaco Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.43527138,
+   "lon": -75.20622663,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0142.tif"
+  },
+  {
+   "farm_name": "Tony Pham/Tiffany and Nancy Farms",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 215100,
+   "status": "Issued",
+   "lat": 38.36362535,
+   "lon": -75.37412128,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0144.tif"
+  },
+  {
+   "farm_name": "Double Z Enterprises c/o Zeke E. Collins/Buck & Rut Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 49400,
+   "status": "Issued",
+   "lat": 38.4648148,
+   "lon": -75.78768961,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0117.tif"
+  },
+  {
+   "farm_name": "Randy Collins/Mother Hen Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 67200,
+   "status": "Issued",
+   "lat": 38.63586083,
+   "lon": -75.82314559,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0143.tif"
+  },
+  {
+   "farm_name": "William M. Twilley/Springdale Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 70000,
+   "status": "Issued",
+   "lat": 38.56964193,
+   "lon": -75.96441842,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0146.tif"
+  },
+  {
+   "farm_name": "Wheat - Ridge Farm, Inc",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 117600,
+   "status": "Issued",
+   "lat": 38.57525278,
+   "lon": -75.73514545,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0149.tif"
+  },
+  {
+   "farm_name": "Roland Todd/Roland's Roaster's",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 159900,
+   "status": "Issued",
+   "lat": 38.68913191,
+   "lon": -75.8362708,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0145.tif"
+  },
+  {
+   "farm_name": "Alan & Kristin Hudson",
+   "county": "Worcester",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.36419629,
+   "lon": -75.25488358,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0151.tif"
+  },
+  {
+   "farm_name": "Mary Lou Brown/Maple Breeze & Beulah Winds",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 136000,
+   "status": "Issued",
+   "lat": 38.67009062,
+   "lon": -75.89623907,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0141.tif"
+  },
+  {
+   "farm_name": "Aberdeen Farm LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 108000,
+   "status": "Issued",
+   "lat": 38.05029984,
+   "lon": -75.53356398,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0155.tif"
+  },
+  {
+   "farm_name": "Joseph E. Chisholm Jr./Big Mill Pond Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65400,
+   "status": "Issued",
+   "lat": 38.01904105,
+   "lon": -75.45678841,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0157.tif"
+  },
+  {
+   "farm_name": "Abby's Farm Inc.",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 168800,
+   "status": "Issued",
+   "lat": 38.08229174,
+   "lon": -75.44186901,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0147.tif"
+  },
+  {
+   "farm_name": "Jason Lambertson/Amen Corner/Pure Country/Millennium/RavenDiane Lambertson/ Farms (Expansion)",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 346000,
+   "status": "Issued",
+   "lat": 38.06312038,
+   "lon": -75.5045199,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0153.tif"
+  },
+  {
+   "farm_name": "S. Truitt Poultry c/o Samantha Truitt",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 184000,
+   "status": "Issued",
+   "lat": 38.40797456,
+   "lon": -75.3156899,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0148.tif"
+  },
+  {
+   "farm_name": "Mark Nguyen/Mark & Jayden Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 239000,
+   "status": "Issued",
+   "lat": 38.43725375,
+   "lon": -75.4545727,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0150.tif"
+  },
+  {
+   "farm_name": "Stephen  W. Pusey/Grand Anse Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 100000,
+   "status": "Issued",
+   "lat": 38.05111767,
+   "lon": -75.56936547,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0154.tif"
+  },
+  {
+   "farm_name": "Chicken City, LTD. c/o Brian Derrickson",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 213500,
+   "status": "Issued",
+   "lat": 38.02222663,
+   "lon": -75.55918255,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0152.tif"
+  },
+  {
+   "farm_name": "Marbury Wilson Perdue III/Borrowed From God",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 44400,
+   "status": "Issued",
+   "lat": 38.1427609,
+   "lon": -75.32647475,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0156.tif"
+  },
+  {
+   "farm_name": "Ricky Scott Holland/Railroad Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 104000,
+   "status": "Issued",
+   "lat": 38.01562992,
+   "lon": -75.54831518,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0167.tif"
+  },
+  {
+   "farm_name": "Randy Bui/Me and My Chickens Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 206000,
+   "status": "Issued",
+   "lat": 38.31611079,
+   "lon": -75.29635662,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0162.tif"
+  },
+  {
+   "farm_name": "Choudery Farms, LLC c/o Shabbir Choudery",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 239000,
+   "status": "Issued",
+   "lat": 38.11249744,
+   "lon": -75.46294201,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0159.tif"
+  },
+  {
+   "farm_name": "R & S Farm Operations LLC/Swamp Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 100000,
+   "status": "Issued",
+   "lat": 38.44301654,
+   "lon": -75.28832907,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0163.tif"
+  },
+  {
+   "farm_name": "Cedar Livesstock Farm LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 290400,
+   "status": "Issued",
+   "lat": 38.32140516,
+   "lon": -75.2687002,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0158.tif"
+  },
+  {
+   "farm_name": "Virgil L. Shockley/Boondock Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 42000,
+   "status": "Issued",
+   "lat": 38.26994496,
+   "lon": -75.39180303,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0160.tif"
+  },
+  {
+   "farm_name": "Van Bawi Thawng/Mt. Moriah Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 112000,
+   "status": "Issued",
+   "lat": 38.0156831,
+   "lon": -75.53181817,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0170.tif"
+  },
+  {
+   "farm_name": "Pebble Branch Farm LLC/John P. Kelly",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 400000,
+   "status": "Issued",
+   "lat": 38.0061531,
+   "lon": -75.5697478,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0164.tif"
+  },
+  {
+   "farm_name": "David Pilchard/Pilchard & Harlee's Wings Farms",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 153000,
+   "status": "Issued",
+   "lat": 38.06400199,
+   "lon": -75.50853154,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0165.tif"
+  },
+  {
+   "farm_name": "Pham Farms, LLC/ Thoan V. Pham & Peter L. Pham",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 219700,
+   "status": "Issued",
+   "lat": 38.08206986,
+   "lon": -75.4986512,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0161.tif"
+  },
+  {
+   "farm_name": "David Nuse Sr.",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 38.27274791,
+   "lon": -75.59263918,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0168.tif"
+  },
+  {
+   "farm_name": "Todd Hite/Hite Farms, LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 85400,
+   "status": "Issued",
+   "lat": 38.05089595,
+   "lon": -75.50376784,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0177.tif"
+  },
+  {
+   "farm_name": "Aksmah LLC/Mahe Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 173500,
+   "status": "Issued",
+   "lat": 38.08516392,
+   "lon": -75.46738572,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0169.tif"
+  },
+  {
+   "farm_name": "Gilbert Thompson Jr.",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 175200,
+   "status": "Issued",
+   "lat": 38.32978143,
+   "lon": -75.18045448,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0176.tif"
+  },
+  {
+   "farm_name": "Gregory P. Wilkins/Runaway Farm (Expansion)",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 228000,
+   "status": "Issued",
+   "lat": 38.3070354,
+   "lon": -75.31896584,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0173.tif"
+  },
+  {
+   "farm_name": "Levinh Farm LLC c/o Minh Vinh",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 232300,
+   "status": "Issued",
+   "lat": 38.08108392,
+   "lon": -75.49667402,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0174.tif"
+  },
+  {
+   "farm_name": "Beverly Farm Partnership/ Arthur Shettle",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 38.00705553,
+   "lon": -75.61858622,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0178.tif"
+  },
+  {
+   "farm_name": "Tue D. Nguyen",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 168000,
+   "status": "Issued",
+   "lat": 38.04862861,
+   "lon": -75.50677076,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0181.tif"
+  },
+  {
+   "farm_name": "Willis E. Redden Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 272000,
+   "status": "Issued",
+   "lat": 38.06180094,
+   "lon": -75.48415837,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0171.tif"
+  },
+  {
+   "farm_name": "Minh Vinh",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 595000,
+   "status": "Issued",
+   "lat": 38.18886951,
+   "lon": -75.55089856,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0175.tif"
+  },
+  {
+   "farm_name": "Maurice Blake",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 68000,
+   "status": "Issued",
+   "lat": 38.43046129,
+   "lon": -75.35599411,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0184.tif"
+  },
+  {
+   "farm_name": "Joshua Thang/ Thang Family Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 210000,
+   "status": "Issued",
+   "lat": 38.00573431,
+   "lon": -75.48517156,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0187.tif"
+  },
+  {
+   "farm_name": "William Cottman/Cottman Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 86000,
+   "status": "Issued",
+   "lat": 38.14939129,
+   "lon": -75.59925728,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0185.tif"
+  },
+  {
+   "farm_name": "Successful Farm Inc",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 113000,
+   "status": "Issued",
+   "lat": 38.09442722,
+   "lon": -75.41276304,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0183.tif"
+  },
+  {
+   "farm_name": "Patricia Collins/Brisk Wind Farms",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 48000,
+   "status": "Issued",
+   "lat": 38.77767404,
+   "lon": -75.81425627,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0180.tif"
+  },
+  {
+   "farm_name": "Onley Road LLC/Far Nasir",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 114800,
+   "status": "Issued",
+   "lat": 38.09445832,
+   "lon": -75.40661898,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0172.tif"
+  },
+  {
+   "farm_name": "Long Nguyen/Bithao & Minh Quang Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.04475412,
+   "lon": -75.5857352,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0179.tif"
+  },
+  {
+   "farm_name": "Joshua Kurtz/Home Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 52000,
+   "status": "Issued",
+   "lat": 38.17690776,
+   "lon": -75.30647249,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0182.tif"
+  },
+  {
+   "farm_name": "Cobb Heritage LLC/Pocomoke Farm #4",
+   "county": "Worcester",
+   "animal_type": "laying_hens_dry_manure",
+   "headcount": 61500,
+   "status": "Issued",
+   "lat": 38.16362,
+   "lon": -75.54098721,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0166.tif"
+  },
+  {
+   "farm_name": "Hieu Vu",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 123700,
+   "status": "Issued",
+   "lat": 38.32270686,
+   "lon": -75.38947674,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0188.tif"
+  },
+  {
+   "farm_name": "Ramsay Family Farm, Inc.",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 117500,
+   "status": "Issued",
+   "lat": 38.05001235,
+   "lon": -75.65883581,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0186.tif"
+  },
+  {
+   "farm_name": "Dean Murray/Murray Farms, Inc./Dividing Road & Kelrin Farms",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 44400,
+   "status": "Issued",
+   "lat": 38.32286801,
+   "lon": -75.66491203,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0189.tif"
+  },
+  {
+   "farm_name": "Garrett Luthy",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 80000,
+   "status": "Issued",
+   "lat": 38.44809645,
+   "lon": -76.02794543,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0193.tif"
+  },
+  {
+   "farm_name": "Charles E. Ball, Jr./Ball Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 54600,
+   "status": "Issued",
+   "lat": 38.71718128,
+   "lon": -75.94858839,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0192.tif"
+  },
+  {
+   "farm_name": "Joshua Cole McCafferty",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 87000,
+   "status": "Issued",
+   "lat": 38.89765684,
+   "lon": -75.85518943,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0190.tif"
+  },
+  {
+   "farm_name": "Van Hmun and Lily Sui/Fox Run & Little Blackwater",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 144800,
+   "status": "Issued",
+   "lat": 38.52192261,
+   "lon": -76.05031547,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0191.tif"
+  },
+  {
+   "farm_name": "James Byron Beauchamp",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 95000,
+   "status": "Issued",
+   "lat": 38.12624329,
+   "lon": -75.57667396,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0197.tif"
+  },
+  {
+   "farm_name": "Harry Nagel",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 48000,
+   "status": "Issued",
+   "lat": 38.73252949,
+   "lon": -75.81039608,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0195.tif"
+  },
+  {
+   "farm_name": "Justin Tomlinson/Maddie and Will Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 42000,
+   "status": "Issued",
+   "lat": 38.35769641,
+   "lon": -75.49241648,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0194.tif"
+  },
+  {
+   "farm_name": "Milton Lee West, Jr./Doris West",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 73000,
+   "status": "Issued",
+   "lat": 38.42640841,
+   "lon": -75.17091088,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0199.tif"
+  },
+  {
+   "farm_name": "Edward Lewton Warren/Motel Chix",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 88400,
+   "status": "Issued",
+   "lat": 38.32105918,
+   "lon": -75.23591977,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0196.tif"
+  },
+  {
+   "farm_name": "Van Lian/Sang Sang's Family Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 176400,
+   "status": "Issued",
+   "lat": 38.43361831,
+   "lon": -75.17799655,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0201.tif"
+  },
+  {
+   "farm_name": "Michelle Littleton/Bethards Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72000,
+   "status": "Issued",
+   "lat": 38.2976,
+   "lon": -75.2805,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0204.tif"
+  },
+  {
+   "farm_name": "Ghazanffer Ali",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 160000,
+   "status": "Issued",
+   "lat": 38.22542914,
+   "lon": -75.60217657,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0202.tif"
+  },
+  {
+   "farm_name": "Robert Family LLC/Robert Thawng",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 173000,
+   "status": "Issued",
+   "lat": 38.38095305,
+   "lon": -75.35767009,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0200.tif"
+  },
+  {
+   "farm_name": "Oscar T. Rentschler Jr./Black Lab Acres",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 142000,
+   "status": "Issued",
+   "lat": 38.19207275,
+   "lon": -75.60561478,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0198.tif"
+  },
+  {
+   "farm_name": "Bawi Hlun/ Chan UK",
+   "county": "Somerset",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.25309998,
+   "lon": -75.64924401,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0203.tif"
+  },
+  {
+   "farm_name": "Cock Spur Farm LLC/Gregory Todd Higgs",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 63000,
+   "status": "Issued",
+   "lat": 39.09623612,
+   "lon": -76.02586502,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0207.tif"
+  },
+  {
+   "farm_name": "Luu Hoang/Golden Chicken Farm, LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 200000,
+   "status": "Issued",
+   "lat": 38.13719969,
+   "lon": -75.73513434,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0205.tif"
+  },
+  {
+   "farm_name": "Sabrina Fishell",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 70000,
+   "status": "Issued",
+   "lat": 38.76571936,
+   "lon": -75.82005953,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0206.tif"
+  },
+  {
+   "farm_name": "Moore Farms, Inc. c/o William A. Moore Jr.",
+   "county": "Talbot",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 179500,
+   "status": "Issued",
+   "lat": 38.87719947,
+   "lon": -75.96785541,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0210.tif"
+  },
+  {
+   "farm_name": "Marc R. Clopper/Clopper Farms",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 54400,
+   "status": "Issued",
+   "lat": 38.88120792,
+   "lon": -75.91583657,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0209.tif"
+  },
+  {
+   "farm_name": "Jason Dryden Farms Inc. c/o Jason Dryden/Pop Pop Elmo Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 167000,
+   "status": "Issued",
+   "lat": 38.06422236,
+   "lon": -75.65971587,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0214.tif"
+  },
+  {
+   "farm_name": "Sunny Apartments, LLC (Mohammed Ahmad)",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 80000,
+   "status": "Issued",
+   "lat": 38.5692059,
+   "lon": -75.78951888,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0211.tif"
+  },
+  {
+   "farm_name": "Randy Collins/Home Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 84000,
+   "status": "Issued",
+   "lat": 38.68386967,
+   "lon": -75.7957136,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0216.tif"
+  },
+  {
+   "farm_name": "Tu Do/Chelsea Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 270000,
+   "status": "Issued",
+   "lat": 38.16186118,
+   "lon": -75.63363156,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0208.tif"
+  },
+  {
+   "farm_name": "C & M Ellingsworth, Inc./Clyde Ellingsworth",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 40000,
+   "status": "Issued",
+   "lat": 39.24782605,
+   "lon": -75.86872199,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0212.tif"
+  },
+  {
+   "farm_name": "Rose Farm, LLC c/o Sarfraz Ahmad",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 190000,
+   "status": "Issued",
+   "lat": 38.4111382,
+   "lon": -75.37650075,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0215.tif"
+  },
+  {
+   "farm_name": "Jin S. Heo/Matthew Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 108800,
+   "status": "Issued",
+   "lat": 38.35041132,
+   "lon": -75.46568166,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0218.tif"
+  },
+  {
+   "farm_name": "Christopher Both",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 315000,
+   "status": "Issued",
+   "lat": 38.79812593,
+   "lon": -75.8592989,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0213.tif"
+  },
+  {
+   "farm_name": "Hussain Farm, LLC/Samar Abbas",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 89900,
+   "status": "Issued",
+   "lat": 38.44934011,
+   "lon": -75.52385789,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0219.tif"
+  },
+  {
+   "farm_name": "Quyen Nguyen/Lam Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 132700,
+   "status": "Issued",
+   "lat": 38.4230537,
+   "lon": -75.15829841,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0225.tif"
+  },
+  {
+   "farm_name": "Charles Laird/Charles Laird Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 90000,
+   "status": "Issued",
+   "lat": 38.00198807,
+   "lon": -75.84440524,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0217.tif"
+  },
+  {
+   "farm_name": "Ray A. Lewis/Ray Lewis Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 63000,
+   "status": "Issued",
+   "lat": 38.37427289,
+   "lon": -75.35248524,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0221.tif"
+  },
+  {
+   "farm_name": "Robert Rosado/Northwind Farm",
+   "county": "Wicomico",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.43854667,
+   "lon": -75.62339995,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0224.tif"
+  },
+  {
+   "farm_name": "Kevin Pham/Danny&Kenny Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 96000,
+   "status": "Issued",
+   "lat": 38.06942308,
+   "lon": -75.65747327,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0220.tif"
+  },
+  {
+   "farm_name": "Jabar Rahim",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 297000,
+   "status": "Issued",
+   "lat": 38.49072132,
+   "lon": -75.99014487,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0223.tif"
+  },
+  {
+   "farm_name": "Anthony E. Balcerzak, Jr./White Haven Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 40000,
+   "status": "Issued",
+   "lat": 38.28640057,
+   "lon": -75.81107561,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0222.tif"
+  },
+  {
+   "farm_name": "William Moore, III",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 62200,
+   "status": "Issued",
+   "lat": 38.95207394,
+   "lon": -75.86259791,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0226.tif"
+  },
+  {
+   "farm_name": "Hai Xuan Ha/Ha Nguyen",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240000,
+   "status": "Issued",
+   "lat": 38.24874344,
+   "lon": -75.30403085,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0228.tif"
+  },
+  {
+   "farm_name": "Rowland Farms, LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 95000,
+   "status": "Issued",
+   "lat": 38.02455219,
+   "lon": -75.3873119,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0234.tif"
+  },
+  {
+   "farm_name": "Zachary Loller/William Loller Farm, LLC",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 270000,
+   "status": "Issued",
+   "lat": 39.22726787,
+   "lon": -76.14347149,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0229.tif"
+  },
+  {
+   "farm_name": "Stephen L. Stoltzfus",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 39.25915929,
+   "lon": -75.96293757,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0233.tif"
+  },
+  {
+   "farm_name": "Jason Powell/Jason Powell Farms Inc.",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 58600,
+   "status": "Issued",
+   "lat": 38.44320379,
+   "lon": -75.35932334,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0236.tif"
+  },
+  {
+   "farm_name": "Michael Lembeck/Rocking L. Ranch",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65000,
+   "status": "Issued",
+   "lat": 38.31648643,
+   "lon": -75.39684014,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0235.tif"
+  },
+  {
+   "farm_name": "Weaver Farms, LLC/Richard Weaver",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 114000,
+   "status": "Issued",
+   "lat": 39.14614042,
+   "lon": -75.81016444,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0227.tif"
+  },
+  {
+   "farm_name": "Newton Bui/Vina Cao",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 354500,
+   "status": "Issued",
+   "lat": 38.111235,
+   "lon": -75.56268609,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0237.tif"
+  },
+  {
+   "farm_name": "Bunting Farms, Inc",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 162000,
+   "status": "Issued",
+   "lat": 38.00981639,
+   "lon": -75.53788075,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0240.tif"
+  },
+  {
+   "farm_name": "Samuel W. Hall/East Ridge Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 56300,
+   "status": "Issued",
+   "lat": 38.21506365,
+   "lon": -75.7148193,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0231.tif"
+  },
+  {
+   "farm_name": "Stroble Farm LLC c/o Gary Stroble",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 104000,
+   "status": "Issued",
+   "lat": 38.24373129,
+   "lon": -75.26991839,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0238.tif"
+  },
+  {
+   "farm_name": "Justin Humphreys/Humphreys Farms, LLC/Somerset Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 122000,
+   "status": "Issued",
+   "lat": 38.13941831,
+   "lon": -75.68621819,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0239.tif"
+  },
+  {
+   "farm_name": "Glenn S. Ains/The Farm at Heron's Pond",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 89400,
+   "status": "Issued",
+   "lat": 38.28181046,
+   "lon": -75.65012513,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0232.tif"
+  },
+  {
+   "farm_name": "Scot Beauchamp/Home and Dad's Farms",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 128100,
+   "status": "Issued",
+   "lat": 38.11237019,
+   "lon": -75.61323728,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0230.tif"
+  },
+  {
+   "farm_name": "Stephen Pusey/Sunset Cielo Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 60000,
+   "status": "Issued",
+   "lat": 38.20809332,
+   "lon": -75.55883217,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0241.tif"
+  },
+  {
+   "farm_name": "Arbaugh's Flowering Springs Inc./Home Farm",
+   "county": "Carroll",
+   "animal_type": "dairy_cattle",
+   "headcount": 300,
+   "status": "Issued",
+   "lat": 39.57995053,
+   "lon": -77.13573312,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0248.tif"
+  },
+  {
+   "farm_name": "Rhonda Donaway",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 94600,
+   "status": "Issued",
+   "lat": 38.41035379,
+   "lon": -75.29353615,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0246.tif"
+  },
+  {
+   "farm_name": "Adam Stanley/Deathly Hollows",
+   "county": "Somerset",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.02564553,
+   "lon": -75.80555385,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0247.tif"
+  },
+  {
+   "farm_name": "Benjamin D. Sowers",
+   "county": "Frederick",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 17000,
+   "status": "Issued",
+   "lat": 39.45932489,
+   "lon": -77.60249195,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0245.tif"
+  },
+  {
+   "farm_name": "Lawrence Lembeck II",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 154400,
+   "status": "Issued",
+   "lat": 38.44714102,
+   "lon": -75.51763237,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0242.tif"
+  },
+  {
+   "farm_name": "Isaac Martin",
+   "county": "Washington",
+   "animal_type": "ducks_liquid_manure",
+   "headcount": 9800,
+   "status": "Issued",
+   "lat": 39.70836528,
+   "lon": -77.69420251,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0244.tif"
+  },
+  {
+   "farm_name": "Aaron Dennis/Carr's Creek Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 56800,
+   "status": "Issued",
+   "lat": 38.7550256,
+   "lon": -75.97700025,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0255.tif"
+  },
+  {
+   "farm_name": "Luan Ngoc Nguyen",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 156000,
+   "status": "Issued",
+   "lat": 38.21008045,
+   "lon": -75.58432147,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0251.tif"
+  },
+  {
+   "farm_name": "Philip L. Meck/Meck Farm",
+   "county": "Cecil",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 88000,
+   "status": "Issued",
+   "lat": 39.45393206,
+   "lon": -75.8708966,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0243.tif"
+  },
+  {
+   "farm_name": "William T. Calloway III/Tommy and Dee's Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 71000,
+   "status": "Issued",
+   "lat": 38.42159027,
+   "lon": -75.78138256,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0252.tif"
+  },
+  {
+   "farm_name": "Lance E. Brown / Lance Brown Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 114000,
+   "status": "Issued",
+   "lat": 38.84400064,
+   "lon": -75.7468958,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0254.tif"
+  },
+  {
+   "farm_name": "Patterson Farms, Inc/Home Farm",
+   "county": "Kent",
+   "animal_type": "dairy_cattle",
+   "headcount": 680,
+   "status": "Issued",
+   "lat": 39.226071,
+   "lon": -75.96616803,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0253.tif"
+  },
+  {
+   "farm_name": "Barry Spedden Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 129000,
+   "status": "Issued",
+   "lat": 38.6071,
+   "lon": -75.7483,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0257.tif"
+  },
+  {
+   "farm_name": "Justin Humphreys/Rizzi's Roost",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 69000,
+   "status": "Issued",
+   "lat": 38.14663691,
+   "lon": -75.6555561,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0250.tif"
+  },
+  {
+   "farm_name": "Adam Stanley Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 46000,
+   "status": "Issued",
+   "lat": 38.02804105,
+   "lon": -75.81643376,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0256.tif"
+  },
+  {
+   "farm_name": "My Lady's Manor Farm, Inc.",
+   "county": "Baltimore",
+   "animal_type": "dairy_cattle",
+   "headcount": 775,
+   "status": "Issued",
+   "lat": 39.6114252,
+   "lon": -76.54319462,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0249.tif"
+  },
+  {
+   "farm_name": "William Robert Thomas, Jr. / Preston Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 108000,
+   "status": "Issued",
+   "lat": 38.76349496,
+   "lon": -75.88316024,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0258.tif"
+  },
+  {
+   "farm_name": "William R.Thomas, Jr. / Bilden Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 79000,
+   "status": "Issued",
+   "lat": 38.78223035,
+   "lon": -75.90409745,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0261.tif"
+  },
+  {
+   "farm_name": "Paul Aaron Hutchison Sr./Home Farm",
+   "county": "Talbot",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 86200,
+   "status": "Issued",
+   "lat": 38.80858,
+   "lon": -76.027472,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0262.tif"
+  },
+  {
+   "farm_name": "Robert Edwin Love/Bobby Love Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 49000,
+   "status": "Issued",
+   "lat": 38.798333,
+   "lon": -75.761944,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0259.tif"
+  },
+  {
+   "farm_name": "Kaleem Ullah (Rahim Farm)",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 134400,
+   "status": "Issued",
+   "lat": 38.668056,
+   "lon": -75.845833,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0264.tif"
+  },
+  {
+   "farm_name": "Jon Sewell/Tuscarora Farms",
+   "county": "Frederick",
+   "animal_type": "turkeys",
+   "headcount": 46000,
+   "status": "Issued",
+   "lat": 39.26149357,
+   "lon": -77.48092636,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0266.tif"
+  },
+  {
+   "farm_name": "Deerspring Dairy Farm, LLC",
+   "county": "Frederick",
+   "animal_type": "dairy_cattle",
+   "headcount": 705,
+   "status": "Issued",
+   "lat": 39.4130233,
+   "lon": -77.51394332,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0263.tif"
+  },
+  {
+   "farm_name": "Ronnie Schrock/Breezewood Poultry Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 50000,
+   "status": "Issued",
+   "lat": 38.0976,
+   "lon": -75.6974,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0269.tif"
+  },
+  {
+   "farm_name": "Tina L. Johnson/Little Chicks, LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 216000,
+   "status": "Issued",
+   "lat": 38.97602938,
+   "lon": -76.03526344,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0260.tif"
+  },
+  {
+   "farm_name": "Ariann Le/Phat Chix Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 260000,
+   "status": "Issued",
+   "lat": 38.4042,
+   "lon": -75.4469,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0271.tif"
+  },
+  {
+   "farm_name": "Mohammad Iqbal/Pinewood Ranch",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240000,
+   "status": "Issued",
+   "lat": 38.1669,
+   "lon": -75.4402,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0268.tif"
+  },
+  {
+   "farm_name": "QuangTran Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 210000,
+   "status": "Issued",
+   "lat": 38.2137,
+   "lon": -75.6474,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0270.tif"
+  },
+  {
+   "farm_name": "Phuong Tran/Blue Bonnet Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 110000,
+   "status": "Issued",
+   "lat": 38.2917,
+   "lon": -75.6411,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0265.tif"
+  },
+  {
+   "farm_name": "Dream Journey Inc.",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 152000,
+   "status": "Issued",
+   "lat": 38.00059167,
+   "lon": -75.64993069,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0275.tif"
+  },
+  {
+   "farm_name": "Moon Farm, LLC/ Hassan Waheed",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 320000,
+   "status": "Issued",
+   "lat": 38.150154,
+   "lon": -75.581974,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0273.tif"
+  },
+  {
+   "farm_name": "Ricky T. Holland/Colona Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 87000,
+   "status": "Issued",
+   "lat": 38.0087,
+   "lon": -75.5953,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0272.tif"
+  },
+  {
+   "farm_name": "Bartenfelder Poultry Farm, LLC / Andrew Joseph Bartenfelder",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 48000,
+   "status": "Issued",
+   "lat": 38.69203162,
+   "lon": -75.88466371,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0274.tif"
+  },
+  {
+   "farm_name": "Sam's Farm, Incorporated",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 257000,
+   "status": "Issued",
+   "lat": 38.08200591,
+   "lon": -75.43815684,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0267.tif"
+  },
+  {
+   "farm_name": "Dennett Alan Butler/Maurice White Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 88000,
+   "status": "Issued",
+   "lat": 38.0187,
+   "lon": -75.7255,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0277.tif"
+  },
+  {
+   "farm_name": "Phat H. Nguyen",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 186000,
+   "status": "Issued",
+   "lat": 38.018996,
+   "lon": -75.525888,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0280.tif"
+  },
+  {
+   "farm_name": "Marbeth Farm, LLC/David M. Clark III",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 73000,
+   "status": "Issued",
+   "lat": 39.1116,
+   "lon": -75.9073,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0278.tif"
+  },
+  {
+   "farm_name": "Liem Nguyen",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 183000,
+   "status": "Issued",
+   "lat": 38.219478,
+   "lon": -75.656743,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0281.tif"
+  },
+  {
+   "farm_name": "Michael A. Lesniowski/H.D. Myles/Barclay Farm",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 268600,
+   "status": "Issued",
+   "lat": 39.15861355,
+   "lon": -75.86488787,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0276.tif"
+  },
+  {
+   "farm_name": "Jeffrey Pettitt/Krastel Farm",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 216000,
+   "status": "Issued",
+   "lat": 39.29479605,
+   "lon": -76.05212868,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0279.tif"
+  },
+  {
+   "farm_name": "Andrew F. Jones/ Jones Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.336667,
+   "lon": -75.361389,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0283.tif"
+  },
+  {
+   "farm_name": "Model Farm LLC/Choudhry Asif",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 190000,
+   "status": "Issued",
+   "lat": 38.3174728,
+   "lon": -75.54470216,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0286.tif"
+  },
+  {
+   "farm_name": "Fiaz Munir (Modification)",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 310400,
+   "status": "Issued",
+   "lat": 38.05508522,
+   "lon": -75.52935031,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0293.tif"
+  },
+  {
+   "farm_name": "One More Haul Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 156000,
+   "status": "Issued",
+   "lat": 38.87992487,
+   "lon": -75.77381286,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0282.tif"
+  },
+  {
+   "farm_name": "Ronnie Schrock Inc./Mason Farms",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 160000,
+   "status": "Issued",
+   "lat": 38.10094063,
+   "lon": -75.69878676,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0287.tif"
+  },
+  {
+   "farm_name": "Beyla Farm, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240000,
+   "status": "Issued",
+   "lat": 38.83859292,
+   "lon": -75.82117398,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0284.tif"
+  },
+  {
+   "farm_name": "David Phan",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 230000,
+   "status": "Issued",
+   "lat": 38.52165763,
+   "lon": -75.93968537,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0289.tif"
+  },
+  {
+   "farm_name": "Greg Harris Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 140400,
+   "status": "Issued",
+   "lat": 38.79316251,
+   "lon": -75.75555665,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0292.tif"
+  },
+  {
+   "farm_name": "Bruce Nossick/Bruce Nossick Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 144000,
+   "status": "Issued",
+   "lat": 38.64466902,
+   "lon": -75.82304054,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0291.tif"
+  },
+  {
+   "farm_name": "Linda Trimble/Rounds Road Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 60000,
+   "status": "Issued",
+   "lat": 38.4018,
+   "lon": -75.4383,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0288.tif"
+  },
+  {
+   "farm_name": "Shane Cohee",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 135000,
+   "status": "Issued",
+   "lat": 38.69588719,
+   "lon": -75.86208375,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0290.tif"
+  },
+  {
+   "farm_name": "ESA Farm, LLC (Imran Asghar Farm)",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 134600,
+   "status": "Issued",
+   "lat": 38.65472243,
+   "lon": -75.72536314,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0285.tif"
+  },
+  {
+   "farm_name": "Justin Humphreys/Humphreys Farms, LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65000,
+   "status": "Issued",
+   "lat": 38.16668941,
+   "lon": -75.62434063,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0294.tif"
+  },
+  {
+   "farm_name": "Jacob Thomas",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 257400,
+   "status": "Issued",
+   "lat": 38.97592479,
+   "lon": -75.88297223,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0298.tif"
+  },
+  {
+   "farm_name": "Chasin Dreams Farm",
+   "county": "Queen Anne's",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 39.12587204,
+   "lon": -75.9055383,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0295.tif"
+  },
+  {
+   "farm_name": "Charles Hickman/Late Start LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 85000,
+   "status": "Issued",
+   "lat": 38.38634561,
+   "lon": -75.49363649,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0297.tif"
+  },
+  {
+   "farm_name": "William James Robinette/Way More Farm (New Construction)",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 263400,
+   "status": "Issued",
+   "lat": 38.79610185,
+   "lon": -75.75681946,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0299.tif"
+  },
+  {
+   "farm_name": "Kris Cohee/Earl Cohee Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 138000,
+   "status": "Issued",
+   "lat": 38.82737236,
+   "lon": -75.75846167,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0301.tif"
+  },
+  {
+   "farm_name": "Angel's Legacy, LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 155000,
+   "status": "Issued",
+   "lat": 38.4483287,
+   "lon": -75.60020056,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0296.tif"
+  },
+  {
+   "farm_name": "Boi & Nawl Farm, LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 208600,
+   "status": "Issued",
+   "lat": 38.43208202,
+   "lon": -75.25256129,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0300.tif"
+  },
+  {
+   "farm_name": "Gujrat Farms LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 248000,
+   "status": "Issued",
+   "lat": 38.85399243,
+   "lon": -75.80562911,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0304.tif"
+  },
+  {
+   "farm_name": "Weaver Farms, LLC/Barclay Road Farm (Organic, New Construction)",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240975,
+   "status": "Issued",
+   "lat": 39.14372358,
+   "lon": -75.81838193,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0305.tif"
+  },
+  {
+   "farm_name": "Michael Lesniowski",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 268800,
+   "status": "Issued",
+   "lat": 39.11924402,
+   "lon": -75.94161974,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0303.tif"
+  },
+  {
+   "farm_name": "Jacob Gibbons/C.O.D. Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 200000,
+   "status": "Issued",
+   "lat": 38.19900386,
+   "lon": -75.36292138,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0308.tif"
+  },
+  {
+   "farm_name": "Long Pham/Megan Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 256000,
+   "status": "Issued",
+   "lat": 38.38793295,
+   "lon": -75.65250221,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0306.tif"
+  },
+  {
+   "farm_name": "Quan Bui",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 151800,
+   "status": "Issued",
+   "lat": 38.36604892,
+   "lon": -75.37824063,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0307.tif"
+  },
+  {
+   "farm_name": "Mohammad Nasir/Aksmah LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 234000,
+   "status": "Issued",
+   "lat": 38.09139722,
+   "lon": -75.44426708,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0302.tif"
+  },
+  {
+   "farm_name": "Crescent, Inc./Athar Warraich",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 228000,
+   "status": "Issued",
+   "lat": 38.31671556,
+   "lon": -75.65644153,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0309.tif"
+  },
+  {
+   "farm_name": "Muhammad Wahla",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 162500,
+   "status": "Issued",
+   "lat": 38.44536854,
+   "lon": -75.3776276,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0311.tif"
+  },
+  {
+   "farm_name": "Ishfaq Ahmed/APNA Farms, LLC (New Construction)",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 328000,
+   "status": "Issued",
+   "lat": 38.32398799,
+   "lon": -75.31563843,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0312.tif"
+  },
+  {
+   "farm_name": "Ijaz Ahmad/Prime Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 131200,
+   "status": "Issued",
+   "lat": 38.78093924,
+   "lon": -75.75026264,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0313.tif"
+  },
+  {
+   "farm_name": "Christian Rhodes/Blackdog Family Farms, LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 144000,
+   "status": "Issued",
+   "lat": 38.93615069,
+   "lon": -75.99866488,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0315.tif"
+  },
+  {
+   "farm_name": "Waqar Ahmed /Emaan and Eshal Farm LLC (New Construction)",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 352000,
+   "status": "Issued",
+   "lat": 38.65904461,
+   "lon": -75.76919274,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0310.tif"
+  },
+  {
+   "farm_name": "Wasey's Poultry Palace, LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 105000,
+   "status": "Issued",
+   "lat": 38.32416169,
+   "lon": -75.3883028,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0319.tif"
+  },
+  {
+   "farm_name": "Galen Horst/Zion Acres Poultry LLC",
+   "county": "Cecil",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 151000,
+   "status": "Issued",
+   "lat": 39.67602009,
+   "lon": -75.95991385,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0317.tif"
+  },
+  {
+   "farm_name": "Matthew P. Manship",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 148000,
+   "status": "Issued",
+   "lat": 38.74958529,
+   "lon": -75.8898882,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0316.tif"
+  },
+  {
+   "farm_name": "Gerald Lewis",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 78600,
+   "status": "Issued",
+   "lat": 38.40795004,
+   "lon": -75.36143916,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0322.tif"
+  },
+  {
+   "farm_name": "Marlin Sensenig",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 156400,
+   "status": "Issued",
+   "lat": 38.85200819,
+   "lon": -75.77599917,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0321.tif"
+  },
+  {
+   "farm_name": "Hasnain Hamid/HHR Farm, LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 178800,
+   "status": "Issued",
+   "lat": 38.44113027,
+   "lon": -75.44654049,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0314.tif"
+  },
+  {
+   "farm_name": "Al Barkat Farms LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 262400,
+   "status": "Issued",
+   "lat": 38.51713499,
+   "lon": -75.71402507,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0323.tif"
+  },
+  {
+   "farm_name": "Andre Rance/JamaicaDra, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 86800,
+   "status": "Issued",
+   "lat": 38.80927628,
+   "lon": -75.86463177,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0320.tif"
+  },
+  {
+   "farm_name": "Randy Bui/Me and My Chickens",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 206000,
+   "status": "Issued",
+   "lat": 38.31611079,
+   "lon": -75.29635662,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0329.tif"
+  },
+  {
+   "farm_name": "Levi Hayman/Makin' Memories Farm, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 144000,
+   "status": "Issued",
+   "lat": 38.96096752,
+   "lon": -75.83345988,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0326.tif"
+  },
+  {
+   "farm_name": "Randal C. Hambrick",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 216000,
+   "status": "Issued",
+   "lat": 39.03839342,
+   "lon": -75.79721562,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0325.tif"
+  },
+  {
+   "farm_name": "Freddy Massey/Hidden Hill Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 116800,
+   "status": "Issued",
+   "lat": 38.37546599,
+   "lon": -75.33931731,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0328.tif"
+  },
+  {
+   "farm_name": "H&H Family Farm LLC/Mohammed Ahmed",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 90000,
+   "status": "Issued",
+   "lat": 38.59329828,
+   "lon": -75.72402261,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0331.tif"
+  },
+  {
+   "farm_name": "Cam Tu Pham/P&N Farm, LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 304000,
+   "status": "Issued",
+   "lat": 38.32499328,
+   "lon": -75.71295277,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0324.tif"
+  },
+  {
+   "farm_name": "Ryan Aydelotte/Peace & Plenty Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 96000,
+   "status": "Issued",
+   "lat": 38.02799951,
+   "lon": -75.52536323,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0334.tif"
+  },
+  {
+   "farm_name": "William Gary Marvel/Hidden Acres Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 94000,
+   "status": "Issued",
+   "lat": 38.89540147,
+   "lon": -75.73908725,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0333.tif"
+  },
+  {
+   "farm_name": "Robert Messner",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 56000,
+   "status": "Issued",
+   "lat": 39.114781453181,
+   "lon": -75.769769323371,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0335.tif"
+  },
+  {
+   "farm_name": "Sarah T. Chisholm/Pullet Downs Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 66000,
+   "status": "Issued",
+   "lat": 38.06755477,
+   "lon": -75.59302749,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0337.tif"
+  },
+  {
+   "farm_name": "David Meulenberg/Nods Forest LLC (New Construction)",
+   "county": "Cecil",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72400,
+   "status": "Issued",
+   "lat": 39.64401,
+   "lon": -75.980616,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0327.tif"
+  },
+  {
+   "farm_name": "Zachary Hudson Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 82000,
+   "status": "Issued",
+   "lat": 38.442039763041,
+   "lon": -75.361301341825,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0336.tif"
+  },
+  {
+   "farm_name": "VALO BioMedia North America LLC (New Construction)",
+   "county": "Carroll",
+   "animal_type": "laying_hens_dry_manure",
+   "headcount": 52440,
+   "status": "Issued",
+   "lat": 39.649633632652,
+   "lon": -77.207916978992,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0338.tif"
+  },
+  {
+   "farm_name": "Justin Tomlinson",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 42000,
+   "status": "Issued",
+   "lat": 38.35769641,
+   "lon": -75.49241648,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0332.tif"
+  },
+  {
+   "farm_name": "Edward Robinson/Robinson Farms, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 44000,
+   "status": "Issued",
+   "lat": 39.134304907205,
+   "lon": -75.777619468175,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0339.tif"
+  },
+  {
+   "farm_name": "Jeff Green/Jeremiah Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 48000,
+   "status": "Issued",
+   "lat": 38.031269456588,
+   "lon": -75.731309509152,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0342.tif"
+  },
+  {
+   "farm_name": "Thomas Robert Leager Jr./T & L Leager",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 172000,
+   "status": "Issued",
+   "lat": 39.15934442618,
+   "lon": -75.905654498935,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0341.tif"
+  },
+  {
+   "farm_name": "MD Jockey Club of Baltimore City, Inc./Pimlico Race Course",
+   "county": "Baltimore City",
+   "animal_type": "horses",
+   "headcount": 350,
+   "status": "Issued",
+   "lat": 39.349105336619,
+   "lon": -76.675988608196,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0340.tif"
+  },
+  {
+   "farm_name": "Larry Nagel Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 61000,
+   "status": "Issued",
+   "lat": 38.715060391722,
+   "lon": -75.804820410013,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0344.tif"
+  },
+  {
+   "farm_name": "Donald Howard/Donald Howard Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 38.02128008072,
+   "lon": -75.808804563335,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0330.tif"
+  },
+  {
+   "farm_name": "Sansi & Virk LLC c/o Rizwan Zafar",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 254700,
+   "status": "Issued",
+   "lat": 39.011444717091,
+   "lon": -75.84227471573,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0345.tif"
+  },
+  {
+   "farm_name": "Cal-Maine Foods, LLC Pullets",
+   "county": "Kent",
+   "animal_type": "laying_hens_dry_manure",
+   "headcount": 352512,
+   "status": "Issued",
+   "lat": 39.271230333059,
+   "lon": -75.791593502114,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0347.tif"
+  },
+  {
+   "farm_name": "Rich Levels Poultry, Inc.",
+   "county": "Kent",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 191667,
+   "status": "Issued",
+   "lat": 39.370208443686,
+   "lon": -75.772466431527,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0348.tif"
+  },
+  {
+   "farm_name": "Van Boi",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 113200,
+   "status": "Issued",
+   "lat": 38.585233794755,
+   "lon": -75.78793112234,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0343.tif"
+  },
+  {
+   "farm_name": "Dustin Calloway/D & W Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 125000,
+   "status": "Issued",
+   "lat": 38.432071108964,
+   "lon": -75.785792077595,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0349.tif"
+  },
+  {
+   "farm_name": "Mark Eck/Eck Farm (Expansion)",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 188000,
+   "status": "Issued",
+   "lat": 39.087429997207,
+   "lon": -75.849634524517,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0351.tif"
+  },
+  {
+   "farm_name": "Whitelyn Farms, Inc.",
+   "county": "Baltimore",
+   "animal_type": "dairy_cattle",
+   "headcount": 400,
+   "status": "Issued",
+   "lat": 39.486722117466,
+   "lon": -76.506011159305,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0350.tif"
+  },
+  {
+   "farm_name": "William Beauchamp, III",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 70000,
+   "status": "Issued",
+   "lat": 38.083040929928,
+   "lon": -75.619434376269,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0353.tif"
+  },
+  {
+   "farm_name": "Bruce J. Twilley/Twilley Farm",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 58000,
+   "status": "Issued",
+   "lat": 38.622345935222,
+   "lon": -75.953232911121,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0355.tif"
+  },
+  {
+   "farm_name": "Hien Tran and Minh Ma/Green Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 96000,
+   "status": "Issued",
+   "lat": 38.091222040777,
+   "lon": -75.514770683953,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0354.tif"
+  },
+  {
+   "farm_name": "Justin Murphy/Murphy's Crusting & Uniloader Service, Inc.",
+   "county": "Dorchester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 320000,
+   "status": "Issued",
+   "lat": 38.574348610034,
+   "lon": -75.749600803978,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0346.tif"
+  },
+  {
+   "farm_name": "Rockawalkin Ridge Road LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 90000,
+   "status": "Issued",
+   "lat": 38.398945737208,
+   "lon": -75.646180915295,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0358.tif"
+  },
+  {
+   "farm_name": "INJA LLC/Iftikhar Farooqui",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 280000,
+   "status": "Issued",
+   "lat": 38.31571465,
+   "lon": -75.39512627,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0318.tif"
+  },
+  {
+   "farm_name": "David Pyle/Cow Comfort Inn Dairy",
+   "county": "Carroll",
+   "animal_type": "dairy_cattle",
+   "headcount": 555,
+   "status": "Issued",
+   "lat": 39.586900220558,
+   "lon": -77.16498626102,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0361.tif"
+  },
+  {
+   "farm_name": "Panora Acres Inc./Stacy Sellers",
+   "county": "Carroll",
+   "animal_type": "cattle_includes_heifers",
+   "headcount": 600,
+   "status": "Issued",
+   "lat": 39.693997476245,
+   "lon": -76.887903953521,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0356.tif"
+  },
+  {
+   "farm_name": "Homegrown Farms, LLC/Dale Leslie Wright, Jr.",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 160000,
+   "status": "Issued",
+   "lat": 38.73759791327,
+   "lon": -75.761684051959,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0362.tif"
+  },
+  {
+   "farm_name": "Henry Hall/Ginny Lee Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65000,
+   "status": "Issued",
+   "lat": 38.399946844792,
+   "lon": -75.712667968116,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0359.tif"
+  },
+  {
+   "farm_name": "Michael A. Lesniowski/H.D. Myles Farms",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 252000,
+   "status": "Issued",
+   "lat": 39.102322563922,
+   "lon": -75.90010765529,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0360.tif"
+  },
+  {
+   "farm_name": "Dustin Calloway/Salt Life Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72000,
+   "status": "Issued",
+   "lat": 38.418248798076,
+   "lon": -75.805793721369,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0363.tif"
+  },
+  {
+   "farm_name": "Hasnain Hamid/Hasnain Farm LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 198000,
+   "status": "Issued",
+   "lat": 38.434686177321,
+   "lon": -75.427348736122,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0364.tif"
+  },
+  {
+   "farm_name": "Haroonali Chaudhry/Langrial Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72000,
+   "status": "Issued",
+   "lat": 38.791073187046,
+   "lon": -75.770834596162,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0357.tif"
+  },
+  {
+   "farm_name": "Rantz William Purcell/RWP Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.155834287341,
+   "lon": -75.666670568349,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0365.tif"
+  },
+  {
+   "farm_name": "Eldwin Martin/Airview Farm",
+   "county": "Wicomico",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.360105729459,
+   "lon": -75.523425360836,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0352.tif"
+  },
+  {
+   "farm_name": "Beth Ball",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 72100,
+   "status": "Issued",
+   "lat": 38.711495756167,
+   "lon": -75.953114281783,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0366.tif"
+  },
+  {
+   "farm_name": "Hoa Tran/Morning Sun LLC",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 98000,
+   "status": "Issued",
+   "lat": 38.305491708493,
+   "lon": -75.536988610557,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0372.tif"
+  },
+  {
+   "farm_name": "Harry J. West, III/West Acres",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 42500,
+   "status": "Issued",
+   "lat": 38.307095877414,
+   "lon": -75.872136720934,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0367.tif"
+  },
+  {
+   "farm_name": "Kristen Perdue/Answered Prayers Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 76500,
+   "status": "Issued",
+   "lat": 38.416663816832,
+   "lon": -75.383919734026,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0368.tif"
+  },
+  {
+   "farm_name": "Cal-Maine Foods, Inc.- Layers",
+   "county": "Kent",
+   "animal_type": "laying_hens_dry_manure",
+   "headcount": 676512,
+   "status": "Issued",
+   "lat": 39.289795101943,
+   "lon": -75.810901237575,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0369.tif"
+  },
+  {
+   "farm_name": "Corner Haven Farms, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 65600,
+   "status": "Issued",
+   "lat": 38.958322494371,
+   "lon": -75.766384270097,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0371.tif"
+  },
+  {
+   "farm_name": "Matthew Fry/Fair Hill Farms, Inc",
+   "county": "Kent",
+   "animal_type": "dairy_cattle",
+   "headcount": 1050,
+   "status": "Issued",
+   "lat": 39.255496049689,
+   "lon": -76.057512728378,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0373.tif"
+  },
+  {
+   "farm_name": "Trina North/Tycon Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 63200,
+   "status": "Issued",
+   "lat": 38.706397488131,
+   "lon": -75.956582487955,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0376.tif"
+  },
+  {
+   "farm_name": "Ronald A. Rogala/Auction Acres",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 62500,
+   "status": "Issued",
+   "lat": 38.766389678205,
+   "lon": -75.831283640565,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0370.tif"
+  },
+  {
+   "farm_name": "Roland Young",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 108000,
+   "status": "Issued",
+   "lat": 38.70598404061,
+   "lon": -75.829885242876,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0377.tif"
+  },
+  {
+   "farm_name": "Muhammad Usman/H & N Farm, LLC",
+   "county": "Wicomico",
+   "animal_type": "unknown",
+   "headcount": 0,
+   "status": "Issued",
+   "lat": 38.359391787382,
+   "lon": -75.324080930702,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0379.tif"
+  },
+  {
+   "farm_name": "Ideal Farm, Inc./Choudhry Asif",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 285000,
+   "status": "Issued",
+   "lat": 38.306912186711,
+   "lon": -75.540674839816,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0381.tif"
+  },
+  {
+   "farm_name": "Martin Vitelli/Knew Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 180000,
+   "status": "Issued",
+   "lat": 38.174370478282,
+   "lon": -75.600494516954,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0375.tif"
+  },
+  {
+   "farm_name": "Mohammed Chaudhry/Faisal Farm, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 75000,
+   "status": "Issued",
+   "lat": 38.771629482378,
+   "lon": -75.786864429619,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0374.tif"
+  },
+  {
+   "farm_name": "Mark Eck/Dad's Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 71000,
+   "status": "Issued",
+   "lat": 39.052047009836,
+   "lon": -75.885739810731,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0380.tif"
+  },
+  {
+   "farm_name": "Bonnie Lewis/A & B Lewis, LLC.",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 50000,
+   "status": "Issued",
+   "lat": 38.235194889768,
+   "lon": -75.315093889857,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0378.tif"
+  },
+  {
+   "farm_name": "Thu Huynh",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 300000,
+   "status": "Issued",
+   "lat": 38.346510430346,
+   "lon": -75.538077632515,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0383.tif"
+  },
+  {
+   "farm_name": "William T. Calloway III/Double T Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 63000,
+   "status": "Issued",
+   "lat": 38.428312812189,
+   "lon": -75.789331397168,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0382.tif"
+  },
+  {
+   "farm_name": "George and Brenda Young Chicks Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 60120,
+   "status": "Issued",
+   "lat": 38.064926868768,
+   "lon": -75.641618572573,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0387.tif"
+  },
+  {
+   "farm_name": "Clifton G Taylor III/Third and Dead End Farms",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 108000,
+   "status": "Issued",
+   "lat": 38.079189497835,
+   "lon": -75.699502080197,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0384.tif"
+  },
+  {
+   "farm_name": "Ladian Farms, LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 142000,
+   "status": "Issued",
+   "lat": 38.222137275545,
+   "lon": -75.583885442959,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0385.tif"
+  },
+  {
+   "farm_name": "Nhan Cao Dang",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240000,
+   "status": "Issued",
+   "lat": 38.441454646004,
+   "lon": -75.503671755439,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0391.tif"
+  },
+  {
+   "farm_name": "Ryan S. Rhodes",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 102400,
+   "status": "Issued",
+   "lat": 39.091147008262,
+   "lon": -76.024284519568,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0389.tif"
+  },
+  {
+   "farm_name": "Chien B. Le/ Michelle and Le Ban Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 240000,
+   "status": "Issued",
+   "lat": 38.036192973014,
+   "lon": -75.520870958297,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0396.tif"
+  },
+  {
+   "farm_name": "Clay R. Littleton/Wide Loop Farm",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 70500,
+   "status": "Issued",
+   "lat": 38.424713248163,
+   "lon": -75.338125022239,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0388.tif"
+  },
+  {
+   "farm_name": "Anthony E. Balcerzak Jr./Big Bivalve",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 38000,
+   "status": "Issued",
+   "lat": 38.30263787856,
+   "lon": -75.876604487644,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0390.tif"
+  },
+  {
+   "farm_name": "Eli del Solar/Stepping Stone Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.284201520872,
+   "lon": -75.217460132544,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0386.tif"
+  },
+  {
+   "farm_name": "Brian C. Jones / B-Boy Farms",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.280987884394,
+   "lon": -75.571793619612,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0392.tif"
+  },
+  {
+   "farm_name": "Tiny Angels LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 270000,
+   "status": "Issued",
+   "lat": 38.148002690857,
+   "lon": -75.655057459055,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0393.tif"
+  },
+  {
+   "farm_name": "Keith/ Aydelotte/Silver Bullet Farm, LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.0449619005,
+   "lon": -75.50125428133,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0403.tif"
+  },
+  {
+   "farm_name": "Mohammad J. Sheikh/Kun Farm LLC",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 117200,
+   "status": "Issued",
+   "lat": 38.25772241549,
+   "lon": -75.689958293416,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0394.tif"
+  },
+  {
+   "farm_name": "Zachary C. Blough",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 140000,
+   "status": "Issued",
+   "lat": 38.783900264989,
+   "lon": -75.767005993363,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0401.tif"
+  },
+  {
+   "farm_name": "Jagomar Farms LLC/Marissa Benjamin",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 312000,
+   "status": "Issued",
+   "lat": 38.233667847885,
+   "lon": -75.649388432465,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0399.tif"
+  },
+  {
+   "farm_name": "Brooks Brittingham/B & K Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 120000,
+   "status": "Issued",
+   "lat": 38.29787447066,
+   "lon": -75.331512539623,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0397.tif"
+  },
+  {
+   "farm_name": "Derek Caraballo/Caraballo Farms, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 211600,
+   "status": "Issued",
+   "lat": 38.865901553547,
+   "lon": -75.757290463653,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0402.tif"
+  },
+  {
+   "farm_name": "Jason Lambertson/Grace Ridge Farm LLC",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 180000,
+   "status": "Issued",
+   "lat": 38.029547285948,
+   "lon": -75.476848605253,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0407.tif"
+  },
+  {
+   "farm_name": "Kathy A. Green/Fulton Acres Farm",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 78000,
+   "status": "Issued",
+   "lat": 38.158391848815,
+   "lon": -75.666199360579,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0395.tif"
+  },
+  {
+   "farm_name": "Ernest Adkins Jr./Viola's Acres",
+   "county": "Wicomico",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 400000,
+   "status": "Issued",
+   "lat": 38.315140168044,
+   "lon": -75.440467044249,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0398.tif"
+  },
+  {
+   "farm_name": "Alex Moore",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 112000,
+   "status": "Issued",
+   "lat": 39.14107969968,
+   "lon": -75.911525180775,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0406.tif"
+  },
+  {
+   "farm_name": "Hoa Tran/Morning Sun LLC/Tranquility Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 255000,
+   "status": "Issued",
+   "lat": 38.074479445424,
+   "lon": -75.479463027173,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0405.tif"
+  },
+  {
+   "farm_name": "Fraizer Rhode, LLC",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 228960,
+   "status": "Issued",
+   "lat": 38.745513382495,
+   "lon": -75.979110507756,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0404.tif"
+  },
+  {
+   "farm_name": "Duy Pham",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 207000,
+   "status": "Issued",
+   "lat": 38.214183920118,
+   "lon": -75.647062982607,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0408.tif"
+  },
+  {
+   "farm_name": "KC Farms LLC",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 288000,
+   "status": "Issued",
+   "lat": 39.163555587827,
+   "lon": -75.861772748517,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0409.tif"
+  },
+  {
+   "farm_name": "Tyler Aydelotte/Roasters and Roses Farm",
+   "county": "Worcester",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 89200,
+   "status": "Issued",
+   "lat": 38.03045141795,
+   "lon": -75.52075995,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0414.tif"
+  },
+  {
+   "farm_name": "Jason Dryden Farms, Inc./William Jason Dryden",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 115000,
+   "status": "Issued",
+   "lat": 38.069635438833,
+   "lon": -75.658053567706,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0400.tif"
+  },
+  {
+   "farm_name": "J. Farm, LLC \"Red Dirt Road\"/Stephen J. Stoltzfus",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 144000,
+   "status": "Issued",
+   "lat": 38.855359401933,
+   "lon": -75.734685529468,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0411.tif"
+  },
+  {
+   "farm_name": "L & B Farms LLC/Troy Tribbett",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 138000,
+   "status": "Issued",
+   "lat": 38.846382982036,
+   "lon": -75.90288175132,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0410.tif"
+  },
+  {
+   "farm_name": "Nazma Chishty",
+   "county": "Queen Anne's",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 248000,
+   "status": "Issued",
+   "lat": 39.133813959858,
+   "lon": -75.795747089351,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0415.tif"
+  },
+  {
+   "farm_name": "Garey Quidas\\Chapel Hill Farm",
+   "county": "Caroline",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 81600,
+   "status": "Issued",
+   "lat": 38.768226905368,
+   "lon": -75.949842230513,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0416.tif"
+  },
+  {
+   "farm_name": "Eldwin D. Martin",
+   "county": "Washington",
+   "animal_type": "ducks_liquid_manure",
+   "headcount": 17000,
+   "status": "Issued",
+   "lat": 39.682833386048,
+   "lon": -77.841629053459,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0412.tif"
+  },
+  {
+   "farm_name": "Daniels Poultry Farm, Inc./Stanley A. Daniels Jr.",
+   "county": "Somerset",
+   "animal_type": "chickens_not_laying_hens",
+   "headcount": 160000,
+   "status": "Issued",
+   "lat": 38.07318472599,
+   "lon": -75.657262976978,
+   "tile_path": "data/raw/naip_tiles_pc_4band_v2/site_0413.tif"
+  }
+ ]
+}
