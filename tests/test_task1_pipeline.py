@@ -168,3 +168,29 @@ def test_checkpoint_on_disk_matches_published_hash():
     from geo_anom.task1 import env
     if env.CHECKPOINT["path"].exists():
         assert env.sha256(env.CHECKPOINT["path"]) == env.CHECKPOINT["sha256"]
+
+
+def test_ground_truth_taken_from_shared_drive_copy(tmp_path, monkeypatch):
+    from geo_anom.task1 import env
+    real = env.ROOT / "data/raw/external/soroka_duren/Delmarva_PL_House_Final.zip"
+    if not real.exists():
+        pytest.skip("USGS zip not on this machine")
+    drive = tmp_path / "Task1_results"; drive.mkdir()
+    (drive / real.name).write_bytes(real.read_bytes())          # what the user uploads
+    monkeypatch.setenv("GEO_ANOM_RESULTS", str(drive))
+    monkeypatch.setitem(env.GROUND_TRUTH, "zip", tmp_path / "gt" / real.name)
+    monkeypatch.setitem(env.GROUND_TRUTH, "dir", tmp_path / "gt" / "unzipped")
+    monkeypatch.setattr(env, "_fetch", lambda *a, **k: pytest.fail("should not download"))
+    shp = env.ensure_ground_truth()
+    assert shp.suffix == ".shp" and shp.exists()
+
+
+def test_wrong_ground_truth_file_rejected(tmp_path, monkeypatch):
+    from geo_anom.task1 import env
+    drive = tmp_path / "Task1_results"; drive.mkdir()
+    (drive / "Delmarva_PL_House_Final.zip").write_bytes(b"not the USGS file")
+    monkeypatch.setenv("GEO_ANOM_RESULTS", str(drive))
+    monkeypatch.setitem(env.GROUND_TRUTH, "zip", tmp_path / "gt" / "Delmarva_PL_House_Final.zip")
+    monkeypatch.setitem(env.GROUND_TRUTH, "dir", tmp_path / "gt" / "unzipped")
+    with pytest.raises(RuntimeError, match="SHA-256"):
+        env.ensure_ground_truth()
