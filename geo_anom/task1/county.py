@@ -58,7 +58,7 @@ def county_out(name: str, root: Path | None = None) -> Path:
 
 
 def registry_points() -> gpd.GeoDataFrame:
-    reg = tiles.load_manifest()
+    reg = tiles.load_registry()
     return gpd.GeoDataFrame(reg, geometry=gpd.points_from_xy([s["lon"] for s in reg], [s["lat"] for s in reg]),
                             crs=4326)
 
@@ -68,7 +68,7 @@ def run_county(name: str, stream: bool = True, max_workers: int = 8, progress=No
     """Map every building in one county. Resumable: re-running continues."""
     county = region.county_boundary(name)
     sites = region.grid_sites(county, name)
-    return run_pipeline(sites, county_out(name, root), manifest=tiles.load_manifest(), prefer="area",
+    return run_pipeline(sites, county_out(name, root), manifest=tiles.load_registry(), prefer="area",
                         stream=stream, max_workers=max_workers, progress=progress, log=log,
                         filters={"farm": [], "county": [name]})
 
