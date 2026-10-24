@@ -31,6 +31,8 @@ prototype. They are stale; don't treat them as current status.
   number computed from them (`run_2026-10-05`, the 2,726-feature
   `full_registry_unet_tulbure_detections.geojson`, R² 0.655, 99.7% precision,
   82% MDE crosscheck) as superseded until recomputed.
+- Task 2 (nutrient demand / balance, poultry → corn loop): `geo_anom/task2/` +
+  `notebooks/06_poultry_corn_loop.ipynb`.
 - Change detection logic in `geo_anom/task1/`, not in new one-off scripts
   (and run/check it from a notebook — see the notebook rule below).
   `scripts/unet_detect.py` / `unet_inference.py` are compatibility wrappers.
@@ -44,7 +46,7 @@ and run in VS Code — analyses, experiments, validations, data downloads, figur
 for slides, statewide runs. Existing scripts stay as they are (no rewrites).
 
 - One notebook per task: `notebooks/NN_short_name.ipynb`, numbered in order
-  (next is `05_…`). Locally: kernel Python 3.9 at
+  (next is `07_…`). Locally: kernel Python 3.9 at
   `/Library/Developer/CommandLineTools/usr/bin/python3`.
 - **Reproducible and shareable (from 2026-10-15):** code lives in git; every
   notebook also runs in **Google Colab** (Open-in-Colab badge in the header);

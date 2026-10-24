@@ -66,3 +66,4 @@ data/processed/task1/*/tiles_done/
 # (already-tracked files, e.g. county_somerset/, are left as they are)
 data/processed/task1/county_*/
 data/processed/task1/statewide/
+data/processed/task1/task2_loop/

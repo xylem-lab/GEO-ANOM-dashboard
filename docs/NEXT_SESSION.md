@@ -4,6 +4,20 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-23 — Eastern Shore finished in Colab; the poultry → corn loop (Task 2 v0, notebook 06)
+
+**Read this section first.** Top priority now (user, 10/7 workshop): close the loop poultry houses → litter → corn, i.e. the LOI's Task 2 Nutrient Balance Map in its first form.
+
+- **Notebook 05 (Colab, shared drive `Task1_results/county_*`):** all 9 Eastern Shore counties done, plus Allegany and Anne Arundel; Baltimore County and the rest of the western counties still running (Colab session crashes from time to time; Run all resumes). Eastern Shore: **2,329 houses** vs 3,040 hand-traced (2016/17); pooled **precision 0.89, recall 0.67, F1 0.76**; by county P 0.80–1.00, R 0.58–0.80. 595 houses are >1 km from any registered permit. Kent/Talbot/Cecil ran on CPU (no GPU in that session); Somerset on code 80051fa, the rest on 204ec65 (same detection code). Anne Arundel: 28 detections, 0 poultry permits, ~2,000 birds in the census → probably not poultry houses; western detections need the by-eye check (05 §6) before they are counted.
+- **Notebook 05 fix:** the statewide KMZ crashed in Colab (`Timestamp is not JSON serializable`, newer geopandas reads `naip_datetime` as dates) → `to_json(..., default=str)`.
+- **New: `geo_anom/task2/`** (`cdl.py`, `balance.py`) + **`notebooks/06_poultry_corn_loop.ipynb`** + `tests/test_task2_balance.py` (73 tests pass).
+  - Corn from the USDA NASS Cropland Data Layer, Maryland file from CropScape (Planetary Computer's `usda-cdl` stops at 2021; NAIP is 2023). 2023 class-1 corn = 523,641 acres (NASS survey ~510k). Years 2021–24 cached in `Task1_results/reference/`.
+  - 5 km grid (absolute UTM 18N cells): houses and roof m² per cell vs corn acres; the same within 10/25/50 km; **index = m² of house per corn acre**. Coefficient-free on purpose: with constant litter per m² (a) and need per acre (b), surplus ⇔ index > b/a, so the index ranking is the N/P ranking and the Extension numbers only set the line.
+  - `B.nutrient_balance()` refuses to run until every coefficient in `B.COEFFICIENTS` is filled in (birds/m², flocks/yr, litter N and P₂O₅ per bird-flock, N availability, corn N and P₂O₅ per acre) — that table is the ask list for the Rhodes/Moyle meeting.
+  - **Somerset-only local test (not the result):** implied stocking 8.6 (MDE CAFO 2017) – 10.6 (Census 2017) birds per m² of detected roof after recall correction — a cross-check for the Extension stocking number. Rank of the 25 km index barely changes with 2021–24 corn rotation (ρ 0.997) or adding soy/small grains (ρ 1.00, but the index halves: crop choice moves the surplus line, not the places); it changes a lot with hauling distance (ρ 0.20 for 10 km vs 25 km) → **hauling distance is the assumption to pin down** (ask Extension / MDA Manure Transport Program).
+  - Known gaps: Maryland-only CDL (Delaware/Virginia cropland near the line not counted); counties not finished in 05 contribute corn but no houses; poultry only (dairy/other manure later).
+- **Next:** run 06 in Colab once 05 has finished; write its "What this shows"; Extension meeting with the coefficient table; then dark-roof recall (v2).
+
 ## 2026-10-15 — notebooks run in Colab, results on the shared drive; all-county run ready (notebook 05)
 
 - **Setup:** code in git; every notebook runs in Colab or locally with the same first cell; results go to `Task1_results/` on the GEO-ANOM shared drive (`geo_anom/task1/env.py`, marker file); imagery streamed, never stored; model + USGS labels downloaded and SHA-256-checked; runs record code commit, NAIP item IDs and package versions. Verified: in-memory tiles pixel-identical to stored tiles; streamed detections identical on Somerset's busiest tiles; resume skips finished tiles.
