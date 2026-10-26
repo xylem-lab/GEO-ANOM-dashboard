@@ -331,3 +331,8 @@ See `docs/NEXT_SESSION.md` 2026-10-07 for the full account. Root cause: windowed
 
 Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, registered or not): P 99% / R 66% / F1 0.79; grid finds 79 more traced houses than registry-centred tiles. 81 houses >1 km from any permit are all real. Misses are concentrated in dark/rust roofs (brightness 145 vs 175; R−B +5 vs −10). Next experiment candidates: (1) fine-tune the U-Net on Delmarva dark-roof houses using the hand tracing as labels (held-out counties for testing); (2) dual threshold — accept lower-probability shapes only if long/narrow and house-sized — measured on Somerset before/after. Do (2) first: cheap, no training.
 
+## 2026-10-23 — Task 2 v0: poultry → corn balance (notebook 06)
+
+- Tried Planetary Computer `usda-cdl` first (stream like NAIP): only to 2021 → rejected for the main layer (NAIP is 2023); its 2008–2021 crop-frequency rasters remain an option for rotation. Used NASS CropScape state files (FIPS 24) instead; 2023 corn total matches the NASS survey.
+- Chose a coefficient-free index (house m² per corn acre) as the main output, because the N/P coefficients are unresolved (broiler N 13.8× AWTF, see 2026-10-05) and the ranking doesn't depend on them.
+- Somerset-only test: ranking robust to rotation years and crop set; sensitive to hauling radius (ρ 0.20 at 10 vs 25 km). Implied stocking 8.6–10.6 birds/m² (AWTF 2017 inventory / recall-corrected roof).
