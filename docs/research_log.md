@@ -335,4 +335,15 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 
 - Tried Planetary Computer `usda-cdl` first (stream like NAIP): only to 2021 → rejected for the main layer (NAIP is 2023); its 2008–2021 crop-frequency rasters remain an option for rotation. Used NASS CropScape state files (FIPS 24) instead; 2023 corn total matches the NASS survey.
 - Chose a coefficient-free index (house m² per corn acre) as the main output, because the N/P coefficients are unresolved (broiler N 13.8× AWTF, see 2026-10-05) and the ranking doesn't depend on them.
-- Somerset-only test: ranking robust to rotation years and crop set; sensitive to hauling radius (ρ 0.20 at 10 vs 25 km). Implied stocking 8.6–10.6 birds/m² (AWTF 2017 inventory / recall-corrected roof).
+- Somerset-only test suggested strong sensitivity to hauling radius (ρ 0.20); on all 9 Eastern Shore counties it is ρ 0.83 (10 km) / 0.93 (50 km) — a one-county artefact.
+- Including unverified western detections put Baltimore city at the top of the index → main analysis restricted to hand-traced (Delmarva) counties until the by-eye check.
+
+## 2026-10-26 — by-eye review tool (notebook 07)
+
+- Rejected Roboflow for labelling: public projects on the free plan (farm imagery with locations), paid private plans, outside the Colab/Drive/git setup. Built a notebook labeller (ipywidgets) writing per-reviewer CSVs to the shared drive instead.
+- Blind design: reviewer sees only imagery + outline; 40 known-real controls mixed in to measure the reviewer, kappa for two reviewers.
+- Detections outside the USGS-traced extent (convex hull + 500 m, same rule as evaluate_run) count as unverified even in Delmarva counties (part of Cecil).
+
+## 2026-10-26 — streaming memory leak (Colab crashes)
+
+- Not a Colab quirk: all-at-once submission + futures dict kept every tile alive per county. Bounded in-flight window fixes it; no effect on detections (verified on 2 Somerset tiles against Colab shards).

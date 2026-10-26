@@ -89,9 +89,9 @@ def ensure_cdl(year: int = 2023, drive_dir: Path | None = None, log=print) -> di
                 for chunk in d.iter_content(1 << 20):
                     f.write(chunk)
         tmp.rename(p)
-        if drive_dir is not None:
-            Path(drive_dir).mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(p, Path(drive_dir) / name)
+    if drive_dir is not None and not (Path(drive_dir) / name).exists():
+        Path(drive_dir).mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(p, Path(drive_dir) / name)
     sha = _sha256(p)
     if year in KNOWN_SHA256 and sha != KNOWN_SHA256[year]:
         log(f"Note: CDL {year} differs from the file first used ({sha[:12]}... vs "

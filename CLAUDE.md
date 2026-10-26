@@ -46,7 +46,7 @@ and run in VS Code — analyses, experiments, validations, data downloads, figur
 for slides, statewide runs. Existing scripts stay as they are (no rewrites).
 
 - One notebook per task: `notebooks/NN_short_name.ipynb`, numbered in order
-  (next is `07_…`). Locally: kernel Python 3.9 at
+  (next is `08_…`). Locally: kernel Python 3.9 at
   `/Library/Developer/CommandLineTools/usr/bin/python3`.
 - **Reproducible and shareable (from 2026-10-15):** code lives in git; every
   notebook also runs in **Google Colab** (Open-in-Colab badge in the header);
