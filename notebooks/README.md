@@ -11,6 +11,7 @@ full run.
 | `04_poultry_by_county.ipynb` | A whole county on a tile grid: every poultry house, accuracy vs USGS hand tracing, galleries of misses / extras / houses far from permits, county totals. Runs in Colab; results to the shared drive |
 | `05_all_counties.ipynb` | Every county, one after another (resumable): county table with pooled accuracy, statewide map, GeoJSON/KMZ, by-eye checks where there is no hand tracing. Colab |
 | `06_poultry_corn_loop.ipynb` | Task 2 v0: poultry-house roof vs corn (USDA Cropland Data Layer) on a 5 km grid, within hauling distance; robustness to rotation/crops/distance; birds-per-m² cross-check; the coefficient ask list. No N/P until coefficients are agreed |
+| `07_review_detections.ipynb` | Look at unverified detections one photo at a time and label them poultry house / not / unsure (blind, with known-real controls mixed in); precision per county, share real outside the traced area, agreement between reviewers. Labels on the shared drive; notebook 06 uses confirmed houses |
 | `02_supply_check.ipynb` | N/P₂O₅ from a full run: coefficients against the AWTF report, one farm recomputed by hand, totals by species |
 
 ## Run

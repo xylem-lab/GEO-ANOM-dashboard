@@ -4,6 +4,14 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-26 — notebook 07: check detections by eye (poultry house or not)
+
+- **Why:** detections outside the USGS-traced area are unverified, and the first ones were not poultry houses (one was a BWI airport taxiway); 11% of Eastern Shore detections (~280) aren't in the 2016/17 tracing either (new houses, or mistakes). Roboflow was considered and rejected: free projects are public (farm imagery + locations), private plans cost money, and it sits outside the Colab/Drive/git setup.
+- **`geo_anom/task1/review.py` + `notebooks/07_review_detections.ipynb` + `tests/test_review.py`** (78 tests pass): queue = Eastern Shore not-traced + everything outside the traced area + 40 blind controls on traced houses; photo from the run's own NAIP item IDs (500 m context + close-up, outline only, no county/group/score shown); ipywidgets buttons, prefetch; labels append-only to `Task1_results/review/labels_<REVIEWER>.csv` (latest per detection wins, so "back" = relabel); summary: precision range per Eastern Shore county, control agreement, per-county share real outside the traced area, Cohen's kappa between reviewers.
+- **Notebook 06 now takes reviewer-confirmed houses outside the traced area** (`USE_REVIEW_LABELS`; confirmed = every reviewer said poultry house). Nothing confirmed yet → 06 results unchanged (2,329 houses, 9 counties).
+- Queue on 10/26: 580 (286 Eastern Shore not traced, 254 outside traced area incl. Frederick's 123, 40 controls).
+- **Next:** the user labels (07); ideally a second reviewer labels the Eastern Shore set for agreement; then test a land-cover rule (share of CDL "developed" classes around a detection) and size on the labels before any classifier.
+
 ## 2026-10-23 — Eastern Shore finished in Colab; the poultry → corn loop (Task 2 v0, notebook 06)
 
 **Read this section first.** Top priority now (user, 10/7 workshop): close the loop poultry houses → litter → corn, i.e. the LOI's Task 2 Nutrient Balance Map in its first form.
