@@ -343,3 +343,7 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Rejected Roboflow for labelling: public projects on the free plan (farm imagery with locations), paid private plans, outside the Colab/Drive/git setup. Built a notebook labeller (ipywidgets) writing per-reviewer CSVs to the shared drive instead.
 - Blind design: reviewer sees only imagery + outline; 40 known-real controls mixed in to measure the reviewer, kappa for two reviewers.
 - Detections outside the USGS-traced extent (convex hull + 500 m, same rule as evaluate_run) count as unverified even in Delmarva counties (part of Cecil).
+
+## 2026-10-26 — streaming memory leak (Colab crashes)
+
+- Not a Colab quirk: all-at-once submission + futures dict kept every tile alive per county. Bounded in-flight window fixes it; no effect on detections (verified on 2 Somerset tiles against Colab shards).

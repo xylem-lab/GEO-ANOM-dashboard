@@ -61,6 +61,64 @@ def write_geojson(path: Path, features: list[dict]):
     path.write_text(json.dumps({"type": "FeatureCollection", "features": features}))
 
 
+def _ram_gb() -> float | None:
+    try:
+        import psutil
+        return psutil.Process().memory_info().rss / 1e9
+    except Exception:
+        return None
+
+
+def stream_tiles(todo: list[dict], fetch, handle, max_workers: int = 8, max_in_flight: int | None = None,
+                 progress=None, log: Callable[[str], None] = print):
+    """Fetch tiles in parallel and hand each to `handle(site, got)` as it arrives,
+    with at most `max_in_flight` (default 2 x max_workers) tiles fetched or being
+    fetched at once.
+
+    Until 2026-10-26 every tile of a county was submitted at once and each
+    finished download (a ~16 MB tile) stayed referenced until the county ended,
+    so RAM grew with county size (Worcester, 545 tiles: ~9 GB) and Colab
+    sessions crashed. Now a tile is dropped as soon as it's handled, and new
+    downloads start only as earlier ones are used, so memory stays flat.
+    """
+    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+
+    max_in_flight = max_in_flight or 2 * max_workers
+    queue = iter(todo)
+    pending = {}
+    bar = progress(total=len(todo)) if progress else None
+    with ThreadPoolExecutor(max_workers=max_workers) as ex:
+        def top_up():
+            while len(pending) < max_in_flight:
+                s = next(queue, None)
+                if s is None:
+                    return
+                pending[ex.submit(fetch, s)] = s
+
+        top_up()
+        while pending:
+            done, _ = wait(pending, return_when=FIRST_COMPLETED)
+            for f in done:
+                s = pending.pop(f)
+                try:
+                    got = f.result()
+                except Exception as e:  # one bad read shouldn't stop a county; re-run picks it up
+                    log(f"  FAILED {s['farm_name']}: {type(e).__name__}: {e}")
+                    got = False
+                if got is not False:
+                    handle(s, got)
+                del got, f
+                if bar is not None:
+                    bar.update(1)
+                    ram = _ram_gb()
+                    if ram is not None and hasattr(bar, "set_postfix_str"):
+                        bar.set_postfix_str(f"RAM {ram:.1f} GB", refresh=False)
+            done = None
+            top_up()
+    if bar is not None and hasattr(bar, "close"):
+        bar.close()
+
+
 def run_pipeline(
     sites: list[dict],
     out_dir: Path,
@@ -132,25 +190,17 @@ def run_pipeline(
 
     n = 0
     if stream and todo:
-        from concurrent.futures import ThreadPoolExecutor, as_completed
-        with ThreadPoolExecutor(max_workers=max_workers) as ex:
-            futs = {ex.submit(tiles.fetch_tile, s): s for s in todo}
-            it = as_completed(futs)
-            for f in (progress(it, total=len(futs)) if progress else it):
-                s = futs[f]
-                try:
-                    got = f.result()
-                except Exception as e:  # one bad read shouldn't stop a county; re-run picks it up
-                    log(f"  FAILED {s['farm_name']}: {type(e).__name__}: {e}")
-                    continue
-                if got is None:
-                    log(f"  no imagery for {s['farm_name']}")
-                    continue
-                img, meta, s_full = got
-                row = process(s_full, img, meta)
-                n += 1
-                if not progress:
-                    log(f"[{n}/{len(todo)}] {s['farm_name'][:45]:<45} raw={row['raw_candidates']:<4} kept={row['kept_in_tile']}")
+        def handle(s, got):
+            nonlocal n
+            if got is None:
+                log(f"  no imagery for {s['farm_name']}")
+                return
+            img, meta, s_full = got
+            row = process(s_full, img, meta)
+            n += 1
+            if not progress:
+                log(f"[{n}/{len(todo)}] {s['farm_name'][:45]:<45} raw={row['raw_candidates']:<4} kept={row['kept_in_tile']}")
+        stream_tiles(todo, tiles.fetch_tile, handle, max_workers=max_workers, progress=progress, log=log)
     else:
         for s in (progress(todo) if progress else todo):
             row = process(s)

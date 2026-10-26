@@ -4,6 +4,12 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-26 — Colab RAM crashes in notebook 05: cause found and fixed
+
+- **Cause:** `run_pipeline(stream=True)` submitted every tile of a county to the download pool at once and kept every finished download (a ~16 MB tile) referenced in the `futs` dict until the county ended → RAM grew with county size (Worcester 545 tiles ≈ 9 GB), worst when detection is slower than download (CPU sessions).
+- **Fix:** `pipeline.stream_tiles()` — at most 2 × `max_workers` tiles in flight; each tile is released once handled; tqdm shows RSS ("RAM x GB"). Notebook 05 also runs `gc.collect()` / `torch.cuda.empty_cache()` between counties.
+- **Checked:** test reproduces the old pattern (200/200 tiles held) and bounds the new one (≤ 9 with 8 in flight); failed downloads are logged and skipped as before. Rerun of 2 Somerset tiles on the laptop vs the Colab shards: same kept/rejected sets, identical outlines (IoU 1.0); only one rejected candidate's mean_prob differs (0.572 vs 0.571, MPS vs CUDA float). RAM 0.8–0.9 GB. Results don't depend on tile order (assembled from shards in sites order).
+
 ## 2026-10-26 — notebook 07: check detections by eye (poultry house or not)
 
 - **Why:** detections outside the USGS-traced area are unverified, and the first ones were not poultry houses (one was a BWI airport taxiway); 11% of Eastern Shore detections (~280) aren't in the 2016/17 tracing either (new houses, or mistakes). Roboflow was considered and rejected: free projects are public (farm imagery + locations), private plans cost money, and it sits outside the Colab/Drive/git setup.

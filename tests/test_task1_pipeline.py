@@ -194,3 +194,52 @@ def test_wrong_ground_truth_file_rejected(tmp_path, monkeypatch):
     monkeypatch.setitem(env.GROUND_TRUTH, "dir", tmp_path / "gt" / "unzipped")
     with pytest.raises(RuntimeError, match="SHA-256"):
         env.ensure_ground_truth()
+
+
+def test_streaming_keeps_only_a_few_tiles_in_memory():
+    """Downloads faster than detection: tiles must not pile up (Colab RAM crash, 2026-10-26)."""
+    import gc
+    import threading
+    import time
+    import weakref
+
+    from geo_anom.task1.pipeline import stream_tiles
+
+    class Tile:                      # stands in for a tile array; weakly referenceable
+        def __init__(self):
+            self.data = bytearray(1000)
+
+    alive, lock, peak, handled = weakref.WeakSet(), threading.Lock(), [0], []
+
+    def fetch(site):
+        t = Tile()
+        with lock:
+            alive.add(t)
+        return t, {}, site
+
+    def handle(site, got):
+        time.sleep(0.002)           # the slow "detector"
+        gc.collect()
+        with lock:
+            peak[0] = max(peak[0], len(alive))
+        handled.append(site["farm_name"])
+
+    todo = [{"farm_name": f"t{i}"} for i in range(200)]
+    stream_tiles(todo, fetch, handle, max_workers=4, max_in_flight=8, log=lambda m: None)
+    assert sorted(handled) == sorted(s["farm_name"] for s in todo)        # every tile handled once
+    assert peak[0] <= 8 + 1, f"{peak[0]} tiles held at once"
+
+
+def test_streaming_survives_a_failed_download():
+    from geo_anom.task1.pipeline import stream_tiles
+
+    def fetch(site):
+        if site["farm_name"] == "bad":
+            raise IOError("read failed")
+        return None if site["farm_name"] == "water" else ("img", {}, site)
+
+    seen, logs = [], []
+    stream_tiles([{"farm_name": n} for n in ["a", "bad", "water", "b"]], fetch,
+                 lambda s, got: seen.append((s["farm_name"], got is None)), max_workers=2, log=logs.append)
+    assert sorted(seen) == [("a", False), ("b", False), ("water", True)]
+    assert any("FAILED bad" in m for m in logs)
