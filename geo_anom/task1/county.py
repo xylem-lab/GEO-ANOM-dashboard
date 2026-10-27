@@ -74,9 +74,28 @@ def run_county(name: str, stream: bool = True, max_workers: int = 8, progress=No
                         filters={"farm": [], "county": [name]})
 
 
-def is_complete(name: str, root: Path | None = None) -> bool:
+def tile_status(name: str, root: Path | None = None) -> dict:
+    """How many of the county's grid tiles have results, have no aerial photo, or are missing."""
+    from geo_anom.task1.pipeline import NO_IMAGERY_DIR, shard_name
+
     out = county_out(name, root)
-    return (out / "run_meta.json").exists() and (out / "county_summary.json").exists()
+    grid = region.grid_sites(region.county_boundary(name), name)
+    have = lambda d: {p.name for p in (out / d).glob("*.json")} if (out / d).exists() else set()
+    done, none_ = have("tiles_done"), have(NO_IMAGERY_DIR)
+    missing = [s["grid_id"] for s in grid if shard_name(s) not in done and shard_name(s) not in none_]
+    return {"tiles": len(grid), "done": len(done), "no_imagery": len(none_), "missing": missing}
+
+
+def is_complete(name: str, root: Path | None = None) -> bool:
+    """Summarised, and every tile has results or is known to have no aerial photo.
+
+    Until 2026-10-27 only the summary was checked, so tiles that failed (e.g. a
+    504 from Planetary Computer) were never retried once a county was summarised.
+    """
+    out = county_out(name, root)
+    if not ((out / "run_meta.json").exists() and (out / "county_summary.json").exists()):
+        return False
+    return not tile_status(name, root)["missing"]
 
 
 def load_county_run(out: Path):

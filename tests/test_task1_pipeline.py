@@ -283,3 +283,26 @@ def test_stac_session_retries_gateway_timeouts():
         assert r.status_code == 200 and len(calls) == 3       # two 504s, then success
     finally:
         srv.shutdown()
+
+
+def test_county_complete_only_when_every_tile_is_accounted_for(tmp_path, monkeypatch):
+    """A failed tile (e.g. a 504) must be retried even after the county was summarised."""
+    import json as _json
+    from geo_anom.task1 import county as C, region
+    from geo_anom.task1.pipeline import NO_IMAGERY_DIR, shard_name
+
+    grid = [{"grid_id": f"r000_c00{i}", "farm_name": f"T grid r000_c00{i}", "lat": 38, "lon": -76,
+             "tile_path": f"data/raw/naip_grid/t/r000_c00{i}.tif"} for i in range(3)]
+    monkeypatch.setattr(region, "county_boundary", lambda name: None)
+    monkeypatch.setattr(region, "grid_sites", lambda area, name: grid)
+    out = C.county_out("T", tmp_path)
+    (out / "tiles_done").mkdir(parents=True)
+    for f in ("run_meta.json", "county_summary.json"):
+        (out / f).write_text("{}")
+    (out / "tiles_done" / shard_name(grid[0])).write_text("{}")
+    assert C.tile_status("T", tmp_path)["missing"] == ["r000_c001", "r000_c002"]
+    assert not C.is_complete("T", tmp_path)                      # summarised, but 2 tiles missing
+    (out / NO_IMAGERY_DIR).mkdir()
+    (out / NO_IMAGERY_DIR / shard_name(grid[1])).write_text(_json.dumps({"site": grid[1]}))
+    (out / "tiles_done" / shard_name(grid[2])).write_text("{}")
+    assert C.is_complete("T", tmp_path)                          # 2 done + 1 known to have no photo
