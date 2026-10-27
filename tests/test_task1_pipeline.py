@@ -253,3 +253,33 @@ def test_county_with_no_houses():
     area = gpd.GeoDataFrame(geometry=[box(X0, Y0, X0 + 5000, Y0 + 5000)], crs="EPSG:32618")
     b = C.county_buildings(empty, area)
     assert len(b) == 0 and "near_permit" in b and int(b.near_permit.sum()) == 0
+
+
+def test_stac_session_retries_gateway_timeouts():
+    """Planetary Computer's search answered 504 for some St. Mary's tiles (2026-10-27)."""
+    import threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    from geo_anom.task1.tiles import make_session
+
+    calls = []
+
+    class Flaky(BaseHTTPRequestHandler):
+        def do_POST(self):
+            calls.append(1)
+            self.rfile.read(int(self.headers.get("Content-Length", 0)))
+            code = 504 if len(calls) <= 2 else 200
+            body = b'{"features": []}' if code == 200 else b"gateway timeout"
+            self.send_response(code); self.send_header("Content-Length", str(len(body))); self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *a):
+            pass
+
+    srv = HTTPServer(("127.0.0.1", 0), Flaky)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        r = make_session(retries=3, backoff=0.01).post(f"http://127.0.0.1:{srv.server_port}/search", json={}, timeout=5)
+        assert r.status_code == 200 and len(calls) == 3       # two 504s, then success
+    finally:
+        srv.shutdown()

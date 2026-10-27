@@ -32,10 +32,32 @@ DEFAULT_MANIFEST = ROOT / "data/raw/naip_tiles_pc_4band_v2/manifest.json"
 # Faster cloud-optimised GeoTIFF reads over HTTP (affects speed only, never pixel values)
 for _k, _v in {"GDAL_DISABLE_READDIR_ON_OPEN": "EMPTY_DIR", "CPL_VSIL_CURL_ALLOWED_EXTENSIONS": ".tif",
                "GDAL_HTTP_MULTIPLEX": "YES", "GDAL_HTTP_MERGE_CONSECUTIVE_RANGES": "YES",
-               "GDAL_HTTP_VERSION": "2", "VSI_CACHE": "TRUE", "GDAL_CACHEMAX": "512"}.items():
+               "GDAL_HTTP_VERSION": "2", "VSI_CACHE": "TRUE", "GDAL_CACHEMAX": "512",
+               # retry image reads on 429/5xx from Azure storage instead of failing the tile
+               "GDAL_HTTP_MAX_RETRY": "5", "GDAL_HTTP_RETRY_DELAY": "2"}.items():
     os.environ.setdefault(_k, _v)
 
 STAC_SEARCH_URL = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
+
+
+def make_session(retries: int = 5, backoff: float = 2.0) -> requests.Session:
+    """HTTP session that retries Planetary Computer's transient errors.
+
+    The STAC API sometimes answers 504 Gateway Timeout (or 429/500/502/503)
+    when busy; each tile used to fail on the first one and needed a re-run
+    (St. Mary's, 2026-10-27). Searches are read-only, so POST is retried too.
+    Waits backoff * 2**n seconds between tries (2, 4, 8, 16 s by default).
+    """
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
+    retry = Retry(total=retries, connect=retries, read=retries, status=retries, backoff_factor=backoff,
+                  status_forcelist=[429, 500, 502, 503, 504], allowed_methods=["GET", "POST"],
+                  respect_retry_after_header=True, raise_on_status=False)
+    s = requests.Session()
+    s.mount("https://", HTTPAdapter(max_retries=retry))
+    s.mount("http://", HTTPAdapter(max_retries=retry))
+    return s
 BUFFER_KM = 1.0
 
 # Matches Microsoft's training imagery (1m NAIP). Planetary Computer serves
@@ -179,7 +201,7 @@ def build_mosaic(lon: float, lat: float, buffer_km: float = BUFFER_KM, item_ids:
     from rasterio.transform import from_origin
     from rasterio.warp import reproject
 
-    session = session or requests.Session()
+    session = session or make_session()
     bbox = BBox.from_point(lon=lon, lat=lat, buffer_km=buffer_km)
     items = get_naip_items(item_ids, session) if item_ids else select_items(find_naip_items(bbox, session), bbox)
     if not items:

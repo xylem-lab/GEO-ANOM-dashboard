@@ -122,7 +122,7 @@ def download_many(sites: list[dict], max_workers: int = 8, progress=None) -> lis
         if dest.exists():
             return s, "cached"
         try:
-            got = tiles.download_tile(s, dest, requests.Session())
+            got = tiles.download_tile(s, dest, tiles.make_session())
             return (got or s), ("ok" if got else "no imagery")
         except Exception as e:  # network hiccups shouldn't kill a county run
             return s, f"error: {type(e).__name__}"
