@@ -88,7 +88,12 @@ def load_county_run(out: Path):
 
 def county_buildings(buildings: gpd.GeoDataFrame, county: gpd.GeoDataFrame, near_m: float = 1000) -> gpd.GeoDataFrame:
     """This county's buildings (centroid inside), in UTM, with `near_permit`."""
-    b = buildings.to_crs(UTM)
+    b = buildings.to_crs(UTM) if buildings.crs is not None else buildings.set_crs(4326).to_crs(UTM)
+    if b.empty:   # a county with no houses (e.g. Calvert) has an empty buildings.geojson with no columns
+        b = b.copy()
+        b["assigned_distance_m"] = pd.Series(dtype=float)
+        b["near_permit"] = pd.Series(dtype=bool)
+        return b
     b = b[b.centroid.within(county.to_crs(UTM).unary_union)].copy()
     b["near_permit"] = b["assigned_distance_m"] <= near_m
     return b

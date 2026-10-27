@@ -243,3 +243,13 @@ def test_streaming_survives_a_failed_download():
                  lambda s, got: seen.append((s["farm_name"], got is None)), max_workers=2, log=logs.append)
     assert sorted(seen) == [("a", False), ("b", False), ("water", True)]
     assert any("FAILED bad" in m for m in logs)
+
+
+def test_county_with_no_houses():
+    """Calvert (2026-10-27): 239 tiles, 0 houses -> empty buildings.geojson without columns."""
+    import geopandas as gpd
+    from geo_anom.task1 import county as C
+    empty = gpd.GeoDataFrame(geometry=[], crs="EPSG:4326")
+    area = gpd.GeoDataFrame(geometry=[box(X0, Y0, X0 + 5000, Y0 + 5000)], crs="EPSG:32618")
+    b = C.county_buildings(empty, area)
+    assert len(b) == 0 and "near_permit" in b and int(b.near_permit.sum()) == 0
