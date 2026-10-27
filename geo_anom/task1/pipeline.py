@@ -283,8 +283,11 @@ def run_pipeline(
         acc = evaluate_run(out_dir)
         (out_dir / "accuracy.json").write_text(json.dumps(acc, indent=2))
         o = acc["object_level"]
-        log(f"Accuracy vs Soroka & Duren: precision {o['precision']:.2f}, recall {o['recall']:.2f}, "
-            f"F1 {o['f1']:.2f}; farm-count R^2 {acc['farm_level_counts'].get('r2', float('nan')):.2f}")
+        if o["ground_truth_houses"]:
+            log(f"Accuracy vs Soroka & Duren: precision {o['precision']:.2f}, recall {o['recall']:.2f}, "
+                f"F1 {o['f1']:.2f}; farm-count R^2 {acc['farm_level_counts'].get('r2', float('nan')):.2f}")
+        else:
+            log("Accuracy: not available here (USGS hand tracing covers the Delmarva peninsula only)")
     log(f"\n{len(kept)} kept detections -> {n_unique} unique buildings")
     log(f"Outputs in {out_dir}")
     return meta

@@ -4,6 +4,12 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-27 — Calvert, Harford: empty county fixed; Aberdeen Proving Ground has no NAIP
+
+- **Calvert** failed in 05 with `KeyError: 'assigned_distance_m'`: all 239 tiles ran, 33 candidates, 0 kept → empty `buildings.geojson` with no columns; `county.county_buildings` now handles an empty county. Calvert = 0 houses, 0 poultry permits, 2,230 birds (AWTF Census) — consistent. Rerunning 05 only writes its summary (tiles are done).
+- **Harford** "no imagery" for 8 tiles (r023–r026, c013–c016, ~39.31–39.35N 76.22–76.29W): Aberdeen Proving Ground (Edgewood). No 2023 NAIP there (one tile has no items; another only 2011/2015, blank). Expected, not a download failure; those tiles will report "no imagery" on every rerun. Military land, no poultry.
+- `Accuracy ... nan` outside Delmarva was cosmetic; the run now says accuracy isn't available there.
+
 ## 2026-10-26 — Colab RAM crashes in notebook 05: cause found and fixed
 
 - **Cause:** `run_pipeline(stream=True)` submitted every tile of a county to the download pool at once and kept every finished download (a ~16 MB tile) referenced in the `futs` dict until the county ended → RAM grew with county size (Worcester 545 tiles ≈ 9 GB), worst when detection is slower than download (CPU sessions).
