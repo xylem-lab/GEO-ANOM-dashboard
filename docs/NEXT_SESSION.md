@@ -4,6 +4,16 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-28 (overnight) -- outlines, recovered houses, darker 2023 photos
+
+Branch `experiment/outline-and-fragment-fixes-2026-10-28`. Scored on the Eastern Shore against USGS tracing (3,040 houses), precision within the traced area as in 05.
+- **Outlines too small:** 2,038 matched pairs; median outline covers 78% of the traced roof (width right, ends and shaded parts cut; U-Net score on the missed roof ~0.34). Minimum rotated rectangle -> 97% of traced area (`refine.rectangle`). Eastern Shore roof 4.85 -> 5.97 km2 (+23%, 22-27% per county, so the 06 ranking holds; implied stocking ~9.6 -> ~7.8 birds/m2 of roof).
+- **Why houses are missed (1,002):** 627 had no candidate at all, 278 were short pieces rejected by the length filter, 65 merged with a neighbour. By eye, ~21/24 no-candidate misses still stand in 2023. Recall by NAIP flight: 54% (2023-06-02) to 83% (2023-05-27). Same missed houses on 2017/2018/2021 photos: ~50% found vs 4% on 2023. 2023 is darker (RGB ~71 vs ~100); matching bands to 2021 recovered 6/26, lost 0/11 (NIR matching alone: 0).
+- **Unmatched detections (286):** by eye 21/24 isolated ones are post-2016/17 farms -> real precision ~97-99%.
+- **SAM recovery (`refine.SamRefiner`, vit_b, 1 m pipeline imagery):** 1,080 rejected pieces in 713 windows (28 min laptop CPU). With recovered shapes required to be >= 80 m long, <= 25 m wide, aspect >= 5 (chosen on this tracing -- tuned, not held out): recall 0.670 -> 0.759 (+268 traced houses), precision 0.888 -> 0.886. Without the rule: recall 0.767 but 147 no-hit shapes, mostly sheds/warehouses by eye.
+- **Notebook 08 (Colab, running):** 428 tiles of the two worst flights containing traced houses, rerun with tiles tone-matched to 2021 (`tiles.fetch_tile_matched`) -> `Task1_results/experiments/tone_match_2021/`.
+- Scripts for the measurements: session scratchpad `outline/` (s1 pairs, s4 misses, s6 by flight, s7 years, s8 band matching, s9 SAM recovery, s10 scoring) -- to be folded into a notebook.
+
 ## 2026-10-27 — Planetary Computer 504s (St. Mary's): requests now retried
 
 - `FAILED ... HTTPError: 504 Server Error: Gateway Timeout for url: .../stac/v1/search` on some St. Mary's tiles: Microsoft's STAC search was overloaded. Not our bug; failed tiles were skipped and a re-run picks them up.
