@@ -61,6 +61,14 @@ def write_geojson(path: Path, features: list[dict]):
     path.write_text(json.dumps({"type": "FeatureCollection", "features": features}))
 
 
+NO_IMAGERY_DIR = "tiles_no_imagery"
+
+
+def shard_name(site: dict) -> str:
+    """File name of a tile's result in tiles_done/ (and tiles_no_imagery/)."""
+    return tiles.site_id(site).replace("/", "__").replace(" ", "_") + ".json"
+
+
 def _ram_gb() -> float | None:
     try:
         import psutil
@@ -156,7 +164,14 @@ def run_pipeline(
     manifest = manifest if manifest is not None else tiles.load_manifest(manifest_path)
 
     def shard_path(site):
-        return shard_dir / (tiles.site_id(site).replace("/", "__").replace(" ", "_") + ".json")
+        return shard_dir / shard_name(site)
+
+    # tiles with no aerial photo at all (e.g. Aberdeen Proving Ground): recorded so a re-run
+    # doesn't keep asking, and so a county can count as complete (county.tile_status)
+    no_img_dir = out_dir / NO_IMAGERY_DIR
+
+    def no_imagery_path(site):
+        return no_img_dir / shard_name(site)
 
     # Tiles on disk (non-streaming only)
     if not stream:
@@ -173,7 +188,7 @@ def run_pipeline(
         sites = ready
 
     model, device = detect.load_model()
-    todo = [s for s in sites if not shard_path(s).exists()]
+    todo = [s for s in sites if not shard_path(s).exists() and not no_imagery_path(s).exists()]
     log(f"Model on {device}; {len(sites)} tiles, {len(sites) - len(todo)} already done, "
         f"{len(todo)} to run{' (streaming)' if stream else ''}")
 
@@ -193,7 +208,9 @@ def run_pipeline(
         def handle(s, got):
             nonlocal n
             if got is None:
-                log(f"  no imagery for {s['farm_name']}")
+                log(f"  no imagery for {s['farm_name']} (recorded; not retried)")
+                no_img_dir.mkdir(exist_ok=True)
+                no_imagery_path(s).write_text(json.dumps({"site": s, "checked_at": dt.datetime.now().isoformat(timespec="seconds")}))
                 return
             img, meta, s_full = got
             row = process(s_full, img, meta)
@@ -218,9 +235,12 @@ def run_pipeline(
         done_sites.append(d["site"])
         farm_rows.append(d["farm_row"])
         candidates += d["features"]
-    missing = len(sites) - len(done_sites)
-    if missing:
-        log(f"  {missing} tiles not done (failed or no imagery) -- re-run to retry them")
+    no_img = sum(no_imagery_path(s).exists() for s in sites)
+    failed = len(sites) - len(done_sites) - no_img
+    if no_img:
+        log(f"  {no_img} tiles have no aerial photo (recorded in {NO_IMAGERY_DIR}/)")
+    if failed:
+        log(f"  {failed} tiles FAILED (e.g. server errors) -- run again: only these are retried")
     ready = done_sites
     (out_dir / "sites.json").write_text(json.dumps(ready, indent=2))
 

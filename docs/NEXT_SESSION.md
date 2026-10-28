@@ -4,6 +4,12 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-27 — Planetary Computer 504s (St. Mary's): requests now retried
+
+- `FAILED ... HTTPError: 504 Server Error: Gateway Timeout for url: .../stac/v1/search` on some St. Mary's tiles: Microsoft's STAC search was overloaded. Not our bug; failed tiles were skipped and a re-run picks them up.
+- **Failed tiles were never retried once a county was summarised** (`is_complete` only checked for `county_summary.json`; Harford printed "8 tiles not done" then "done"). Now a county is complete only when every grid tile has a result in `tiles_done/` or a marker in `tiles_no_imagery/` (written when NAIP has no photo, e.g. Aberdeen Proving Ground, and not retried); `county.tile_status()` reports done / no photo / missing; notebook 05 re-runs any county with missing tiles (only those tiles are fetched). State on 10-27: 20 counties complete with every tile; Calvert needs only its summary; Harford 8 missing (Aberdeen → markers on next run); St. Mary's 194/393; Washington not started.
+- Now `tiles.make_session()` retries 429/500/502/503/504 and connection errors up to 5 times (2, 4, 8, 16 s backoff, POST included — searches are read-only), used by default in `build_mosaic`/`fetch_tile`; GDAL image reads retry too (`GDAL_HTTP_MAX_RETRY=5`, `GDAL_HTTP_RETRY_DELAY=2`). Speed/robustness only; same pixels.
+
 ## 2026-10-27 — Calvert, Harford: empty county fixed; Aberdeen Proving Ground has no NAIP
 
 - **Calvert** failed in 05 with `KeyError: 'assigned_distance_m'`: all 239 tiles ran, 33 candidates, 0 kept → empty `buildings.geojson` with no columns; `county.county_buildings` now handles an empty county. Calvert = 0 houses, 0 poultry permits, 2,230 birds (AWTF Census) — consistent. Rerunning 05 only writes its summary (tiles are done).

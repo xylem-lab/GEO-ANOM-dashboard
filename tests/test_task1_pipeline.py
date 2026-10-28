@@ -253,3 +253,56 @@ def test_county_with_no_houses():
     area = gpd.GeoDataFrame(geometry=[box(X0, Y0, X0 + 5000, Y0 + 5000)], crs="EPSG:32618")
     b = C.county_buildings(empty, area)
     assert len(b) == 0 and "near_permit" in b and int(b.near_permit.sum()) == 0
+
+
+def test_stac_session_retries_gateway_timeouts():
+    """Planetary Computer's search answered 504 for some St. Mary's tiles (2026-10-27)."""
+    import threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    from geo_anom.task1.tiles import make_session
+
+    calls = []
+
+    class Flaky(BaseHTTPRequestHandler):
+        def do_POST(self):
+            calls.append(1)
+            self.rfile.read(int(self.headers.get("Content-Length", 0)))
+            code = 504 if len(calls) <= 2 else 200
+            body = b'{"features": []}' if code == 200 else b"gateway timeout"
+            self.send_response(code); self.send_header("Content-Length", str(len(body))); self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *a):
+            pass
+
+    srv = HTTPServer(("127.0.0.1", 0), Flaky)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        r = make_session(retries=3, backoff=0.01).post(f"http://127.0.0.1:{srv.server_port}/search", json={}, timeout=5)
+        assert r.status_code == 200 and len(calls) == 3       # two 504s, then success
+    finally:
+        srv.shutdown()
+
+
+def test_county_complete_only_when_every_tile_is_accounted_for(tmp_path, monkeypatch):
+    """A failed tile (e.g. a 504) must be retried even after the county was summarised."""
+    import json as _json
+    from geo_anom.task1 import county as C, region
+    from geo_anom.task1.pipeline import NO_IMAGERY_DIR, shard_name
+
+    grid = [{"grid_id": f"r000_c00{i}", "farm_name": f"T grid r000_c00{i}", "lat": 38, "lon": -76,
+             "tile_path": f"data/raw/naip_grid/t/r000_c00{i}.tif"} for i in range(3)]
+    monkeypatch.setattr(region, "county_boundary", lambda name: None)
+    monkeypatch.setattr(region, "grid_sites", lambda area, name: grid)
+    out = C.county_out("T", tmp_path)
+    (out / "tiles_done").mkdir(parents=True)
+    for f in ("run_meta.json", "county_summary.json"):
+        (out / f).write_text("{}")
+    (out / "tiles_done" / shard_name(grid[0])).write_text("{}")
+    assert C.tile_status("T", tmp_path)["missing"] == ["r000_c001", "r000_c002"]
+    assert not C.is_complete("T", tmp_path)                      # summarised, but 2 tiles missing
+    (out / NO_IMAGERY_DIR).mkdir()
+    (out / NO_IMAGERY_DIR / shard_name(grid[1])).write_text(_json.dumps({"site": grid[1]}))
+    (out / "tiles_done" / shard_name(grid[2])).write_text("{}")
+    assert C.is_complete("T", tmp_path)                          # 2 done + 1 known to have no photo
