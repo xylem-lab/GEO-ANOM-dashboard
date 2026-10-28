@@ -141,6 +141,7 @@ def run_pipeline(
     log: Callable[[str], None] = print,
     stream: bool = False,
     max_workers: int = 8,
+    fetch: Callable | None = None,
 ) -> dict:
     """Run the whole mapping step and write every output. Returns run_meta.
 
@@ -150,7 +151,8 @@ def run_pipeline(
     `progress` wraps the per-tile loop (e.g. tqdm).
 
     `stream=True`: tiles are built in memory from Planetary Computer
-    (`max_workers` in parallel) and never written to disk.
+    (`max_workers` in parallel) and never written to disk. `fetch` replaces
+    tiles.fetch_tile for streaming (e.g. tiles.fetch_tile_matched).
 
     Resumable either way: each finished tile is saved as
     out_dir/tiles_done/<tile>.json; a re-run skips tiles already there.
@@ -217,7 +219,7 @@ def run_pipeline(
             n += 1
             if not progress:
                 log(f"[{n}/{len(todo)}] {s['farm_name'][:45]:<45} raw={row['raw_candidates']:<4} kept={row['kept_in_tile']}")
-        stream_tiles(todo, tiles.fetch_tile, handle, max_workers=max_workers, progress=progress, log=log)
+        stream_tiles(todo, fetch or tiles.fetch_tile, handle, max_workers=max_workers, progress=progress, log=log)
     else:
         for s in (progress(todo) if progress else todo):
             row = process(s)
@@ -289,6 +291,7 @@ def run_pipeline(
         "species_overrides": detect.SPECIES_FILTER_OVERRIDES,
         "close_kernel": detect.CLOSE_KERNEL,
         "stream": stream,
+        "fetch": getattr(fetch, "__name__", None) if fetch else "fetch_tile",
         "tiles_requested": len(sites),
         "tiles": len(ready),
         "raw_candidates": len(candidates),
