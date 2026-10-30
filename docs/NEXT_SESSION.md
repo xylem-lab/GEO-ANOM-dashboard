@@ -4,6 +4,32 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-10-30 -- plan to finish Task 1 and Task 2 (after the Extension meeting)
+
+**Final Eastern Shore map v1** (original detections + tone-matched rerun of notebook 08 + SAM repair with the strict shape rule, de-duplicated at 30% overlap, outlines as rectangles): **2,823 houses, 6.93 km2 roof**; recall 0.805, precision 0.881 in the traced area. Built by a scratchpad script so far (step 1 folds it into a notebook). Shared with the team for heatmaps (centres, roof area, 2 km grid, KMZ; no farm/permit details): `Task1_results/final_eastern_shore/heatmap_share/`. Rest of Maryland ~0 houses (Extension).
+
+**New facts from the meeting and sources** (meeting summary on the shared drive only -- it names people/farms; the Grade A milk producer list is confidential):
+- Action items: (a) why Caroline maps below Wicomico/Worcester (Extension expects Caroline largest next census: new construction there, closures in Wicomico) -- are idle houses counted? (b) cross-check mapped houses with MDE's public AFO data.
+- Houses 40x400 to 66x650 ft (ours average ~26,400 ft2). Rusted roofs are not a reliable idle sign.
+- DCA 2024: 601 M chickens, 4,909 houses on Delmarva -> ~122k birds/house/yr. Census 2022 MD-1 district: 60.3 M broilers on hand 31 Dec 2022 (district includes parts of 3 western-shore counties; no county split).
+- Litter: UD (Pokhrel & Shober 2024) 2.3-3 lb/bird, Delmarva >= 686k t/yr, recommends testing. UGA B1245 (Georgia, placeholder): 64/54/48 lb N/P2O5/K2O per ton, first-year N 0.5-0.7. NCC density 6.5-9.0 lb/ft2.
+
+**Task 1 -- five steps**
+1. Notebook 11: rebuild the final map v1 + county table from the run folders (rectangle, SAM strict, 08 union). Laptop.
+2. Notebook 12: active vs idle -- distance to MDE poultry permits (`AFO.csv.xlsx`, registry snapshot); per county: mapped, near a permit, permitted birds, Census birds. Answers action items (a)+(b). Farm-level output to the shared drive only.
+3. Notebook 13: history -- detector on NAIP 2013/15/17/18/21 (2011 optional); per house first year seen / still standing / gone. Shows Caroline construction and Wicomico closures; "present every year + near a permit" = strongest active signal. Colab.
+4. Retraining in the agreed order: **07 labels -> 09 training chips -> 10 fine-tune** (hold out whole counties incl. Wicomico) -> rerun the Shore = map v2.
+5. Western counties: decide from 07 labels whether any western detections are poultry houses.
+Done when: map v1 (reproducible) and v2 (retrained), each house tagged active/idle, first year seen, checked by eye or not.
+
+**Task 2 -- four steps**
+A. Rerun 06 on the final map, rectangle roof area, active houses only (coefficient-free index).
+B. Fill `B.COEFFICIENTS` from the sources above; still needed from Extension: Maryland litter nutrients per ton (or the CBP 2015 poultry litter report), Maryland first-year N availability, Maryland corn N/P recommendation per acre, county active-house counts / Census 2022 by county, Manure Transport Program totals by county.
+C. Surplus/deficit map at low/high coefficient ends; keep only cells robust across all -- the Task 2 Nutrient Balance Map (show surplus/deficit and ranking, not N/P totals).
+D. Translocation: distance/corridors from surplus to deficit cells (lower -> mid/upper Shore); add Delaware/Virginia cropland near the line.
+
+**Order:** now 1, 2, deck/brief to DCA 2024 + Census 2022, start 3 on Colab, labelling in 07 -> then A, 09/10, rerun -> then B-D when the Maryland numbers arrive.
+
 ## 2026-10-28 (overnight) -- outlines, recovered houses, darker 2023 photos
 
 Branch `experiment/outline-and-fragment-fixes-2026-10-28`. Scored on the Eastern Shore against USGS tracing (3,040 houses), precision within the traced area as in 05.
