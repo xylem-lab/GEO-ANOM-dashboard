@@ -4,6 +4,16 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-01 -- notebook 09: training data for fine-tuning (branch `experiment/retraining-data-2026-11-01`)
+
+- `geo_anom/task1/training.py` + `notebooks/09_training_data.ipynb` + `tests/test_training.py` (95 tests pass).
+- 512 m windows, 1 m RGB+NIR, NAIP 2017/2021/2023. House windows centred on groups of USGS-traced houses (every house whole in one window); empty windows = random land squares with nothing within 300 m (0.5 per house window, per county and year). Plan: 4,368 windows (~3.7 GB) in `Task1_results/training/v1/`.
+- Masks 0/1/255: traced = house every year; our map's houses not in the tracing = ignored until 07; 07-confirmed = house in 2023 (ignored earlier); 07-rejected = not a house (hard negatives, any county); 2 m ignore band on traced roof edges; no-data ignored. Masks rebuild in minutes after 07 (`extra_windows` adds windows only for new 07 results; nothing re-downloaded).
+- Split by whole county: test Wicomico + Queen Anne's, val Dorchester, train the other six. Note: Robinson's model was trained on all of Delmarva on older photos, so the fair comparison in notebook 10 is on the held-out counties' 2023 photos.
+- Augmentation (`T.augment`): crops placed on a house 70% of the time, rot90/flip, scale 0.8-1.25, gain 0.6-1.25 (RGB) / 0.7-1.3 (NIR), gamma 0.8-1.25, contrast 0.75-1.25. `T.ChipDataset` serves 256 px crops for notebook 10.
+- Checked on a small run: masks sit on the roofs in all three years; sample RGB means 2017 ~102, 2021 ~109, 2023 ~83.
+- **Next:** run 09 on Colab (downloads ~1-2 h, resumable); user labels in 07 then re-runs 09 sections 1-4; write notebook 10 (fine-tune, keep the base checkpoint, score with the 05 pipeline on held-out counties' 2023 tiles).
+
 ## 2026-10-30 -- plan to finish Task 1 and Task 2 (after the Extension meeting)
 
 **Final Eastern Shore map v1** (original detections + tone-matched rerun of notebook 08 + SAM repair with the strict shape rule, de-duplicated at 30% overlap, outlines as rectangles): **2,823 houses, 6.93 km2 roof**; recall 0.805, precision 0.881 in the traced area. Built by a scratchpad script so far (step 1 folds it into a notebook). Shared with the team for heatmaps (centres, roof area, 2 km grid, KMZ; no farm/permit details): `Task1_results/final_eastern_shore/heatmap_share/`. Rest of Maryland ~0 houses (Extension).
