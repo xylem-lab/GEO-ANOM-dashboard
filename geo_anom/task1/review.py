@@ -191,7 +191,7 @@ def latest(raw: pd.DataFrame) -> pd.DataFrame:
 
 def load_labels(folder: Path) -> pd.DataFrame:
     """Every reviewer's latest labels from labels_<reviewer>.csv files."""
-    files = sorted(Path(folder).glob("labels_*.csv"))
+    files = sorted(f for f in Path(folder).glob("labels_*.csv") if not f.name.startswith("labels_kind_"))
     raw = pd.concat([pd.read_csv(f) for f in files], ignore_index=True) if files else pd.DataFrame(columns=LabelStore.cols)
     return latest(raw)
 
