@@ -4,6 +4,13 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-02 -- notebook 07 labelled (UA, 719 detections); dairy tagging added
+
+- **Eastern Shore, detections not in the 2016/17 tracing (262):** 235 poultry houses (new since 2016/17), 16 not poultry, 11 unsure -> Eastern Shore precision of notebook 05 detections ~99% (per county 0.94-1.00 low end), vs 0.89 counted against the tracing alone. Controls 40/40 called poultry house.
+- **Outside the traced area (417):** 36 poultry houses (Frederick 21, Cecil 6, Queen Anne's 4, Carroll 2, Washington 2, Harford 1), 373 not poultry, 8 unsure. Confirms Extension: almost no poultry houses west of the Bay; the western detections were warehouses, roads, other barns.
+- User noted many of the "not poultry"/"unsure" detections are **dairy farms** -> new optional section 6 in notebook 07 (branch `experiment/dairy-tags-2026-11-02`): second pass over those, labels dairy / other livestock / not a farm building / unsure -> `review/labels_kind_<REVIEWER>.csv`, dairy candidates -> `review/dairy_candidates.geojson` (shared drive only). `load_labels` ignores the kind files.
+- Not reviewed: houses added after 05 by SAM repair / brightened rerun that aren't in the tracing (stay "ignored" in notebook 09).
+
 ## 2026-10-27 — Planetary Computer 504s (St. Mary's): requests now retried
 
 - `FAILED ... HTTPError: 504 Server Error: Gateway Timeout for url: .../stac/v1/search` on some St. Mary's tiles: Microsoft's STAC search was overloaded. Not our bug; failed tiles were skipped and a re-run picks them up.
