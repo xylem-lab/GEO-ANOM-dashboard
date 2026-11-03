@@ -61,3 +61,22 @@ def test_summary_precision_range_and_controls(tmp_path):
     assert p["not yet checked"] == 1
     assert out["control"] == {"checked": 1, "called poultry house": 1, "agreement": 1.0}
     assert out["unverified"].loc["Charles", "not poultry"] == 1
+
+
+def test_kind_store_takes_its_own_labels(tmp_path):
+    import pytest
+    from geo_anom.task1 import review as R
+    st = R.LabelStore(tmp_path / "labels_kind_UA.csv", "UA", labels=R.KIND_LABELS)
+    row = {"key": "frederick/r001_c002_000", "county": "Frederick", "group": "unverified"}
+    st.add(row, "dairy")
+    assert st.done() == {"frederick/r001_c002_000"}
+    with pytest.raises(ValueError):
+        st.add(row, "poultry house")
+
+
+def test_poultry_labels_ignore_kind_files(tmp_path):
+    from geo_anom.task1 import review as R
+    row = {"key": "k1", "county": "Frederick", "group": "unverified"}
+    R.LabelStore(tmp_path / "labels_UA.csv", "UA").add(row, "not poultry")
+    R.LabelStore(tmp_path / "labels_kind_UA.csv", "UA", labels=R.KIND_LABELS).add(row, "dairy")
+    assert R.load_labels(tmp_path).label.tolist() == ["not poultry"]

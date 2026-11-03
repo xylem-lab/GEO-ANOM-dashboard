@@ -36,6 +36,8 @@ from geo_anom.task1 import county as C
 from geo_anom.task1 import region
 
 LABELS = ["poultry house", "not poultry", "unsure"]
+# second pass over "not poultry" / "unsure": what is it? (seeds for dairy and other species)
+KIND_LABELS = ["dairy", "other livestock", "not a farm building", "unsure"]
 GROUPS = ["es_unmatched", "unverified", "control"]
 UTM = region.UTM
 
@@ -159,17 +161,17 @@ class LabelStore:
 
     cols = ["key", "label", "reviewer", "labelled_at", "county", "group", "code"]
 
-    def __init__(self, path: Path, reviewer: str, code: str = ""):
+    def __init__(self, path: Path, reviewer: str, code: str = "", labels: list[str] = LABELS):
         if not reviewer.strip():
             raise ValueError("set REVIEWER to your name or initials")
-        self.path, self.reviewer, self.code = Path(path), reviewer.strip(), code
+        self.path, self.reviewer, self.code, self.labels = Path(path), reviewer.strip(), code, list(labels)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         if not self.path.exists():
             pd.DataFrame(columns=self.cols).to_csv(self.path, index=False)
 
     def add(self, row, label: str):
-        if label not in LABELS:
-            raise ValueError(f"label must be one of {LABELS}")
+        if label not in self.labels:
+            raise ValueError(f"label must be one of {self.labels}")
         rec = {"key": row["key"], "label": label, "reviewer": self.reviewer,
                "labelled_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                "county": row["county"], "group": row["group"], "code": self.code}
@@ -265,7 +267,8 @@ def summarize(queue: pd.DataFrame, labels: pd.DataFrame, summaries: dict) -> dic
 
 # ── the review screen ──────────────────────────────────────────────────────────
 
-def review_ui(queue: gpd.GeoDataFrame, store: LabelStore, prefetch: int = 4, size_m: float = 500):
+def review_ui(queue: gpd.GeoDataFrame, store: LabelStore, prefetch: int = 4, size_m: float = 500,
+              question: str = "a poultry house?"):
     """Photo + buttons. Skips what this reviewer has already labelled; fetches the
     next photos in the background while you look at this one."""
     from concurrent.futures import ThreadPoolExecutor
@@ -286,8 +289,9 @@ def review_ui(queue: gpd.GeoDataFrame, store: LabelStore, prefetch: int = 4, siz
 
     img = W.Image(format="png", layout=W.Layout(width="100%", max_width="1040px"))
     status = W.HTML()
-    buttons = [W.Button(description=l, button_style=s, layout=W.Layout(width="150px"))
-               for l, s in zip(LABELS, ["success", "danger", "warning"])]
+    styles = ["success", "danger", "warning"] if store.labels == LABELS else ["info", "primary", "", "warning"]
+    buttons = [W.Button(description=l, button_style=s, layout=W.Layout(width="160px"))
+               for l, s in zip(store.labels, styles)]
     back = W.Button(description="← back", layout=W.Layout(width="90px"))
 
     def show():
@@ -300,7 +304,7 @@ def review_ui(queue: gpd.GeoDataFrame, store: LabelStore, prefetch: int = 4, siz
             return
         want(p)
         status.value = (f"<b>{p + 1} / {len(todo)}</b> &nbsp; Is the <span style='color:#d4b000'>yellow outline</span> "
-                        f"a poultry house? (left: 500 m around it, right: close-up)")
+                        f"{question} (left: 500 m around it, right: close-up)")
         try:
             img.value = futures[todo[p]].result()
         except Exception as e:     # imagery hiccup: say so, the reviewer can mark unsure
@@ -322,7 +326,7 @@ def review_ui(queue: gpd.GeoDataFrame, store: LabelStore, prefetch: int = 4, siz
             state["pos"] = state["history"].pop()
             show()
 
-    for b, l in zip(buttons, LABELS):
+    for b, l in zip(buttons, store.labels):
         b.on_click(on(l))
     back.on_click(on_back)
     ui = W.VBox([status, img, W.HBox(buttons + [back])])
