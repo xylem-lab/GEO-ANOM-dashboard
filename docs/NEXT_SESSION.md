@@ -4,6 +4,14 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-03 -- notebook 10 first result (Wicomico) + 07 section 7 (branch `experiment/finetune-check-2026-11-03`)
+
+- Branch = retraining branch + dairy-tags branch merged, so 07 has sections 6 and 7 and 10 reads the new labels. 07 and 10 now run from this branch.
+- Fine-tuned model (best.pt = epoch 1 of 15; val F1 flat ~0.93 after epoch 1, so the pick is noise), Wicomico, whole county: traced houses found 470 of 621 (published model 366, final v1 482); median IoU 0.81 (was 0.71). But 204 detections are not traced, not in final v1 and not in 07 -- unchecked. Treated as wrong, low-end precision ~0.74 -> fails the decision rule as it stands. Queen Anne's still running.
+- Look at 16 of the 204: ~8 real poultry houses missing from final v1, ~6 road segments, ~2 sandy creek beds. Run had `use_road_filter=False` (as in 05); the road filter would likely remove most roads.
+- `review.build_check_queue(run_root, counties, known)` (+ test): another run's detections nobody has checked, keys prefixed `finetune_v1:`. 07 section 7 labels them (204 + 20 blind controls) into `review/finetune_v1/labels_<REVIEWER>.csv` and saves `confirmed.geojson` / `rejected.geojson` there (drive only). 10 section 4 adds those to the 07 labels; rerun section 4 only.
+- Next: label section 7; rerun 10 section 4; try the road filter on the fine-tuned run; if retraining again, add the rejected ones (roads, sand) as hard negatives and use a harder validation set.
+
 ## 2026-11-03 -- notebook 10: fine-tune + test on held-out counties (branch `experiment/retraining-data-2026-11-01`)
 
 - `geo_anom/task1/finetune.py` + `notebooks/10_finetune.ipynb` + `tests/test_finetune.py`; `run_pipeline(checkpoint=...)` runs any checkpoint and records its path/SHA-256 in run_meta.

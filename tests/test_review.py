@@ -80,3 +80,30 @@ def test_poultry_labels_ignore_kind_files(tmp_path):
     R.LabelStore(tmp_path / "labels_UA.csv", "UA").add(row, "not poultry")
     R.LabelStore(tmp_path / "labels_kind_UA.csv", "UA", labels=R.KIND_LABELS).add(row, "dairy")
     assert R.load_labels(tmp_path).label.tolist() == ["not poultry"]
+
+
+def test_check_queue_keeps_only_unchecked(tmp_path, monkeypatch):
+    import json
+    import geopandas as gpd
+    from shapely.geometry import box
+    utm = R.UTM
+    out = tmp_path / "county_wicomico"; out.mkdir()
+    b = gpd.GeoDataFrame({"candidate_id": ["wicomico/t0_000", "wicomico/t0_001", "wicomico/t0_002", "wicomico/t0_003"],
+                          "tile_path": ["t0.tif"] * 4, "assigned_distance_m": [100.0] * 4},
+                         geometry=[box(0, 0, 150, 15),        # on a traced house -> control
+                                   box(0, 300, 150, 315),     # already in the final map -> left out
+                                   box(0, 600, 150, 615),     # new, unchecked
+                                   box(0, 900, 150, 915)],    # new, unchecked
+                         crs=utm).to_crs(4326)
+    b.to_file(out / "buildings.geojson", driver="GeoJSON")
+    (out / "run_meta.json").write_text("{}")
+    (out / "sites.json").write_text(json.dumps([{"tile_path": "t0.tif", "naip_item_ids": ["x"]}]))
+    cty = gpd.GeoDataFrame(geometry=[box(-5000, -5000, 5000, 5000)], crs=utm)
+    monkeypatch.setattr(R.region, "county_boundary", lambda n: cty)
+    gt = gpd.GeoDataFrame(geometry=[box(1, 1, 149, 14)], crs=utm)
+    known = gpd.GeoDataFrame(geometry=[box(2, 301, 148, 314)], crs=utm)
+    q = R.build_check_queue(tmp_path, ["Wicomico"], known=known, gt=gt, key_prefix="ft:")
+    assert sorted(q.key) == ["ft:wicomico/t0_000", "ft:wicomico/t0_002", "ft:wicomico/t0_003"]
+    assert q.set_index("key").loc["ft:wicomico/t0_000", "group"] == "control"
+    assert (q.naip_item_ids.map(list) == pd.Series([["x"]] * 3)).all()
+    assert R.build_check_queue(tmp_path, ["Queen Anne's"], gt=gt).empty      # county not run yet

@@ -9,6 +9,9 @@ Checking detections by eye: is this a poultry house or not? (notebook 07)
                                                  in blind to check the reviewer
     LabelStore(path, reviewer)   one CSV per reviewer on the shared drive; append-only,
                                  the latest label per detection wins (so "back" = relabel)
+    build_check_queue(run_root, counties, known)
+                                 another run's detections nobody has checked yet
+                                 (e.g. the fine-tuned model's test counties, notebook 10)
     review_ui(queue, store)      photo + buttons (ipywidgets), next photos prefetched
     load_labels / summarize      precision per county with unsure/unlabelled as a range,
                                  control agreement, agreement between reviewers
@@ -42,6 +45,37 @@ GROUPS = ["es_unmatched", "unverified", "control"]
 UTM = region.UTM
 
 
+def _county_detections(out: Path, n: str) -> gpd.GeoDataFrame:
+    """One county run's buildings inside the county (UTM), with the NAIP item IDs used."""
+    _, sites_run, bld = C.load_county_run(out)
+    b = C.county_buildings(bld, region.county_boundary(n))
+    if len(b):
+        items = {s["tile_path"]: s.get("naip_item_ids") for s in sites_run}
+        b["naip_item_ids"] = b["tile_path"].map(items)
+        b["county"] = n
+    return b
+
+
+def _finish_queue(parts: list, matched: list, rng, n_controls: int, key_prefix: str = "") -> gpd.GeoDataFrame:
+    """Mix in up to n_controls known-real detections, add lon/lat, keep the review columns, shuffle."""
+    if matched:
+        m = pd.concat(matched)
+        parts.append(m.iloc[rng.choice(len(m), size=min(n_controls, len(m)), replace=False)])
+    if not parts:
+        return gpd.GeoDataFrame(columns=["key", "county", "group", "geometry"], geometry="geometry", crs=UTM)
+    q = gpd.GeoDataFrame(pd.concat(parts, ignore_index=True), crs=UTM)
+    c = q.geometry.centroid.to_crs(4326)
+    q["lon"], q["lat"] = c.x, c.y
+    q = q.rename(columns={"candidate_id": "key"})
+    q["key"] = key_prefix + q["key"].astype(str)
+    keep = ["key", "county", "group", "area_m2", "length_m", "width_m", "mean_prob", "tile_path",
+            "naip_item_ids", "lon", "lat", "geometry"]
+    q = q[[k for k in keep if k in q.columns]]
+    if q["key"].duplicated().any():
+        raise ValueError("candidate_id is not unique across the queue")
+    return q.iloc[rng.permutation(len(q))].reset_index(drop=True)
+
+
 def build_queue(counties: list[str], root: Path | None = None, gt: gpd.GeoDataFrame | None = None,
                 n_controls: int = 40, seed: int = 0) -> gpd.GeoDataFrame:
     """Every detection to review, one row each, in a fixed random order."""
@@ -53,41 +87,53 @@ def build_queue(counties: list[str], root: Path | None = None, gt: gpd.GeoDataFr
     for n in counties:
         out = C.county_out(n, root)
         summary = json.loads((out / "county_summary.json").read_text())
-        _, sites_run, bld = C.load_county_run(out)
-        cty = region.county_boundary(n)
-        b = C.county_buildings(bld, cty)
+        b = _county_detections(out, n)
         if not len(b):
             continue
-        items = {s["tile_path"]: s.get("naip_item_ids") for s in sites_run}
-        b["naip_item_ids"] = b["tile_path"].map(items)
-        b["county"] = n
         if summary["accuracy"] is None:
             b["group"] = "unverified"
             parts.append(b)
         else:
-            hit = C.compare_with_ground_truth(b, gt, cty)["hit_b"]
+            hit = C.compare_with_ground_truth(b, gt, region.county_boundary(n))["hit_b"]
             # outside the area USGS traced (e.g. part of Cecil) a detection isn't "missing from
             # the tracing" -- it's simply unverified (same extent rule as evaluate.evaluate_run)
             traced = gt_area.contains(b.centroid)
             b["group"] = np.where(b.index.isin(hit), "control", np.where(traced, "es_unmatched", "unverified"))
             parts.append(b[b.group != "control"])
             matched.append(b[b.group == "control"])
-    rng = np.random.default_rng(seed)
-    if matched:
-        m = pd.concat(matched)
-        parts.append(m.iloc[rng.choice(len(m), size=min(n_controls, len(m)), replace=False)])
-    if not parts:
-        return gpd.GeoDataFrame(columns=["key", "county", "group", "geometry"], geometry="geometry", crs=UTM)
-    q = gpd.GeoDataFrame(pd.concat(parts, ignore_index=True), crs=UTM)
-    c = q.geometry.centroid.to_crs(4326)
-    q["lon"], q["lat"] = c.x, c.y
-    q = q.rename(columns={"candidate_id": "key"})
-    keep = ["key", "county", "group", "area_m2", "length_m", "width_m", "mean_prob", "tile_path",
-            "naip_item_ids", "lon", "lat", "geometry"]
-    q = q[[k for k in keep if k in q.columns]]
-    if q["key"].duplicated().any():
-        raise ValueError("candidate_id is not unique across the queue")
-    return q.iloc[rng.permutation(len(q))].reset_index(drop=True)
+    return _finish_queue(parts, matched, np.random.default_rng(seed), n_controls)
+
+
+def build_check_queue(run_root: Path, counties: list[str], known: gpd.GeoDataFrame | None = None,
+                      gt: gpd.GeoDataFrame | None = None, n_controls: int = 20, seed: int = 0,
+                      key_prefix: str = "") -> gpd.GeoDataFrame:
+    """Detections from another run (e.g. a fine-tuned model's test counties under
+    experiments/<run>/) that nobody has checked: not on a USGS-traced house and not touching
+    anything in `known` (the final map, 07-labelled outlines). Group "new_unchecked", with up
+    to n_controls detections on traced houses mixed in blind ("control").
+
+    Keys get `key_prefix` (e.g. "finetune_v1:") so they never clash with the published
+    run's candidate_ids, whose labels are already in labels_<reviewer>.csv."""
+    from geo_anom.task1.evaluate import load_ground_truth
+
+    gt = gt if gt is not None else load_ground_truth()
+    parts, matched = [], []
+    for n in counties:
+        out = C.county_out(n, run_root)
+        if not (out / "buildings.geojson").exists():
+            continue
+        b = _county_detections(out, n)
+        if not len(b):
+            continue
+        hit = C.compare_with_ground_truth(b, gt, region.county_boundary(n))["hit_b"]
+        seen = b.index.isin(hit)
+        if known is not None and len(known):
+            k = known.to_crs(UTM)[["geometry"]]
+            seen = seen | b.index.isin(gpd.sjoin(b[["geometry"]], k, predicate="intersects").index)
+        b["group"] = np.where(b.index.isin(hit), "control", "new_unchecked")
+        parts.append(b[~seen])
+        matched.append(b[b.index.isin(hit)])
+    return _finish_queue(parts, matched, np.random.default_rng(seed), n_controls, key_prefix)
 
 
 # ── photos ─────────────────────────────────────────────────────────────────────
