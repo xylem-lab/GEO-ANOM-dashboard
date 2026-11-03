@@ -261,12 +261,31 @@ def passes_tulbure_filter(stats: dict, dist_to_road_m: float | None,
 
 # --- Optional road filter (OSM) ------------------------------------------
 
-def load_road_union(tile_bbox: tuple, cache_dir: Path):
-    """OSM through-roads for a tile's bbox (WGS84), cached on disk."""
+def _overpass(query: str, timeout: int) -> dict | None:
+    """POST an Overpass query; None on a non-200 answer. Falls back to curl when this
+    Python's SSL can't talk to the server (old LibreSSL on some Macs)."""
+    import subprocess
+
     import requests
+
+    url = "https://overpass-api.de/api/interpreter"
+    agent = "geo-anom-research/0.1 (educational, rate-limited)"
+    try:
+        resp = requests.post(url, data={"data": query}, timeout=timeout, headers={"User-Agent": agent})
+        return resp.json() if resp.status_code == 200 else None
+    except requests.exceptions.SSLError:
+        r = subprocess.run(["curl", "-s", "-f", "-m", str(timeout), "-A", agent, "--data-urlencode",
+                            f"data={query}", url], capture_output=True)
+        return json.loads(r.stdout) if r.returncode == 0 and r.stdout else None
+
+
+def load_road_union(tile_bbox: tuple, cache_dir: Path, timeout: int = 30):
+    """OSM through-roads for a bbox (WGS84: west, south, east, north), cached on disk.
+    Public roads only (motorway ... residential): no driveways, farm lanes or service roads."""
     from shapely.geometry import LineString
     from shapely.ops import unary_union
 
+    cache_dir = Path(cache_dir)
     cache_dir.mkdir(parents=True, exist_ok=True)
     key = f"{tile_bbox[0]:.4f}_{tile_bbox[1]:.4f}_{tile_bbox[2]:.4f}_{tile_bbox[3]:.4f}.json"
     cache_file = cache_dir / key
@@ -275,13 +294,10 @@ def load_road_union(tile_bbox: tuple, cache_dir: Path):
     else:
         w, s, e, n = tile_bbox
         highway = "motorway|trunk|primary|secondary|tertiary|unclassified|residential"
-        query = f'[out:json][timeout:25];way["highway"~"^({highway})$"]({s},{w},{n},{e});out geom;'
-        session = requests.Session()
-        session.headers.update({"User-Agent": "geo-anom-research/0.1 (educational, rate-limited)"})
-        resp = session.post("https://overpass-api.de/api/interpreter", data={"data": query}, timeout=30)
-        if resp.status_code != 200:
+        query = f'[out:json][timeout:{max(25, timeout - 5)}];way["highway"~"^({highway})$"]({s},{w},{n},{e});out geom;'
+        data = _overpass(query, timeout)
+        if data is None:
             return None
-        data = resp.json()
         cache_file.write_text(json.dumps(data))
 
     lines = [
@@ -290,6 +306,26 @@ def load_road_union(tile_bbox: tuple, cache_dir: Path):
         if el.get("geometry") and len(el["geometry"]) >= 2
     ]
     return unary_union(lines) if lines else None
+
+
+def distance_to_roads(gdf, cache_dir: Path, pad_deg: float = 0.01, timeout: int = 180):
+    """Metres from each feature's centre to the nearest OSM public road (one Overpass
+    query for the whole area, cached). The same measure as the Tulbure road rule
+    (MIN_DIST_TO_ROAD_M), applied after a run instead of during it."""
+    import geopandas as gpd
+    import pandas as pd
+
+    from geo_anom.task1.region import UTM
+
+    if not len(gdf):
+        return pd.Series(dtype=float, index=gdf.index)
+    w, s, e, n = gdf.to_crs(4326).total_bounds
+    roads = load_road_union((round(w - pad_deg, 3), round(s - pad_deg, 3), round(e + pad_deg, 3), round(n + pad_deg, 3)),
+                            cache_dir, timeout=timeout)
+    if roads is None:
+        raise RuntimeError("could not get roads from OpenStreetMap (Overpass busy?) -- try again in a minute")
+    ru = gpd.GeoSeries([roads], crs=4326).to_crs(UTM).iloc[0]
+    return gdf.to_crs(UTM).centroid.distance(ru)
 
 
 # --- One site, end to end ------------------------------------------------

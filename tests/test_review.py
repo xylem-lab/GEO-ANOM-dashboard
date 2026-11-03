@@ -107,3 +107,24 @@ def test_check_queue_keeps_only_unchecked(tmp_path, monkeypatch):
     assert q.set_index("key").loc["ft:wicomico/t0_000", "group"] == "control"
     assert (q.naip_item_ids.map(list) == pd.Series([["x"]] * 3)).all()
     assert R.build_check_queue(tmp_path, ["Queen Anne's"], gt=gt).empty      # county not run yet
+
+
+def test_check_queue_skips_detections_on_roads(tmp_path, monkeypatch):
+    import json
+    import geopandas as gpd
+    from shapely.geometry import box
+    from geo_anom.task1 import detect
+    utm = R.UTM
+    out = tmp_path / "county_wicomico"; out.mkdir()
+    gpd.GeoDataFrame({"candidate_id": ["w/0", "w/1", "w/2"], "tile_path": ["t0.tif"] * 3, "assigned_distance_m": [1.0] * 3},
+                     geometry=[box(0, 0, 150, 15), box(0, 600, 150, 615), box(0, 900, 150, 915)],
+                     crs=utm).to_crs(4326).to_file(out / "buildings.geojson", driver="GeoJSON")
+    (out / "run_meta.json").write_text("{}")
+    (out / "sites.json").write_text(json.dumps([{"tile_path": "t0.tif"}]))
+    monkeypatch.setattr(R.region, "county_boundary", lambda n: gpd.GeoDataFrame(geometry=[box(-5000, -5000, 5000, 5000)], crs=utm))
+    # w/1 sits on a road (2 m); w/0 is a control near a road -- controls are never dropped
+    monkeypatch.setattr(detect, "distance_to_roads", lambda b, cache: pd.Series([3.0, 2.0, 250.0], index=b.index))
+    gt = gpd.GeoDataFrame(geometry=[box(1, 1, 149, 14)], crs=utm)
+    q = R.build_check_queue(tmp_path, ["Wicomico"], gt=gt, road_cache=tmp_path / "osm")
+    assert sorted(q.key) == ["w/0", "w/2"]
+    assert q.attrs["on_road"] == {"Wicomico": 1}

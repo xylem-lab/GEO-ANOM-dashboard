@@ -69,7 +69,7 @@ def _finish_queue(parts: list, matched: list, rng, n_controls: int, key_prefix: 
     q = q.rename(columns={"candidate_id": "key"})
     q["key"] = key_prefix + q["key"].astype(str)
     keep = ["key", "county", "group", "area_m2", "length_m", "width_m", "mean_prob", "tile_path",
-            "naip_item_ids", "lon", "lat", "geometry"]
+            "naip_item_ids", "road_m", "lon", "lat", "geometry"]
     q = q[[k for k in keep if k in q.columns]]
     if q["key"].duplicated().any():
         raise ValueError("candidate_id is not unique across the queue")
@@ -106,18 +106,23 @@ def build_queue(counties: list[str], root: Path | None = None, gt: gpd.GeoDataFr
 
 def build_check_queue(run_root: Path, counties: list[str], known: gpd.GeoDataFrame | None = None,
                       gt: gpd.GeoDataFrame | None = None, n_controls: int = 20, seed: int = 0,
-                      key_prefix: str = "") -> gpd.GeoDataFrame:
+                      key_prefix: str = "", road_cache: Path | None = None,
+                      min_road_m: float = 20.0) -> gpd.GeoDataFrame:
     """Detections from another run (e.g. a fine-tuned model's test counties under
     experiments/<run>/) that nobody has checked: not on a USGS-traced house and not touching
     anything in `known` (the final map, 07-labelled outlines). Group "new_unchecked", with up
     to n_controls detections on traced houses mixed in blind ("control").
 
     Keys get `key_prefix` (e.g. "finetune_v1:") so they never clash with the published
-    run's candidate_ids, whose labels are already in labels_<reviewer>.csv."""
+    run's candidate_ids, whose labels are already in labels_<reviewer>.csv.
+
+    With `road_cache` (a folder for OpenStreetMap roads), unchecked detections whose centre
+    is within `min_road_m` of a public road are left out -- the Tulbure road rule; they
+    are road surface, not buildings. Their number is in `queue.attrs["on_road"]`."""
     from geo_anom.task1.evaluate import load_ground_truth
 
     gt = gt if gt is not None else load_ground_truth()
-    parts, matched = [], []
+    parts, matched, on_road = [], [], {}
     for n in counties:
         out = C.county_out(n, run_root)
         if not (out / "buildings.geojson").exists():
@@ -131,9 +136,17 @@ def build_check_queue(run_root: Path, counties: list[str], known: gpd.GeoDataFra
             k = known.to_crs(UTM)[["geometry"]]
             seen = seen | b.index.isin(gpd.sjoin(b[["geometry"]], k, predicate="intersects").index)
         b["group"] = np.where(b.index.isin(hit), "control", "new_unchecked")
+        if road_cache is not None:
+            from geo_anom.task1.detect import distance_to_roads
+            b["road_m"] = distance_to_roads(b, road_cache)
+            road = (~seen) & (b["road_m"] < min_road_m)
+            on_road[n] = int(road.sum())
+            seen = seen | road
         parts.append(b[~seen])
         matched.append(b[b.index.isin(hit)])
-    return _finish_queue(parts, matched, np.random.default_rng(seed), n_controls, key_prefix)
+    q = _finish_queue(parts, matched, np.random.default_rng(seed), n_controls, key_prefix)
+    q.attrs["on_road"] = on_road
+    return q
 
 
 # ── photos ─────────────────────────────────────────────────────────────────────
