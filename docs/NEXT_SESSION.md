@@ -4,6 +4,14 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-03 -- notebook 10: fine-tune + test on held-out counties (branch `experiment/retraining-data-2026-11-01`)
+
+- `geo_anom/task1/finetune.py` + `notebooks/10_finetune.ipynb` + `tests/test_finetune.py`; `run_pipeline(checkpoint=...)` runs any checkpoint and records its path/SHA-256 in run_meta.
+- Training: start from the published weights; AdamW (decoder 3e-4, encoder 1e-4, cosine), cross-entropy (house x2) + 0.5 Dice, 255 ignored; 15 rounds x 4,000 augmented 256 px crops, 2023 windows drawn 2x; AMP on CUDA. Validation (Dorchester) house-pixel F1 every round, round 0 = published model; best.pt only if it beats it. Resumable (last.pt). In Colab the train/val windows are copied to local disk first.
+- Test: whole 05 pipeline on Wicomico + Queen Anne's (789 tiles, same 2023 item IDs; `TEST_TILES="traced"` = 229 tiles) vs notebook 05's run and the final v1 map; recall vs tracing, precision as a range using 07 labels (unchecked new detections shown).
+- Decision rule (set before running): adopt if more traced houses found and low-end precision no more than 1 pt below the published model's; then rerun 05 on the Eastern Shore with the new checkpoint, re-apply outline fixes, put the SHA-256 in env.py.
+- Dry run locally (12 windows, 1 round, 2 tiles) end to end OK. Published model on those val windows: house-pixel P 0.98 / R 0.55 (outlines cover too little roof -- consistent with the 78% outline finding).
+
 ## 2026-11-01 -- notebook 09: training data for fine-tuning (branch `experiment/retraining-data-2026-11-01`)
 
 - `geo_anom/task1/training.py` + `notebooks/09_training_data.ipynb` + `tests/test_training.py` (95 tests pass).
