@@ -4,6 +4,15 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-03 -- Task 1 closed: notebooks 11 + 12, frozen release (branch `task1/final-2026-11-03`)
+
+- Branch = every earlier branch (outline fixes, 09/10, dairy tags, finetune check) + `geo_anom/task1/final.py`, notebooks 11-12, `docs/TASK1_RESULTS.md`, tests. One PR into main replaces the stacked branches.
+- **11:** ladder rebuilt from the drive (05 runs, 08 tone-matched runs, a fresh SAM run saved to `Task1_results/final/sam_repair/`, 07 labels); reproduces map v1 exactly (2,823). Steps: published 0.670/0.990 -> rectangles (roof cover 79->91%) -> brightened 0.757 -> SAM 0.805 -> checked by eye 0.805/0.970 (recall / precision checked). Road rule tested, not adopted (-8 real houses). Fine-tuned model tested, not adopted.
+- **Frozen:** `Task1_results/final/release_v1/` (map, county table, ladder, validation, MANIFEST.json with SHA-256): 2,833 houses (2,807 Eastern Shore + 26 west), 6.98 km2 roof.
+- **12:** roof -> birds: on hand 42.6-84.4 M vs Census 2017 59.5 M / MDE 2017 69.2 M (r 0.96/0.98); capacity 60.8-93.7 M vs MDE permits 50.9 M (r 0.99); 149k birds/house/yr vs DCA 122k. County ranking fixed since step 2. Map error < Task 2 coefficient spread -> stop.
+- Overpass: retries added; road cache per county in `Task1_results/reference/osm_roads/`.
+- Next: Task 2 notebook reading release_v1 + an editable coefficient sheet (Rafi).
+
 ## 2026-11-03 -- notebook 10 first result (Wicomico) + 07 section 7 (branch `experiment/finetune-check-2026-11-03`)
 
 - Branch = retraining branch + dairy-tags branch merged, so 07 has sections 6 and 7 and 10 reads the new labels. 07 and 10 now run from this branch.

@@ -261,22 +261,39 @@ def passes_tulbure_filter(stats: dict, dist_to_road_m: float | None,
 
 # --- Optional road filter (OSM) ------------------------------------------
 
-def _overpass(query: str, timeout: int) -> dict | None:
-    """POST an Overpass query; None on a non-200 answer. Falls back to curl when this
-    Python's SSL can't talk to the server (old LibreSSL on some Macs)."""
+def _overpass(query: str, timeout: int, tries: int = 4, wait_s: float = 20.0) -> dict | None:
+    """POST an Overpass query; None if every try fails. Retries busy/rate-limited answers
+    (429, 504) with a growing wait. Falls back to curl when this Python's SSL can't talk to
+    the server (old LibreSSL on some Macs)."""
     import subprocess
+    import time
 
     import requests
 
     url = "https://overpass-api.de/api/interpreter"
     agent = "geo-anom-research/0.1 (educational, rate-limited)"
-    try:
-        resp = requests.post(url, data={"data": query}, timeout=timeout, headers={"User-Agent": agent})
-        return resp.json() if resp.status_code == 200 else None
-    except requests.exceptions.SSLError:
+    use_curl = False
+    for k in range(tries):
+        if k:
+            time.sleep(wait_s * k)
+        if not use_curl:
+            try:
+                resp = requests.post(url, data={"data": query}, timeout=timeout, headers={"User-Agent": agent})
+                if resp.status_code == 200:
+                    return resp.json()
+                continue
+            except requests.exceptions.SSLError:
+                use_curl = True
+            except requests.exceptions.RequestException:
+                continue
         r = subprocess.run(["curl", "-s", "-f", "-m", str(timeout), "-A", agent, "--data-urlencode",
                             f"data={query}", url], capture_output=True)
-        return json.loads(r.stdout) if r.returncode == 0 and r.stdout else None
+        if r.returncode == 0 and r.stdout:
+            try:
+                return json.loads(r.stdout)
+            except ValueError:
+                continue
+    return None
 
 
 def load_road_union(tile_bbox: tuple, cache_dir: Path, timeout: int = 30):
@@ -308,10 +325,11 @@ def load_road_union(tile_bbox: tuple, cache_dir: Path, timeout: int = 30):
     return unary_union(lines) if lines else None
 
 
-def distance_to_roads(gdf, cache_dir: Path, pad_deg: float = 0.01, timeout: int = 180):
+def distance_to_roads(gdf, cache_dir: Path, pad_deg: float = 0.01, timeout: int = 180, bounds=None):
     """Metres from each feature's centre to the nearest OSM public road (one Overpass
     query for the whole area, cached). The same measure as the Tulbure road rule
-    (MIN_DIST_TO_ROAD_M), applied after a run instead of during it."""
+    (MIN_DIST_TO_ROAD_M), applied after a run instead of during it. Pass `bounds` (WGS84
+    west, south, east, north; e.g. a county's) to fetch -- and cache -- one fixed area."""
     import geopandas as gpd
     import pandas as pd
 
@@ -319,7 +337,7 @@ def distance_to_roads(gdf, cache_dir: Path, pad_deg: float = 0.01, timeout: int 
 
     if not len(gdf):
         return pd.Series(dtype=float, index=gdf.index)
-    w, s, e, n = gdf.to_crs(4326).total_bounds
+    w, s, e, n = bounds if bounds is not None else gdf.to_crs(4326).total_bounds
     roads = load_road_union((round(w - pad_deg, 3), round(s - pad_deg, 3), round(e + pad_deg, 3), round(n + pad_deg, 3)),
                             cache_dir, timeout=timeout)
     if roads is None:
