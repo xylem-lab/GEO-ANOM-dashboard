@@ -39,6 +39,19 @@ Precision against the 2016/17 tracing alone is ~0.88 at every step; the differen
 | Cecil | 30 | 21 | 0.85 | 1.00 |
 | Frederick, Carroll, Washington, Harford | 26 | 18 | — | checked by eye |
 
+## Correcting for the houses the map misses (notebook 12, section 5)
+
+594 of 3,040 traced Eastern Shore houses have no outline. By eye, 21 of 24 of them still stand in 2023 (88%, Wilson 95% range 69–96%), so they are real misses: mostly older, smaller houses on the darkest 2023 flights (traced footprint 1,617 m² vs 2,503 m² for found houses).
+
+**Added roof = traced footprint of the missed houses × outline/footprint ratio k (0.96) × share still standing.** The low end also drops the 3% of outlines not confirmed. The 26 houses west of the Bay are not corrected (no tracing there).
+
+| | houses | roof km² |
+|---|---|---|
+| mapped | 2,833 | 6.98 |
+| **estimated real total** | **~3,350 (3,160–3,400)** | **7.79 (7.41–7.86), +12%** |
+
+Largest corrections: Worcester +15%, Somerset +14%, Wicomico +12%; smallest Caroline +6%. New houses missed outside the tracing are not added, so this is slightly low.
+
 ## Validation: does the mapped roof hold the birds Maryland reports?
 
 Roof → floor (0.90–0.96) → birds per ft² at placement (0.9–1.3) → share of days with birds (0.70–0.90) → flocks a year (5–6).
@@ -51,9 +64,9 @@ Roof → floor (0.90–0.96) → birds per ft² at placement (0.9–1.3) → sha
 
 ## Why Task 1 stops here
 
-1. The mapped roof reproduces three independent bird counts within the assumption ranges.
-2. The county ranking has not changed since step 2 (Spearman 1.00), so more houses would not reorder Task 2's surplus map.
-3. The remaining map error (at most ~20% of houses missed, ~3% unconfirmed) is smaller than Task 2's coefficient spread (litter N availability 31–70%, birds per house −28% / +33%, N/P per ton ±15–20%, litter per bird ±13%).
-4. The misses sit on the darkest 2023 flights; the two further methods tried did not beat the map. More houses need the next NAIP flight, not more model work.
+1. The mapped roof is the right size and has the right county pattern: three independent bird counts fall within the assumption ranges (r 0.96–0.99 across counties). This check is too loose to show completeness (its ranges are wider than the misses), so completeness is measured and corrected separately (above).
+2. The map misses about 1 in 5 traced houses; we measured the misses and correct the roof for them (+12%). Task 2 uses the corrected roof.
+3. The county ranking has not changed since step 2 (Spearman 1.00).
+4. The misses sit on the darkest 2023 flights; the two further methods tried did not beat the map. More houses need a brighter NAIP flight, not more model work.
 
 Caveats: one reviewer so far (a second-reviewer sample is set up in notebook 07 section 8); 2017 inventories vs 2023 photos; density and occupancy are literature ranges; the 26 western houses look like another kind of poultry or idle houses (Frederick: 0.57 M birds by roof vs 0.07 M in the Census) and are flagged for Task 2.
