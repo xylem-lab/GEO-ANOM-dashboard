@@ -319,6 +319,59 @@ def validation_table(final: gpd.GeoDataFrame, awtf: pd.DataFrame, permits: pd.Da
     return T
 
 
+# ── correcting the map for the houses it misses ───────────────────────────────
+
+# Missed traced houses checked by eye on 2023 photos (notebook 05/08 miss audit, 2026-10):
+# 21 of 24 were still standing, 3 were gone.
+STILL_STANDING = (21, 24)
+
+
+def miss_correction(mapped: gpd.GeoDataFrame, gt: gpd.GeoDataFrame, counties: list[str] = C.EASTERN_SHORE,
+                    standing: tuple = STILL_STANDING, unconfirmed: float = 0.03) -> pd.DataFrame:
+    """Estimated real roof and houses per county, adding the traced houses the map misses.
+
+    For each county (inside the USGS tracing):
+      missed            traced houses no outline touches
+      missed_area_m2    their traced footprint (missed houses are smaller than found ones)
+      k                 outline roof / traced footprint on the houses we do find (outline size)
+      s                 share of missed houses still standing in 2023 (by eye, Wilson 95% range)
+      added roof        = missed_area_m2 x k x s
+    low  = s at its lower bound, less the share of outlines not confirmed (`unconfirmed`)
+    high = s at its upper bound.  Houses outside the tracing (e.g. west of the Bay) are not corrected."""
+    from geo_anom.task1.review import wilson
+    k_, n_ = standing
+    s = {"low": wilson(k_, n_)[0], "mid": k_ / n_, "high": wilson(k_, n_)[1]}
+    m = mapped.to_crs(UTM).reset_index(drop=True)
+    rows = []
+    for n in counties:
+        cu = region.county_boundary(n).to_crs(UTM).unary_union
+        g_ = gt[gt.centroid.within(cu)].reset_index(drop=True)
+        mc = m[m.centroid.within(cu)]
+        j = gpd.sjoin(g_[["geometry"]], mc[["geometry"]], predicate="intersects")
+        hit = g_.index.isin(j.index)
+        area = g_.geometry.area
+        k = mc.loc[mc.index.isin(j.index_right)].geometry.area.sum() / area[hit].sum() if hit.any() else 1.0
+        r = {"county": n, "traced": len(g_), "found": int(hit.sum()), "missed": int((~hit).sum()),
+             "found_area_mean_m2": area[hit].mean(), "missed_area_mean_m2": area[~hit].mean(),
+             "missed_area_m2": area[~hit].sum(), "k": k,
+             "mapped_houses": len(mc), "mapped_roof_m2": mc.geometry.area.sum()}
+        rows.append(r)
+    T = pd.DataFrame(rows).set_index("county")
+    tot = T[["traced", "found", "missed", "missed_area_m2", "mapped_houses", "mapped_roof_m2"]].sum()
+    tot["found_area_mean_m2"] = (T.found_area_mean_m2 * T.found).sum() / T.found.sum()
+    tot["missed_area_mean_m2"] = T.missed_area_m2.sum() / T.missed.sum()
+    tot["k"] = (T.k * T.found).sum() / T.found.sum()
+    T.loc["Eastern Shore"] = tot
+    for lv, sv in s.items():
+        add = T.missed_area_m2 * T.k * sv
+        base = T.mapped_roof_m2 * (1 - unconfirmed) if lv == "low" else T.mapped_roof_m2
+        T[f"roof_m2_{lv}"] = base + add
+        T[f"houses_{lv}"] = T.mapped_houses * ((1 - unconfirmed) if lv == "low" else 1) + T.missed * sv
+    T["still_standing"] = f"{k_}/{n_} ({s['low']:.2f}-{s['high']:.2f})"
+    T["added_share_mid"] = T.roof_m2_mid / T.mapped_roof_m2 - 1
+    return T
+
+
 def freeze(files: dict, out: Path, meta: dict) -> dict:
     """Write MANIFEST.json (SHA-256 of every released file + run facts) next to the files."""
     man = {"made_at": pd.Timestamp.now().isoformat(timespec="seconds"), **meta,

@@ -59,3 +59,19 @@ def test_validation_table_totals():
     assert V.loc["Total", "houses"] == 3
     assert V.loc["A", "on_hand_mid"] == pytest.approx(V.loc["A", "capacity_mid"] * 0.80)
     assert np.isnan(V.loc["B", "mde_permitted"])
+
+
+def test_miss_correction_adds_standing_share_of_missed_footprint(monkeypatch):
+    cu = box(0, 0, 10_000, 10_000)
+    monkeypatch.setattr(FN.region, "county_boundary", lambda n: g(cu))
+    traced = g(box(0, 0, 100, 20), box(0, 100, 100, 120),        # found, 2,000 m2 each
+               box(0, 200, 50, 220))                              # missed, 1,000 m2
+    mapped = g(box(0, 0, 100, 20), box(0, 100, 100, 120))
+    T = FN.miss_correction(mapped, traced, counties=["X"], standing=(3, 4), unconfirmed=0.0)
+    r = T.loc["X"]
+    assert (r.found, r.missed) == (2, 1)
+    assert r.k == pytest.approx(1.0)
+    assert r.roof_m2_mid == pytest.approx(4000 + 1000 * 0.75)
+    assert r.houses_mid == pytest.approx(2.75)
+    assert r.roof_m2_low < r.roof_m2_mid < r.roof_m2_high
+    assert T.loc["Eastern Shore", "missed"] == 1
