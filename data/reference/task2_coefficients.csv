@@ -1,0 +1,18 @@
+name,low,mid,high,unit,step,status,source,note
+floor_share,0.90,0.93,0.96,share of roof footprint that is floor,supply,assumption,Task 1 notebook 12,eaves overhang
+birds_per_ft2,0.90,1.10,1.30,birds per ft2 of floor at placement,supply,literature,NCC Animal Welfare Guidelines (6.5-9 lb/ft2 at market weight); DCA 2024 average live weight 7.3 lb,Rafi to confirm for Delmarva
+flocks_per_year,5.0,5.5,6.0,flocks per house per year,supply,literature,Delmarva practice; DCA 2024 (601 M birds / 4909 houses = 122k birds per house per year),
+active_share,0.85,0.93,1.00,share of mapped houses holding birds,supply,assumption,Extension: rusted roofs are not a reliable idle sign; MDE permits cover 66% of mapped capacity (Task 1 notebook 12),to refine with the MDE active/idle cross-check
+litter_lb_per_bird,2.3,2.65,3.0,lb of litter (as removed) per bird marketed,supply,literature,UD Extension (Pokhrel & Shober 2024) 2.3-3 lb/bird; DLLC 2019 / Chesapeake Bay Program 1.5 t per 1000 birds per year; new Delmarva study (DCA 2026) ~25% below the Bay model rate,
+N_lb_per_ton,50.0,57.3,64.0,lb total N per wet ton of litter,supply,literature,DLLC 2019 citing CBP Poultry Litter Subcommittee 2015 (DE/MD lab records); UGA B1245 (Georgia) 64 lb as high end,
+P_lb_per_ton,17.0,20.2,23.0,lb P (elemental) per wet ton of litter,supply,literature,DLLC 2019 citing CBP 2015 (DE/MD); litter P fell ~16% 1995-2013 (phytase),x 2.29 = P2O5
+N_available,0.31,0.50,0.70,share of litter N available to the crop in year 1 (after losses),supply,literature,Tewolde et al. 2013 (31%); Kansas State 45-55%; Oklahoma State 50-60%; DLLC 2019 20% ammonia loss,Maryland Nutrient Management Manual value pending (Rafi)
+corn_N_lb_per_acre,140,165,190,lb N per acre (UMD recommendation by yield goal),demand,literature,UMD yield-goal recommendation ~1 lb N per bushel; Eastern Shore yield goals 140-190 bu/ac,Rafi: MD manual rate and yield goals
+corn_P2O5_lb_per_acre,50,60,70,lb P2O5 per acre (crop removal),demand,literature,~0.37 lb P2O5 per bushel x 140-190 bu/ac,
+soy_P2O5_lb_per_acre,32,40,48,lb P2O5 per acre (crop removal; soybeans take no N),demand,literature,~0.8 lb P2O5 per bushel x 40-60 bu/ac,
+small_grain_N_lb_per_acre,70,90,110,lb N per acre (wheat / barley),demand,literature,UMD small-grain recommendation (split spring N),Rafi to confirm
+small_grain_P2O5_lb_per_acre,30,35,40,lb P2O5 per acre (crop removal),demand,literature,~0.5 lb P2O5 per bushel x 60-80 bu/ac,DLLC: wheat/barley P rate was one of three contested points
+P_rate_multiplier,1.0,1.0,1.5,P applied on soils below the high-P threshold / crop removal,demand,contested,DLLC 2019: optimum (= removal) vs medium (build-up) category was not agreed (>6000 t difference),
+high_P_offset,-0.10,0.0,0.10,added to the share of cropland too high in P to take any (from the DLLC fit),demand,literature,DLLC 2019 Maryland fit: % cropland above FIV 150 = 1.632 x (lb litter P per cropland acre) + 10.294 (R2 0.89),no public field soil-test data
+hay_N_lb_per_acre,60,80,100,lb N per acre (grass hay; used only when hay is included),demand,assumption,UMD grass hay recommendation range,only in the "with hay" scenario
+hay_P2O5_lb_per_acre,25,35,45,lb P2O5 per acre (removal; used only when hay is included),demand,assumption,~12 lb P2O5 per ton of hay x 2-4 t/ac,only in the "with hay" scenario
