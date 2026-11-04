@@ -63,13 +63,6 @@ def test_tornado_lists_varying_coefficients(sheet):
     assert "litter_lb_per_bird" in set(t.coefficient) and (t.swing.diff().dropna() <= 1e-9).all()
 
 
-def test_translocate_nearest_first_and_unplaced():
-    d = pd.DataFrame([[0, 10, 50], [10, 0, 40], [50, 40, 0]], index=list("ABC"), columns=list("ABC"), dtype=float)
-    flows, un = NU.translocate(pd.Series({"A": 100.0, "B": -5, "C": -5}), pd.Series({"A": 0, "B": 60.0, "C": 30.0}), d)
-    f = flows.set_index("to").tons
-    assert f["B"] == pytest.approx(60) and f["C"] == pytest.approx(30) and un["A"] == pytest.approx(10)
-
-
 def test_within_matches_add_within():
     import geopandas as gpd
     from geo_anom.task2 import balance as B
@@ -85,14 +78,3 @@ def test_hay_scenario_adds_need(sheet):
     a = NU.crop_need({"corn": 100.0}, v)["N_need_lb"]
     b = NU.crop_need({"corn": 100.0, "hay": 50.0}, v)["N_need_lb"]
     assert b - a == pytest.approx(50 * 80)
-
-
-def test_cross_bay_trips_go_over_a_bridge():
-    import geopandas as gpd
-    from shapely.geometry import Point
-    # two places facing each other across the Bay, 20 km apart in a straight line
-    pts = gpd.GeoSeries([Point(-76.10, 38.40), Point(-76.33, 38.40)], crs=4326).to_crs("EPSG:32618")
-    g = gpd.GeoDataFrame({"n": ["east", "west"]}, geometry=pts.buffer(100), crs="EPSG:32618")
-    straight = NU.centroid_km(g, "n", road_factor=1).loc["east", "west"]
-    bridged = NU.centroid_km(g, "n", road_factor=1, east=["east"]).loc["east", "west"]
-    assert straight < 25 and bridged > 100

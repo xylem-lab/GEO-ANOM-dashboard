@@ -18,11 +18,10 @@ and a source for each; change the sheet, rerun, and every table and map follows.
     uncertainty                       every coefficient drawn from a triangular(low, mid, high)
                                       distribution; a place is a *robust* surplus when it is in
                                       surplus in >= 90% of draws
-    translocation                     surplus tons moved to counties with room, least ton-km
-                                      (linear program); what doesn't fit stays "unplaced"
 
-Delaware and Virginia cropland is not in the demand (Maryland data only), so "unplaced"
-litter is the part that would have to leave Maryland's cropland or go to other uses.
+Task 2 produces the numbers (supply, need, balance, uncertainty). How litter is moved --
+routes, costs, the most efficient transport -- is planned later from these numbers.
+Delaware and Virginia cropland is not in the demand (Maryland data only).
 """
 
 from __future__ import annotations
@@ -193,62 +192,6 @@ def tornado(roof_m2, acres: dict, sheet: pd.DataFrame, what: str = "surplus_tons
         r["swing"] = abs(r["high"] - r["low"])
         rows.append(r)
     return pd.DataFrame(rows).sort_values("swing", ascending=False).reset_index(drop=True)
-
-
-# ── translocation ──────────────────────────────────────────────────────────────
-
-def translocate(surplus: pd.Series, room: pd.Series, dist_km: pd.DataFrame) -> tuple:
-    """Least ton-km moves of surplus litter (tons, by place) into room (tons, by place).
-    Returns (flows: from, to, tons, km; unplaced tons by origin). Linear program (HiGHS)."""
-    from scipy.optimize import linprog
-
-    src = surplus[surplus > 0]
-    dst = room[room > 0]
-    if not len(src):
-        return pd.DataFrame(columns=["from", "to", "tons", "km"]), pd.Series(dtype=float)
-    ns, nd = len(src), len(dst)
-    D = dist_km.loc[src.index, dst.index].values if nd else np.zeros((ns, 0))
-    big = 10 * (D.max() if D.size else 1) + 1
-    # variables: flows (ns x nd) then unplaced (ns); cost = ton-km, unplaced at a high price
-    c = np.concatenate([D.ravel(), np.full(ns, big)])
-    A_eq = np.zeros((ns, ns * nd + ns)); b_eq = src.values
-    for i in range(ns):
-        A_eq[i, i * nd:(i + 1) * nd] = 1; A_eq[i, ns * nd + i] = 1
-    A_ub = np.zeros((nd, ns * nd + ns)); b_ub = dst.values
-    for j in range(nd):
-        A_ub[j, j:ns * nd:nd] = 1
-    res = linprog(c, A_ub=A_ub if nd else None, b_ub=b_ub if nd else None, A_eq=A_eq, b_eq=b_eq,
-                  bounds=(0, None), method="highs")
-    if not res.success:
-        raise RuntimeError(res.message)
-    f = res.x[:ns * nd].reshape(ns, nd)
-    rows = [{"from": src.index[i], "to": dst.index[j], "tons": f[i, j], "km": D[i, j]}
-            for i in range(ns) for j in range(nd) if f[i, j] > 1e-6]
-    return pd.DataFrame(rows), pd.Series(res.x[ns * nd:], index=src.index)
-
-
-# Where trucks cross between the Eastern Shore and the rest of Maryland (lon, lat)
-CROSSINGS = {"Chesapeake Bay Bridge": (-76.381, 38.993), "I-95 Susquehanna bridge": (-76.083, 39.563)}
-
-
-def centroid_km(gdf, name_col: str, road_factor: float = 1.25, east: list | None = None,
-                crossings: dict | None = None, utm: str = "EPSG:32618") -> pd.DataFrame:
-    """Distance between area centroids, km: straight line x a road factor. With `east` (the
-    names on the Eastern Shore), a trip between the two shores goes over the nearer crossing
-    (`crossings`, default the Bay Bridge and the I-95 bridge) instead of across the water."""
-    import geopandas as gpd
-
-    c = gdf.set_index(name_col).geometry.centroid
-    x, y = c.x.values, c.y.values
-    d = np.hypot(x[:, None] - x[None, :], y[:, None] - y[None, :])
-    if east is not None:
-        crossings = crossings or CROSSINGS
-        pts = gpd.GeoSeries(gpd.points_from_xy(*zip(*crossings.values())), crs=4326).to_crs(utm)
-        via = np.min([np.hypot(x - p.x, y - p.y)[:, None] + np.hypot(x - p.x, y - p.y)[None, :] for p in pts], axis=0)
-        e = np.isin(c.index, east)
-        other = e[:, None] != e[None, :]
-        d = np.where(other, via, d)
-    return pd.DataFrame(d / 1000 * road_factor, index=c.index, columns=c.index)
 
 
 def within(x: np.ndarray, ix, iy, radius_m: float, cell_m: float) -> np.ndarray:

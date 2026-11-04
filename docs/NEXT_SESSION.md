@@ -6,9 +6,9 @@ below it, which is kept for history.
 
 ## 2026-11-03 -- Task 2 draft v1: notebook 13 (branch `task2/nutrient-balance-2026-11-03`, on top of the Task 1 PR)
 
-- `geo_anom/task2/nutrients.py` (+ 12 tests): roof -> birds -> litter tons -> N/P2O5; CDL 2023 need (corn, soy, small grains, double crops; optional hay); P limit = DLLC 2019 MD fit of high-P cropland share + offset, P rate x multiplier; capacity = min(N-based, P-based) tons; Monte Carlo (triangular low/mid/high); tornado; county LP translocation (cross-Bay trips via Bay Bridge / I-95 bridge).
+- `geo_anom/task2/nutrients.py` (+ 12 tests): roof -> birds -> litter tons -> N/P2O5; CDL 2023 need (corn, soy, small grains, double crops; optional hay); P limit = DLLC 2019 MD fit of high-P cropland share + offset, P rate x multiplier; capacity = min(N-based, P-based) tons; Monte Carlo (triangular low/mid/high); tornado. Transport optimization taken out (2026-11-03, user): Task 2 = the numbers; moving litter is planned later.
 - Coefficients: `data/reference/task2_coefficients.csv` (defaults, sources) -> copied to `Task2_results/coefficients.csv` on the drive for Rafi; how-to in `docs/TASK2_COEFFICIENTS.md`. Outputs in `Task2_results/draft_v1/` with run_meta (sheet SHA-256, Task 1 manifest SHA-256, CDL SHA-256).
-- Draft v1 (defaults): ES litter ~515 kt/yr (294-835); robust surplus Wicomico, Somerset, Worcester (100% of draws); Caroline 70%; mid/upper Shore robust room; P limits everywhere; ES net -38 kt (mid) -> a distribution problem; translocation ~246 kt (135-315), ~110 km; biggest levers: P_rate_multiplier, birds_per_ft2, P_lb_per_ton, litter_lb_per_bird, high_P_offset.
+- Draft v1 (defaults): ES litter ~515 kt/yr (294-835); robust surplus Wicomico, Somerset, Worcester (100% of draws); Caroline 70%; every other county robust room; whole state: need 1.09 M acres (ES 707k, rest 387k), net -444 kt (room), ES -38 kt, rest -406 kt; P limits everywhere; biggest levers: P_rate_multiplier, birds_per_ft2, P_lb_per_ton, litter_lb_per_bird, high_P_offset.
 - Open: Delaware/Virginia cropland not in demand; CDL undercounts wheat; county high-P share on grid; N/P presentation rule still undecided (litter tons shown, N/P lb not printed).
 
 ## 2026-11-03 -- Task 1 closed: notebooks 11 + 12, frozen release (branch `task1/final-2026-11-03`)
