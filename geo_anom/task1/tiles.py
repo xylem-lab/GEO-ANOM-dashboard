@@ -310,3 +310,54 @@ def read_tile(path: Path) -> tuple[np.ndarray, dict]:
         meta = {"crs": src.crs, "transform": src.transform,
                 "bounds": src.bounds, "res_m": src.res[0]}
     return img, meta
+
+
+# --- Experimental: tone-match a 2023 tile to an older NAIP year (2026-10-28) ----------
+# Measured: the 2023 Maryland NAIP is much darker than 2021 (RGB mean ~71 vs ~100 on
+# the same places) and the U-Net misses houses on it (Eastern Shore recall 54% on the
+# 2023-06-02 flight vs 83% on 2023-05-27). Matching each band's histogram to the
+# 2021 photo of the same square recovered 6/26 sampled houses the run had missed,
+# with no loss on 11 it had found. The detector still sees only the 2023 pixels,
+# re-toned; the older photo is used for its brightness distribution only.
+
+def match_bands(img: np.ndarray, ref: np.ndarray) -> np.ndarray:
+    """Per-band quantile mapping of `img` onto `ref` (both HWC uint8), ignoring no-data (0)."""
+    out = img.copy()
+    for b in range(img.shape[2]):
+        a, r = img[..., b], ref[..., b]
+        va, vr = a[a > 0], r[r > 0]
+        if va.size < 100 or vr.size < 100:
+            continue
+        q = np.linspace(0, 100, 257)
+        src_q, ref_q = np.percentile(va, q), np.percentile(vr, q)
+        src_q = np.maximum.accumulate(src_q + np.arange(src_q.size) * 1e-6)   # strictly increasing for interp
+        mapped = np.interp(a.astype(np.float32), src_q, ref_q)
+        out[..., b] = np.where(a > 0, np.clip(np.round(mapped), 1, 255), 0).astype(np.uint8)
+    return out
+
+
+def reference_mosaic(lon: float, lat: float, year: str, buffer_km: float = BUFFER_KM,
+                     session: requests.Session | None = None):
+    """The `year` NAIP mosaic of the same square (CHW uint8, profile, items), or None."""
+    session = session or make_session()
+    bbox = BBox.from_point(lon=lon, lat=lat, buffer_km=buffer_km)
+    items = [i for i in find_naip_items(bbox, session) if i["properties"]["datetime"][:4] == str(year)]
+    chosen = select_items(items, bbox)
+    if not chosen:
+        return None
+    return build_mosaic(lon, lat, buffer_km=buffer_km, item_ids=[i["id"] for i in chosen], session=session)
+
+
+def fetch_tile_matched(site: dict, reference_year: str = "2021", session: requests.Session | None = None):
+    """Like fetch_tile, but the image is tone-matched to the `reference_year` photo
+    of the same square. Falls back to the unmatched tile if there is no reference."""
+    got = fetch_tile(site, session=session)
+    if got is None:
+        return None
+    img, meta, s = got
+    ref = reference_mosaic(site["lon"], site["lat"], reference_year, session=session)
+    if ref is None:
+        return img, meta, {**s, "tone_matched_to": None}
+    ref_img = np.moveaxis(ref[0], 0, -1)   # only its value distribution is used, so grids needn't agree
+    return match_bands(img, ref_img), meta, {**s, "tone_matched_to": str(reference_year),
+                                              "tone_reference_ids": [i["id"] for i in ref[2]]}

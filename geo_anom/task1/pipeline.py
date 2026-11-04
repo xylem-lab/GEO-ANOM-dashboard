@@ -141,6 +141,8 @@ def run_pipeline(
     log: Callable[[str], None] = print,
     stream: bool = False,
     max_workers: int = 8,
+    fetch: Callable | None = None,
+    checkpoint: Path | None = None,
 ) -> dict:
     """Run the whole mapping step and write every output. Returns run_meta.
 
@@ -150,7 +152,10 @@ def run_pipeline(
     `progress` wraps the per-tile loop (e.g. tqdm).
 
     `stream=True`: tiles are built in memory from Planetary Computer
-    (`max_workers` in parallel) and never written to disk.
+    (`max_workers` in parallel) and never written to disk. `fetch` replaces
+    tiles.fetch_tile for streaming (e.g. tiles.fetch_tile_matched).
+    `checkpoint` replaces the published model (e.g. a fine-tuned one from notebook 10);
+    its path and SHA-256 are recorded in run_meta.
 
     Resumable either way: each finished tile is saved as
     out_dir/tiles_done/<tile>.json; a re-run skips tiles already there.
@@ -187,7 +192,8 @@ def run_pipeline(
                 log(f"  no tile on disk for {s['farm_name']} (use download_missing or stream=True)")
         sites = ready
 
-    model, device = detect.load_model()
+    ckpt = Path(checkpoint) if checkpoint else detect.CHECKPOINT_PATH
+    model, device = detect.load_model(ckpt)
     todo = [s for s in sites if not shard_path(s).exists() and not no_imagery_path(s).exists()]
     log(f"Model on {device}; {len(sites)} tiles, {len(sites) - len(todo)} already done, "
         f"{len(todo)} to run{' (streaming)' if stream else ''}")
@@ -217,7 +223,7 @@ def run_pipeline(
             n += 1
             if not progress:
                 log(f"[{n}/{len(todo)}] {s['farm_name'][:45]:<45} raw={row['raw_candidates']:<4} kept={row['kept_in_tile']}")
-        stream_tiles(todo, tiles.fetch_tile, handle, max_workers=max_workers, progress=progress, log=log)
+        stream_tiles(todo, fetch or tiles.fetch_tile, handle, max_workers=max_workers, progress=progress, log=log)
     else:
         for s in (progress(todo) if progress else todo):
             row = process(s)
@@ -277,8 +283,8 @@ def run_pipeline(
         "manifest": str(manifest_path) if Path(manifest_path).exists() else f"in memory ({len(manifest)} sites)",
         "manifest_sha256": (sha256(Path(manifest_path)) if Path(manifest_path).exists() else
                             hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest()[:16]),
-        "checkpoint": str(detect.CHECKPOINT_PATH.relative_to(ROOT)),
-        "checkpoint_sha256": sha256(detect.CHECKPOINT_PATH),
+        "checkpoint": str(ckpt.relative_to(ROOT)) if ckpt.is_relative_to(ROOT) else str(ckpt),
+        "checkpoint_sha256": sha256(ckpt),
         "device": str(device),
         "environment": env.environment(),
         "filters": filters or {"farm": [], "county": []},
@@ -289,6 +295,7 @@ def run_pipeline(
         "species_overrides": detect.SPECIES_FILTER_OVERRIDES,
         "close_kernel": detect.CLOSE_KERNEL,
         "stream": stream,
+        "fetch": getattr(fetch, "__name__", None) if fetch else "fetch_tile",
         "tiles_requested": len(sites),
         "tiles": len(ready),
         "raw_candidates": len(candidates),

@@ -4,6 +4,95 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-03 -- Task 1 closed: notebooks 11 + 12, frozen release (branch `task1/final-2026-11-03`)
+
+- Branch = every earlier branch (outline fixes, 09/10, dairy tags, finetune check) + `geo_anom/task1/final.py`, notebooks 11-12, `docs/TASK1_RESULTS.md`, tests. One PR into main replaces the stacked branches.
+- **11:** ladder rebuilt from the drive (05 runs, 08 tone-matched runs, a fresh SAM run saved to `Task1_results/final/sam_repair/`, 07 labels); reproduces map v1 exactly (2,823). Steps: published 0.670/0.990 -> rectangles (roof cover 79->91%) -> brightened 0.757 -> SAM 0.805 -> checked by eye 0.805/0.970 (recall / precision checked). Road rule tested, not adopted (-8 real houses). Fine-tuned model tested, not adopted.
+- **Frozen:** `Task1_results/final/release_v1/` (map, county table, ladder, validation, MANIFEST.json with SHA-256): 2,833 houses (2,807 Eastern Shore + 26 west), 6.98 km2 roof.
+- **12:** roof -> birds: on hand 42.6-84.4 M vs Census 2017 59.5 M / MDE 2017 69.2 M (r 0.96/0.98); capacity 60.8-93.7 M vs MDE permits 50.9 M (r 0.99); 149k birds/house/yr vs DCA 122k. County ranking fixed since step 2. Map error < Task 2 coefficient spread -> stop.
+- SAM rule cross-check (11): rule chosen on one half of the Eastern Shore (F1, 75 rules) scored on the other: recall 0.789 / 0.825 vs 0.786 / 0.823 for the rule in use, no SAM 0.751 / 0.762 -> no tuning bias; map unchanged. Saved `Task1_results/final/sam_rule_cross_check.csv`.
+- 07 section 8: blind 100-photo sample (40 rechecks of section-2 labels, 30 brightened-photo + 30 SAM houses from release_v1) -> Cohen's kappa between reviewers and precision of the added houses (Wilson 95% CI); labels in `review/agreement/`. **To do: second reviewer labels all 100; UA labels the 60 new houses.**
+- Rerunning 11 + 12 gives byte-identical release files (same SHA-256).
+- Overpass: retries added; road cache per county in `Task1_results/reference/osm_roads/`.
+- Next: Task 2 notebook reading release_v1 + an editable coefficient sheet (Rafi).
+
+## 2026-11-03 -- notebook 10 first result (Wicomico) + 07 section 7 (branch `experiment/finetune-check-2026-11-03`)
+
+- Branch = retraining branch + dairy-tags branch merged, so 07 has sections 6 and 7 and 10 reads the new labels. 07 and 10 now run from this branch.
+- Fine-tuned model (best.pt = epoch 1 of 15; val F1 flat ~0.93 after epoch 1, so the pick is noise), Wicomico, whole county: traced houses found 470 of 621 (published model 366, final v1 482); median IoU 0.81 (was 0.71). But 204 detections are not traced, not in final v1 and not in 07 -- unchecked. Treated as wrong, low-end precision ~0.74 -> fails the decision rule as it stands. Queen Anne's still running.
+- Look at 16 of the 204 (CORRECTED: that sample was drawn without excluding final v1, so its ~8 "houses" were already in final v1; the rest were ~6 road segments, ~2 sandy creek beds). Run had `use_road_filter=False` (as in 05); the road filter would likely remove most roads.
+- `review.build_check_queue(run_root, counties, known)` (+ test): another run's detections nobody has checked, keys prefixed `finetune_v1:`. 07 section 7 labels them (204 + 20 blind controls) into `review/finetune_v1/labels_<REVIEWER>.csv` and saves `confirmed.geojson` / `rejected.geojson` there (drive only). 10 section 4 adds those to the 07 labels; rerun section 4 only.
+- Road rule after the fact (`detect.distance_to_roads`, one Overpass query per county, cached in `Task1_results/reference/osm_roads/`; curl fallback for old-SSL Pythons): centre within 20 m of an OSM public road -> dropped. Wicomico: 150 of the 204 unchecked dropped (all within 10 m, i.e. on the road), 1 of 567 known houses. Queen Anne's: 327 dropped. 07 section 7 now skips them (`SKIP_ROADS_M = 20`): queue = 54 + 49 unchecked + 20 controls. Notebook 10 section 4 applies it to every model (`ROAD_FILTER_M = 20`).
+- Both test counties, road rule on (834 traced): published 537 found (recall 0.64), precision 0.99; final v1 659 (0.79), 0.96-0.995; fine-tuned 656 (0.79) in one plain pass, precision 0.87-0.997 with 116 unchecked. Decision now rests on labelling 07 section 7.
+- 07 section 7 labelled (UA, 123): controls 20/20 poultry; new detections Wicomico 9 poultry / 40 not / 5 unsure, Queen Anne's 5 / 44 / 0.
+- Result (road rule on, both test counties, 834 traced): fine-tuned found 656 (recall 0.79) but precision 0.88-0.90 (87 wrong); published 0.64 / 0.99; final v1 0.79 / 0.96-0.995. **Fails the decision rule: final v1 stays.** 14 new houses confirmed (in review/finetune_v1/confirmed.geojson) can be added to the map; the 84 rejected + 477 on-road detections are hard negatives if fine-tuning is tried again.
+- Was: next: label section 7; rerun 10 section 4; if retraining again, add the rejected ones (roads, sand) as hard negatives and use a harder validation set.
+
+## 2026-11-03 -- notebook 10: fine-tune + test on held-out counties (branch `experiment/retraining-data-2026-11-01`)
+
+- `geo_anom/task1/finetune.py` + `notebooks/10_finetune.ipynb` + `tests/test_finetune.py`; `run_pipeline(checkpoint=...)` runs any checkpoint and records its path/SHA-256 in run_meta.
+- Training: start from the published weights; AdamW (decoder 3e-4, encoder 1e-4, cosine), cross-entropy (house x2) + 0.5 Dice, 255 ignored; 15 rounds x 4,000 augmented 256 px crops, 2023 windows drawn 2x; AMP on CUDA. Validation (Dorchester) house-pixel F1 every round, round 0 = published model; best.pt only if it beats it. Resumable (last.pt). In Colab the train/val windows are copied to local disk first.
+- Test: whole 05 pipeline on Wicomico + Queen Anne's (789 tiles, same 2023 item IDs; `TEST_TILES="traced"` = 229 tiles) vs notebook 05's run and the final v1 map; recall vs tracing, precision as a range using 07 labels (unchecked new detections shown).
+- Decision rule (set before running): adopt if more traced houses found and low-end precision no more than 1 pt below the published model's; then rerun 05 on the Eastern Shore with the new checkpoint, re-apply outline fixes, put the SHA-256 in env.py.
+- Dry run locally (12 windows, 1 round, 2 tiles) end to end OK. Published model on those val windows: house-pixel P 0.98 / R 0.55 (outlines cover too little roof -- consistent with the 78% outline finding).
+
+## 2026-11-02 -- notebook 07 labelled (UA, 719 detections); dairy tagging added
+
+- **Eastern Shore, detections not in the 2016/17 tracing (262):** 235 poultry houses (new since 2016/17), 16 not poultry, 11 unsure -> Eastern Shore precision of notebook 05 detections ~99% (per county 0.94-1.00 low end), vs 0.89 counted against the tracing alone. Controls 40/40 called poultry house.
+- **Outside the traced area (417):** 36 poultry houses (Frederick 21, Cecil 6, Queen Anne's 4, Carroll 2, Washington 2, Harford 1), 373 not poultry, 8 unsure. Confirms Extension: almost no poultry houses west of the Bay; the western detections were warehouses, roads, other barns.
+- User noted many of the "not poultry"/"unsure" detections are **dairy farms** -> new optional section 6 in notebook 07 (branch `experiment/dairy-tags-2026-11-02`): second pass over those, labels dairy / other livestock / not a farm building / unsure -> `review/labels_kind_<REVIEWER>.csv`, dairy candidates -> `review/dairy_candidates.geojson` (shared drive only). `load_labels` ignores the kind files.
+- Not reviewed: houses added after 05 by SAM repair / brightened rerun that aren't in the tracing (stay "ignored" in notebook 09).
+
+## 2026-11-01 -- notebook 09: training data for fine-tuning (branch `experiment/retraining-data-2026-11-01`)
+
+- `geo_anom/task1/training.py` + `notebooks/09_training_data.ipynb` + `tests/test_training.py` (95 tests pass).
+- 512 m windows, 1 m RGB+NIR, NAIP 2017/2021/2023. House windows centred on groups of USGS-traced houses (every house whole in one window); empty windows = random land squares with nothing within 300 m (0.5 per house window, per county and year). Plan: 4,368 windows (~3.7 GB) in `Task1_results/training/v1/`.
+- Masks 0/1/255: traced = house every year; our map's houses not in the tracing = ignored until 07; 07-confirmed = house in 2023 (ignored earlier); 07-rejected = not a house (hard negatives, any county); 2 m ignore band on traced roof edges; no-data ignored. Masks rebuild in minutes after 07 (`extra_windows` adds windows only for new 07 results; nothing re-downloaded).
+- Split by whole county: test Wicomico + Queen Anne's, val Dorchester, train the other six. Note: Robinson's model was trained on all of Delmarva on older photos, so the fair comparison in notebook 10 is on the held-out counties' 2023 photos.
+- Augmentation (`T.augment`): crops placed on a house 70% of the time, rot90/flip, scale 0.8-1.25, gain 0.6-1.25 (RGB) / 0.7-1.3 (NIR), gamma 0.8-1.25, contrast 0.75-1.25. `T.ChipDataset` serves 256 px crops for notebook 10.
+- Checked on a small run: masks sit on the roofs in all three years; sample RGB means 2017 ~102, 2021 ~109, 2023 ~83.
+- **Next:** run 09 on Colab (downloads ~1-2 h, resumable); user labels in 07 then re-runs 09 sections 1-4; write notebook 10 (fine-tune, keep the base checkpoint, score with the 05 pipeline on held-out counties' 2023 tiles).
+
+## 2026-10-30 -- plan to finish Task 1 and Task 2 (after the Extension meeting)
+
+**Final Eastern Shore map v1** (original detections + tone-matched rerun of notebook 08 + SAM repair with the strict shape rule, de-duplicated at 30% overlap, outlines as rectangles): **2,823 houses, 6.93 km2 roof**; recall 0.805, precision 0.881 in the traced area. Built by a scratchpad script so far (step 1 folds it into a notebook). Shared with the team for heatmaps (centres, roof area, 2 km grid, KMZ; no farm/permit details): `Task1_results/final_eastern_shore/heatmap_share/`. Rest of Maryland ~0 houses (Extension).
+
+**New facts from the meeting and sources** (meeting summary on the shared drive only -- it names people/farms; the Grade A milk producer list is confidential):
+- Action items: (a) why Caroline maps below Wicomico/Worcester (Extension expects Caroline largest next census: new construction there, closures in Wicomico) -- are idle houses counted? (b) cross-check mapped houses with MDE's public AFO data.
+- Houses 40x400 to 66x650 ft (ours average ~26,400 ft2). Rusted roofs are not a reliable idle sign.
+- DCA 2024: 601 M chickens, 4,909 houses on Delmarva -> ~122k birds/house/yr. Census 2022 MD-1 district: 60.3 M broilers on hand 31 Dec 2022 (district includes parts of 3 western-shore counties; no county split).
+- Litter: UD (Pokhrel & Shober 2024) 2.3-3 lb/bird, Delmarva >= 686k t/yr, recommends testing. UGA B1245 (Georgia, placeholder): 64/54/48 lb N/P2O5/K2O per ton, first-year N 0.5-0.7. NCC density 6.5-9.0 lb/ft2.
+
+**Task 1 -- five steps**
+1. Notebook 11: rebuild the final map v1 + county table from the run folders (rectangle, SAM strict, 08 union). Laptop.
+2. Notebook 12: active vs idle -- distance to MDE poultry permits (`AFO.csv.xlsx`, registry snapshot); per county: mapped, near a permit, permitted birds, Census birds. Answers action items (a)+(b). Farm-level output to the shared drive only.
+3. Notebook 13: history -- detector on NAIP 2013/15/17/18/21 (2011 optional); per house first year seen / still standing / gone. Shows Caroline construction and Wicomico closures; "present every year + near a permit" = strongest active signal. Colab.
+4. Retraining in the agreed order: **07 labels -> 09 training chips -> 10 fine-tune** (hold out whole counties incl. Wicomico) -> rerun the Shore = map v2.
+5. Western counties: decide from 07 labels whether any western detections are poultry houses.
+Done when: map v1 (reproducible) and v2 (retrained), each house tagged active/idle, first year seen, checked by eye or not.
+
+**Task 2 -- four steps**
+A. Rerun 06 on the final map, rectangle roof area, active houses only (coefficient-free index).
+B. Fill `B.COEFFICIENTS` from the sources above; still needed from Extension: Maryland litter nutrients per ton (or the CBP 2015 poultry litter report), Maryland first-year N availability, Maryland corn N/P recommendation per acre, county active-house counts / Census 2022 by county, Manure Transport Program totals by county.
+C. Surplus/deficit map at low/high coefficient ends; keep only cells robust across all -- the Task 2 Nutrient Balance Map (show surplus/deficit and ranking, not N/P totals).
+D. Translocation: distance/corridors from surplus to deficit cells (lower -> mid/upper Shore); add Delaware/Virginia cropland near the line.
+
+**Order:** now 1, 2, deck/brief to DCA 2024 + Census 2022, start 3 on Colab, labelling in 07 -> then A, 09/10, rerun -> then B-D when the Maryland numbers arrive.
+
+## 2026-10-28 (overnight) -- outlines, recovered houses, darker 2023 photos
+
+Branch `experiment/outline-and-fragment-fixes-2026-10-28`. Scored on the Eastern Shore against USGS tracing (3,040 houses), precision within the traced area as in 05.
+- **Outlines too small:** 2,038 matched pairs; median outline covers 78% of the traced roof (width right, ends and shaded parts cut; U-Net score on the missed roof ~0.34). Minimum rotated rectangle -> 97% of traced area (`refine.rectangle`). Eastern Shore roof 4.85 -> 5.97 km2 (+23%, 22-27% per county, so the 06 ranking holds; implied stocking ~9.6 -> ~7.8 birds/m2 of roof).
+- **Why houses are missed (1,002):** 627 had no candidate at all, 278 were short pieces rejected by the length filter, 65 merged with a neighbour. By eye, ~21/24 no-candidate misses still stand in 2023. Recall by NAIP flight: 54% (2023-06-02) to 83% (2023-05-27). Same missed houses on 2017/2018/2021 photos: ~50% found vs 4% on 2023. 2023 is darker (RGB ~71 vs ~100); matching bands to 2021 recovered 6/26, lost 0/11 (NIR matching alone: 0).
+- **Unmatched detections (286):** by eye 21/24 isolated ones are post-2016/17 farms -> real precision ~97-99%.
+- **SAM recovery (`refine.SamRefiner`, vit_b, 1 m pipeline imagery):** 1,080 rejected pieces in 713 windows (28 min laptop CPU). With recovered shapes required to be >= 80 m long, <= 25 m wide, aspect >= 5 (chosen on this tracing -- tuned, not held out): recall 0.670 -> 0.759 (+268 traced houses), precision 0.888 -> 0.886. Without the rule: recall 0.767 but 147 no-hit shapes, mostly sheds/warehouses by eye.
+- **Notebook 08 (Colab, running):** 428 tiles of the two worst flights containing traced houses, rerun with tiles tone-matched to 2021 (`tiles.fetch_tile_matched`) -> `Task1_results/experiments/tone_match_2021/`.
+- **Retraining plan (after the Extension meeting, 2026-10-28), in this order:**
+  1. **Notebook 07 first:** label the ~286 Eastern Shore detections missing from the tracing (new farms vs mistakes) and the western detections; these become the 2023 corrections and the "not poultry" examples. Training cannot start before this.
+  2. **Notebook 09:** training labels = USGS tracing minus houses torn down by 2023, plus 07-confirmed new farms; negatives = 07-rejected detections (warehouses, roads, airport); 256 px chips from NAIP 2017, 2018, 2021, 2023 with brightness/contrast/scale augmentation.
+  3. **Notebook 10:** fine-tune the Robinson U-Net (same architecture), hold out whole counties (incl. Wicomico) for the test; compare with today's model and the tone-matched run; new checkpoint versioned with SHA-256 in env.py.
+- Scripts for the measurements: session scratchpad `outline/` (s1 pairs, s4 misses, s6 by flight, s7 years, s8 band matching, s9 SAM recovery, s10 scoring) -- to be folded into a notebook.
+
 ## 2026-10-27 — Planetary Computer 504s (St. Mary's): requests now retried
 
 - `FAILED ... HTTPError: 504 Server Error: Gateway Timeout for url: .../stac/v1/search` on some St. Mary's tiles: Microsoft's STAC search was overloaded. Not our bug; failed tiles were skipped and a re-run picks them up.
