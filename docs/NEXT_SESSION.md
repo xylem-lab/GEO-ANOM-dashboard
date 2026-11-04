@@ -10,6 +10,9 @@ below it, which is kept for history.
 - **11:** ladder rebuilt from the drive (05 runs, 08 tone-matched runs, a fresh SAM run saved to `Task1_results/final/sam_repair/`, 07 labels); reproduces map v1 exactly (2,823). Steps: published 0.670/0.990 -> rectangles (roof cover 79->91%) -> brightened 0.757 -> SAM 0.805 -> checked by eye 0.805/0.970 (recall / precision checked). Road rule tested, not adopted (-8 real houses). Fine-tuned model tested, not adopted.
 - **Frozen:** `Task1_results/final/release_v1/` (map, county table, ladder, validation, MANIFEST.json with SHA-256): 2,833 houses (2,807 Eastern Shore + 26 west), 6.98 km2 roof.
 - **12:** roof -> birds: on hand 42.6-84.4 M vs Census 2017 59.5 M / MDE 2017 69.2 M (r 0.96/0.98); capacity 60.8-93.7 M vs MDE permits 50.9 M (r 0.99); 149k birds/house/yr vs DCA 122k. County ranking fixed since step 2. Map error < Task 2 coefficient spread -> stop.
+- SAM rule cross-check (11): rule chosen on one half of the Eastern Shore (F1, 75 rules) scored on the other: recall 0.789 / 0.825 vs 0.786 / 0.823 for the rule in use, no SAM 0.751 / 0.762 -> no tuning bias; map unchanged. Saved `Task1_results/final/sam_rule_cross_check.csv`.
+- 07 section 8: blind 100-photo sample (40 rechecks of section-2 labels, 30 brightened-photo + 30 SAM houses from release_v1) -> Cohen's kappa between reviewers and precision of the added houses (Wilson 95% CI); labels in `review/agreement/`. **To do: second reviewer labels all 100; UA labels the 60 new houses.**
+- Rerunning 11 + 12 gives byte-identical release files (same SHA-256).
 - Overpass: retries added; road cache per county in `Task1_results/reference/osm_roads/`.
 - Next: Task 2 notebook reading release_v1 + an editable coefficient sheet (Rafi).
 

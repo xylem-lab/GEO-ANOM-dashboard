@@ -146,8 +146,9 @@ def sam_recover(out_dir: Path, counties: list[str] = C.EASTERN_SHORE, root: Path
     return rec_f
 
 
-def load_sam(path: Path, rule: dict = SAM_RULE) -> gpd.GeoDataFrame:
-    """SAM shapes that pass the strict house rule, best score first."""
+def load_sam(path: Path, rule: dict | None = SAM_RULE) -> gpd.GeoDataFrame:
+    """SAM shapes with length / width / aspect, best score first; only those passing `rule`
+    (None = all of them)."""
     from geo_anom.task1.detect import polygon_stats
 
     rec = [json.loads(line) for line in open(path)]
@@ -155,10 +156,14 @@ def load_sam(path: Path, rule: dict = SAM_RULE) -> gpd.GeoDataFrame:
                          geometry="geometry", crs=UTM)
     if not len(S):
         return S
-    st = [polygon_stats(g) for g in S.geometry]
-    ok = [x["length_m"] >= rule["length_min"] and x["width_m"] <= rule["width_max"] and x["aspect"] >= rule["aspect_min"]
-          for x in st]
-    return S[ok].sort_values("sam_score", ascending=False, kind="stable")
+    st = pd.DataFrame([polygon_stats(g) for g in S.geometry], index=S.index)
+    S["length_m"], S["width_m"], S["aspect"] = st.length_m, st.width_m, st.aspect
+    S = S.sort_values("sam_score", ascending=False, kind="stable")
+    return passes(S, rule) if rule else S
+
+
+def passes(S: gpd.GeoDataFrame, rule: dict) -> gpd.GeoDataFrame:
+    return S[(S.length_m >= rule["length_min"]) & (S.width_m <= rule["width_max"]) & (S.aspect >= rule["aspect_min"])]
 
 
 # ── building the layers ────────────────────────────────────────────────────────
@@ -179,12 +184,8 @@ def rect(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     return out
 
 
-def build_steps(n: str, sam: gpd.GeoDataFrame, bright_root: Path | None, road_cache: Path | None = None,
-                rejected: gpd.GeoDataFrame | None = None, confirmed_new: gpd.GeoDataFrame | None = None,
-                root: Path | None = None) -> dict:
-    """The layers (UTM, column `source`) for county `n`: STEPS, plus TESTED when `road_cache`
-    is given. Steps 1-3 reproduce final map v1 exactly: new shapes are matched against the
-    raw outlines, rectangles drawn at the end."""
+def detector_and_bright(n: str, bright_root: Path | None, root: Path | None = None):
+    """(published model's outlines, + brightened-photo houses) for county `n`, raw outlines."""
     cty = region.county_boundary(n); cu = cty.to_crs(UTM).unary_union
     _, _, bld = C.load_county_run(C.county_out(n, root))
     O = C.county_buildings(bld, cty)[["geometry"]].reset_index(drop=True).assign(source="detector")
@@ -192,8 +193,18 @@ def build_steps(n: str, sam: gpd.GeoDataFrame, bright_root: Path | None, road_ca
     if bright_root is not None and (Path(bright_root) / C.county_out(n).name / "buildings.geojson").exists():
         t = gpd.read_file(Path(bright_root) / C.county_out(n).name / "buildings.geojson").to_crs(UTM)
         T = t[t.centroid.within(cu)][["geometry"]]
+    return O, add_new(O, T, "brightened photo")
+
+
+def build_steps(n: str, sam: gpd.GeoDataFrame, bright_root: Path | None, road_cache: Path | None = None,
+                rejected: gpd.GeoDataFrame | None = None, confirmed_new: gpd.GeoDataFrame | None = None,
+                root: Path | None = None) -> dict:
+    """The layers (UTM, column `source`) for county `n`: STEPS, plus TESTED when `road_cache`
+    is given. Steps 1-3 reproduce final map v1 exactly: new shapes are matched against the
+    raw outlines, rectangles drawn at the end."""
+    cty = region.county_boundary(n); cu = cty.to_crs(UTM).unary_union
+    O, OT = detector_and_bright(n, bright_root, root)
     S = sam[sam.centroid.within(cu)] if len(sam) else sam
-    OT = add_new(O, T, "brightened photo")
     OTS = add_new(OT, S, "SAM repair")
     L = {"published model": O, "rectangle outlines": rect(O), "brightened photo": rect(OT), "SAM repair": rect(OTS)}
     cur = L["SAM repair"]
@@ -314,3 +325,57 @@ def freeze(files: dict, out: Path, meta: dict) -> dict:
            "files": {name: env.sha256(Path(p)) for name, p in files.items()}}
     (Path(out) / "MANIFEST.json").write_text(json.dumps(man, indent=2, default=str))
     return man
+
+
+# ── the SAM shape rule, chosen fairly ──────────────────────────────────────────
+
+FOLDS = {"A": ["Worcester", "Caroline", "Dorchester", "Kent", "Cecil"],
+         "B": ["Wicomico", "Somerset", "Queen Anne's", "Talbot"]}
+RULE_GRID = {"length_min": [60, 70, 80, 90, 100], "width_max": [20, 25, 30], "aspect_min": [3, 4, 5, 6, 7]}
+
+
+def sam_rule_scores(sam_all: gpd.GeoDataFrame, bright_root: Path | None, gt: gpd.GeoDataFrame,
+                    confirmed: gpd.GeoDataFrame | None = None, counties: list[str] = C.EASTERN_SHORE,
+                    grid: dict = RULE_GRID, root: Path | None = None) -> pd.DataFrame:
+    """Every rule in `grid` (plus 'no SAM') scored per county, as step 3 would be with it:
+    one row per (rule, county) with traced / found / detections / on_traced / confirmed."""
+    import itertools
+    rules = [None] + [dict(zip(grid, v)) for v in itertools.product(*grid.values())]
+    rows = []
+    for n in counties:
+        cu = region.county_boundary(n).to_crs(UTM).unary_union
+        gtc = gt[gt.centroid.within(cu)].reset_index(drop=True)
+        ext = traced_extent(gtc, cu)
+        _, OT = detector_and_bright(n, bright_root, root)
+        Sn = sam_all[sam_all.centroid.within(cu)]
+        for r in rules:
+            lay = rect(add_new(OT, passes(Sn, r), "SAM repair")) if r else rect(OT)
+            s = score(lay, gtc, ext, confirmed)
+            rows.append({"rule": "no SAM" if r is None else f"L>={r['length_min']} W<={r['width_max']} A>={r['aspect_min']}",
+                         **(r or {}), "county": n, "traced": len(gtc), **s})
+    return pd.DataFrame(rows)
+
+
+def summarize_rules(scores: pd.DataFrame, counties: list[str]) -> pd.DataFrame:
+    """Per rule over `counties`: recall, precision (checked by eye), F1."""
+    d = scores[scores.county.isin(counties)].groupby("rule", sort=False)[
+        ["traced", "found", "detections", "on_traced", "confirmed"]].sum()
+    d["recall"] = d.found / d.traced
+    d["precision_checked"] = (d.on_traced + d.confirmed) / d.detections
+    d["f1"] = 2 * d.recall * d.precision_checked / (d.recall + d.precision_checked)
+    return d
+
+
+def cross_validate_rule(scores: pd.DataFrame, folds: dict = FOLDS, current: str = "L>=80 W<=25 A>=5") -> pd.DataFrame:
+    """Choose the rule with the best F1 on one fold, report it on the other; next to the rule
+    in use (chosen on all counties), no SAM, and the best rule in hindsight on the test fold."""
+    rows = []
+    for test, tune in [("B", "A"), ("A", "B")]:
+        chosen = summarize_rules(scores, folds[tune]).f1.idxmax()
+        on_test = summarize_rules(scores, folds[test])
+        for label, rule in [("no SAM", "no SAM"), (f"chosen on fold {tune}", chosen), ("rule in use", current),
+                            ("best on test fold (hindsight)", on_test.f1.idxmax())]:
+            r = on_test.loc[rule]
+            rows.append({"test fold": f"{test}: " + ", ".join(folds[test]), "rule from": label, "rule": rule,
+                         "recall": r.recall, "precision_checked": r.precision_checked, "f1": r.f1, "found": int(r.found)})
+    return pd.DataFrame(rows)

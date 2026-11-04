@@ -18,6 +18,8 @@ Eastern Shore, scored against the USGS hand-traced houses (Soroka & Duren 2020, 
 | tested, not adopted: road rule (20 m) | 2,810 | 6.92 | 0.802 | 0.966 | 92% |
 | tested, not adopted: fine-tuned U-Net (held-out Wicomico + Queen Anne's) | | | 0.787 (map v1: 0.790) | 0.88–0.90 (map v1: 0.96–0.995) | |
 
+The SAM shape rule holds on counties it was not chosen on: picked on one half of the Eastern Shore and scored on the other, recall 0.789 / 0.825 vs 0.786 / 0.823 for the rule in use (no SAM: 0.751 / 0.762).
+
 Precision against the 2016/17 tracing alone is ~0.88 at every step; the difference is mostly houses built since.
 
 ## Frozen map
@@ -54,4 +56,4 @@ Roof → floor (0.90–0.96) → birds per ft² at placement (0.9–1.3) → sha
 3. The remaining map error (at most ~20% of houses missed, ~3% unconfirmed) is smaller than Task 2's coefficient spread (litter N availability 31–70%, birds per house −28% / +33%, N/P per ton ±15–20%, litter per bird ±13%).
 4. The misses sit on the darkest 2023 flights; the two further methods tried did not beat the map. More houses need the next NAIP flight, not more model work.
 
-Caveats: SAM shape rule chosen on the same tracing; one reviewer; 2017 inventories vs 2023 photos; density and occupancy are literature ranges; the 26 western houses look like another kind of poultry or idle houses (Frederick: 0.57 M birds by roof vs 0.07 M in the Census) and are flagged for Task 2.
+Caveats: one reviewer so far (a second-reviewer sample is set up in notebook 07 section 8); 2017 inventories vs 2023 photos; density and occupancy are literature ranges; the 26 western houses look like another kind of poultry or idle houses (Frederick: 0.57 M birds by roof vs 0.07 M in the Census) and are flagged for Task 2.

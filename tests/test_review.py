@@ -128,3 +128,25 @@ def test_check_queue_skips_detections_on_roads(tmp_path, monkeypatch):
     q = R.build_check_queue(tmp_path, ["Wicomico"], gt=gt, road_cache=tmp_path / "osm")
     assert sorted(q.key) == ["w/0", "w/2"]
     assert q.attrs["on_road"] == {"Wicomico": 1}
+
+
+def test_agreement_queue_mixes_new_houses_and_rechecks():
+    import geopandas as gpd
+    from shapely.geometry import box
+    utm = R.UTM
+    rel = gpd.GeoDataFrame({"house_id": [f"MD-{i:05d}" for i in range(6)], "county": "Wicomico",
+                            "source": ["detector", "brightened photo", "brightened photo", "SAM repair", "SAM repair", "SAM repair"]},
+                           geometry=[box(0, i * 50, 150, i * 50 + 15) for i in range(6)], crs=utm)
+    q07 = gpd.GeoDataFrame({"key": ["a", "b", "c", "d"], "county": "Wicomico", "group": ["es_unmatched"] * 3 + ["control"]},
+                           geometry=[box(1000, i * 50, 1150, i * 50 + 15) for i in range(4)], crs=utm)
+    lab = pd.DataFrame({"key": ["a", "b", "c", "d"], "label": ["poultry house", "not poultry", "unsure", "poultry house"],
+                        "reviewer": "UA", "labelled_at": "2026-11-01"})
+    q = R.build_agreement_queue(rel, q07, lab, n_new=2, n_old=4)
+    assert q.group.value_counts().to_dict() == {"brightened photo": 2, "SAM repair": 2, "07 recheck": 2}
+    assert set(q[q.group == "07 recheck"].key) == {"a", "b"}          # unsure and controls left out
+    assert q.key.str.startswith("release_v1:").sum() == 4
+
+
+def test_wilson_interval():
+    lo, hi = R.wilson(27, 30)
+    assert 0.73 < lo < 0.75 and 0.96 < hi < 0.98

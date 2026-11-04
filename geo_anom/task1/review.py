@@ -392,3 +392,50 @@ def review_ui(queue: gpd.GeoDataFrame, store: LabelStore, prefetch: int = 4, siz
     show()
     display(ui)
     return ui
+
+
+# ── second reviewer: agreement + precision of houses nobody checked ────────────
+
+def build_agreement_queue(release: gpd.GeoDataFrame, queue07: gpd.GeoDataFrame, labels07: pd.DataFrame,
+                          n_new: int = 30, n_old: int = 40, seed: int = 0,
+                          new_sources: tuple = ("brightened photo", "SAM repair")) -> gpd.GeoDataFrame:
+    """A blind sample for a second reviewer (or the first, for the new houses):
+
+      07 recheck          n_old detections already labelled in sections 2-3, half called poultry
+                          house, half not -> agreement between reviewers (Cohen's kappa)
+      brightened photo /  n_new houses of each kind from the frozen map; nobody has looked at
+      SAM repair          them -> their precision
+
+    `release` = notebook 11's frozen map (house_id, county, source, geometry)."""
+    rng = np.random.default_rng(seed)
+    rel = release.to_crs(UTM)
+    parts = []
+    for src in new_sources:
+        g = rel[rel.source == src]
+        g = g.iloc[rng.choice(len(g), size=min(n_new, len(g)), replace=False)]
+        parts.append(gpd.GeoDataFrame({"key": "release_v1:" + g.house_id, "county": g.county, "group": src},
+                                      geometry=g.geometry.values, crs=UTM))
+    lab = latest(labels07)
+    lab = lab[lab.label.isin(["poultry house", "not poultry"])].drop_duplicates("key")
+    q07 = queue07[queue07.group != "control"].merge(lab[["key", "label"]], on="key")
+    for want in ["poultry house", "not poultry"]:
+        g = q07[q07.label == want]
+        g = g.iloc[rng.choice(len(g), size=min(n_old // 2, len(g)), replace=False)]
+        parts.append(gpd.GeoDataFrame(g.drop(columns=["label", "group"]).assign(group="07 recheck"), crs=UTM))
+    q = gpd.GeoDataFrame(pd.concat(parts, ignore_index=True), crs=UTM)
+    c = q.geometry.centroid.to_crs(4326)
+    q["lon"], q["lat"] = c.x, c.y
+    keep = ["key", "county", "group", "tile_path", "naip_item_ids", "lon", "lat", "geometry"]
+    q = q[[k for k in keep if k in q.columns]]
+    return q.iloc[rng.permutation(len(q))].reset_index(drop=True)
+
+
+def wilson(k: int, n: int, z: float = 1.96) -> tuple:
+    """95% Wilson interval for k successes out of n."""
+    if not n:
+        return (np.nan, np.nan)
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return (c - h, c + h)
