@@ -11,7 +11,8 @@ below it, which is kept for history.
 - **Sample drawn once** (seed 20261105, commit f4682f5): S1 100 / S2 150 / S3 56 (all) / S4 150 objects, S6 150/150/100 cells; pilot 75 (25 each S1, S2, S4); calibration 30 (tail of the S1/S2/S4 orders); rest = reserve. Saved on the drive only: `Task1_results/accuracy_v1/frame.geojson` (SHA-256 d649666f...) + `sample_meta.json`. Notebook refuses to redraw and warns if protocol/release/tracing change.
 - Blind photos: NAIP **2023 only** (the tile fetcher otherwise takes the newest year), crosshair, no outline; windowed COG reads (cells 3-7 s instead of 1-6 min with `build_mosaic`).
 - Defaults until decided: S2 sample 150 (not census); S5 footprints off (Microsoft download not approved yet); under construction = not standing; split cells take the larger count.
-- **No accuracy number from 14 yet.** Next: choose the second interpreter (Jenny Ha / Pradeep) and set `INTERPRETERS`; both label calibration (30) -> discuss -> pilot (75) -> kappa gate >= 0.8 -> main (~385) -> cells (400) -> adjudicate -> step 9. Then rewrite 14's "What this shows" and the audit table from the outputs.
+- Second interpreter: **Monica** (decided 2026-11-05; protocol v1.1 amendment, recorded in `sample_meta.json`; notebook default `INTERPRETERS = ["UA", "Monica"]`).
+- **No accuracy number from 14 yet.** Next: UA and Monica both label calibration (30) -> discuss -> pilot (75) -> kappa gate >= 0.8 -> main (~385) -> cells (400) -> adjudicate -> step 9. Then rewrite 14's "What this shows" and the audit table from the outputs.
 - Still open: adjudicator (Nakalembe / Extension); approve S5 Microsoft footprints download.
 
 ## 2026-11-05 -- Project reset: audit + finishing plan (branch `docs/fresh-start-2026-11-05`)

@@ -1,9 +1,9 @@
-# Task 1 accuracy assessment: protocol and sample design (v1, frozen 2026-11-05)
+# Task 1 accuracy assessment: protocol and sample design (v1.1, 2026-11-05)
 
 Status: **v1, approved 2026-11-05 and frozen before the sample was drawn.** Its
 SHA-256 is written into `sample_meta.json` and every result of notebook 14. Any
 later change gets a new version (v2, ...), the reason, and is reported. Changes
-from the reviewed draft v0 are listed in §8.
+from the reviewed draft v0 are listed in §8; amendments after the draw in §9.
 
 Notebook: `notebooks/14_accuracy_assessment.ipynb`. Reusable code:
 `geo_anom/task1/accuracy.py`. Labels and samples: shared drive
@@ -76,12 +76,13 @@ neutral colour). Question: *how many standing poultry houses have their centre
 inside the square and no outline?* Answer 0–5 or 6+, and say where in the note
 (e.g. "NE ninth, 3 houses"). Photo: `accuracy.render_cell`.
 
-**Interpreters.** Two, independent and blind: Umesh Adari + one of Jenny Ha /
-Pradeep (decision open). Each gets the full sample, own random order, strata
+**Interpreters.** Two, independent and blind: Umesh Adari (UA) and Monica
+(decided 2026-11-05, §9). Each gets the full sample, own random order, strata
 mixed, no county, model score, stratum or earlier label shown, and no access to
 the other's file until both are done. Known limit: Umesh labelled most of S2 in
-notebook 07 a week ago; we report the second interpreter's agreement with the
-adjudicated label separately so the result doesn't rest on Umesh alone.
+notebook 07 a week ago; Monica has not seen those labels. We report Monica's
+agreement with the adjudicated label separately so the result doesn't rest on
+Umesh alone.
 
 **Calibration (before the pilot).** 30 items that can never enter the sample or
 the reserve: the last 10 items of the random orders of S1, S2 and S4, spread
@@ -189,7 +190,7 @@ Reported next to the objective numbers vs the tracing (recall 80.5%, precision
 
 ## 7. Decisions (defaults in v1 until decided)
 
-1. Second interpreter: Jenny Ha or Pradeep. *Open; doesn't affect the sample.*
+1. Second interpreter: **Monica** (decided 2026-11-05).
 2. S2: sample 150. (Labelling all 327 would add ~1 h each; possible later as v2
    only before S2 labels are opened.)
 3. S5 footprints: **off** until the download is approved. S6 still runs; with S5
@@ -207,3 +208,12 @@ Reported next to the objective numbers vs the tracing (recall 80.5%, precision
 - Cells: count + note instead of clicking each house; centre-inside rule; 1.2 m.
 - Bootstrap is finite-population corrected (rescaled).
 - Every photo is NAIP 2023 (the tile fetcher otherwise takes the newest year).
+
+## 9. Amendments after the sample was drawn
+
+| Version | Date | Change | Affects the sample? |
+|---|---|---|---|
+| v1.1 | 2026-11-05 | Second interpreter named: Monica (§2, §7) | No (decided before any labelling) |
+
+Each amendment's SHA-256 is added to `protocol_amendments` in `sample_meta.json`,
+so notebook 14 accepts it without the protocol warning.
