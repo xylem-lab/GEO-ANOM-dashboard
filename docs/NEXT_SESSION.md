@@ -4,6 +4,16 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-05 -- Notebook 14: accuracy assessment set up, sample drawn (branch `research/accuracy-assessment-2026-11-05`, on top of `docs/fresh-start-2026-11-05`)
+
+- Protocol v1 approved and frozen: `docs/TASK1_ACCURACY_PROTOCOL.md` (SHA-256 461665a6...). Code `geo_anom/task1/accuracy.py` (+ 12 tests), notebook `14_accuracy_assessment.ipynb`.
+- Frames reproduce release_v1 exactly: S1 2,450 outlines on a traced house, S2 327 outlines in the traced area on no traced house, S3 56 outside the traced area (30 ES + 26 west), S4 594 traced houses missed; 9,361 ES 1 km cells (A 1,137 with a known house, B 2,748 within 1 km, C 5,476 farther).
+- **Sample drawn once** (seed 20261105, commit f4682f5): S1 100 / S2 150 / S3 56 (all) / S4 150 objects, S6 150/150/100 cells; pilot 75 (25 each S1, S2, S4); calibration 30 (tail of the S1/S2/S4 orders); rest = reserve. Saved on the drive only: `Task1_results/accuracy_v1/frame.geojson` (SHA-256 d649666f...) + `sample_meta.json`. Notebook refuses to redraw and warns if protocol/release/tracing change.
+- Blind photos: NAIP **2023 only** (the tile fetcher otherwise takes the newest year), crosshair, no outline; windowed COG reads (cells 3-7 s instead of 1-6 min with `build_mosaic`).
+- Defaults until decided: S2 sample 150 (not census); S5 footprints off (Microsoft download not approved yet); under construction = not standing; split cells take the larger count.
+- **No accuracy number from 14 yet.** Next: choose the second interpreter (Jenny Ha / Pradeep) and set `INTERPRETERS`; both label calibration (30) -> discuss -> pilot (75) -> kappa gate >= 0.8 -> main (~385) -> cells (400) -> adjudicate -> step 9. Then rewrite 14's "What this shows" and the audit table from the outputs.
+- Still open: adjudicator (Nakalembe / Extension); approve S5 Microsoft footprints download.
+
 ## 2026-11-05 -- Project reset: audit + finishing plan (branch `docs/fresh-start-2026-11-05`)
 
 - Read `docs/FRESH_START.md` (prompt for a new chat, where things are, open decisions, what not to quote) and `docs/PROJECT_AUDIT_2026-11-05.md` (status, confidence, plan).

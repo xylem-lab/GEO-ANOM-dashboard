@@ -353,3 +353,12 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Audit of all work vs the LOI (`docs/PROJECT_AUDIT_2026-11-05.md`). Visual checks done without a probability sample, protocol or second interpreter (97% precision, 21/24 still standing) are not defensible; replaced by a design-based assessment (Phase 1, notebook 14).
 - Rejected as validation of completeness: bird-count agreement (ranges ~2x wide).
 - Stop improving the detector; measure it.
+
+## 2026-11-05 — accuracy assessment design (notebook 14)
+
+- Chose a stratified design over a plain random sample of outlines: precision is dominated by S1 (87% of outlines), which the 88.2% figure simply assumed correct, so S1 gets its own 100-item sample; S2 and S4 carry most of the uncertainty and get 150 each.
+- Random 1 km cells alone are a weak way to find houses on neither source (rare; ~0.6% of cells): with 0 hits in 150 cells the 95% bound is still ~60 houses. Proposed an independent footprint candidate stratum (Microsoft footprints, S5) instead of more cells; on hold until the download is approved.
+- Rejected showing the outline in the blind photos (as 07 did): a traced polygon and a detection rectangle look different, which would unblind the stratum. Crosshair only.
+- Rejected `tiles.build_mosaic` for display: warping whole bands takes 1-6 min per 1 km cell; windowed reads on the COG overviews take 3-7 s, same 2023 items.
+- Bootstrap must be finite-population corrected (rescaled), otherwise a census stratum (S3) shows sampling error; caught by a census test.
+- Dropped the "outline covers two houses" flag from the draft: it can't be judged blind. Instead: 2,450 S1 outlines touch 2,446 traced houses, so merged/split outlines nearly cancel (stated as an approximation).
