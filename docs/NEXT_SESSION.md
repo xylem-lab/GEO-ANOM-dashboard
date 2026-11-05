@@ -4,6 +4,14 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-05 -- Project reset: audit + finishing plan (branch `docs/fresh-start-2026-11-05`)
+
+- Read `docs/FRESH_START.md` (prompt for a new chat, where things are, open decisions, what not to quote) and `docs/PROJECT_AUDIT_2026-11-05.md` (status, confidence, plan).
+- Withdrawn as not defensible: 97% precision (one reviewer, no protocol) and the 21/24 still-standing check, so also the corrected roof 7.79 km2 (`final.miss_correction`, nb 12 section 5). Objective numbers kept: recall 80.5% and precision 88.2% vs the USGS tracing; release_v1 2,833 houses / 6.98 km2.
+- Plan: Phase 1 design-based accuracy assessment (nb 14: protocol, stratified samples, two blind interpreters, kappa >= 0.8, CIs) -> Phase 2 Task 2 with Rafi, validated vs MDA MTP -> Phase 3 three-way comparison (LOI objective 2) + paper -> Phase 4 Task 3 + release.
+- Hold the Task 1 one-pager for Prof. Nakalembe (presents 7.79 km2).
+- New rule: no number goes into a summary without its sample, protocol and uncertainty written down.
+
 ## 2026-11-03 -- Task 2 draft v1: notebook 13 (branch `task2/nutrient-balance-2026-11-03`, on top of the Task 1 PR)
 
 - `geo_anom/task2/nutrients.py` (+ 12 tests): roof -> birds -> litter tons -> N/P2O5; CDL 2023 need (corn, soy, small grains, double crops; optional hay); P limit = DLLC 2019 MD fit of high-P cropland share + offset, P rate x multiplier; capacity = min(N-based, P-based) tons; Monte Carlo (triangular low/mid/high); tornado. Transport optimization taken out (2026-11-03, user): Task 2 = the numbers; moving litter is planned later.

@@ -6,6 +6,9 @@ the pipeline. Proposal/decks live in the sibling `../GEO-ANOM` repo (LOI:
 `Nakalembe_Lansing__AIM_LOI2026_Final.docx`).
 
 ## Read first
+0. `docs/FRESH_START.md` and `docs/PROJECT_AUDIT_2026-11-05.md` — project
+   reset on 2026-11-05: what is solid, what is not defensible yet, and the
+   four-phase finishing plan.
 1. `docs/NEXT_SESSION.md` — **top dated section only**; it supersedes
    everything below it. Never cite a number from an older section without
    checking the newer ones.
@@ -46,7 +49,7 @@ and run in VS Code — analyses, experiments, validations, data downloads, figur
 for slides, statewide runs. Existing scripts stay as they are (no rewrites).
 
 - One notebook per task: `notebooks/NN_short_name.ipynb`, numbered in order
-  (next is `08_…`). Locally: kernel Python 3.9 at
+  (next is `14_…`). Locally: kernel Python 3.9 at
   `/Library/Developer/CommandLineTools/usr/bin/python3`.
 - **Reproducible and shareable (from 2026-10-15):** code lives in git; every
   notebook also runs in **Google Colab** (Open-in-Colab badge in the header);

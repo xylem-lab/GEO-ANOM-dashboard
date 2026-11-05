@@ -347,3 +347,9 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 ## 2026-10-26 — streaming memory leak (Colab crashes)
 
 - Not a Colab quirk: all-at-once submission + futures dict kept every tile alive per county. Bounded in-flight window fixes it; no effect on detections (verified on 2 Somerset tiles against Colab shards).
+
+## 2026-11-05 — project reset
+
+- Audit of all work vs the LOI (`docs/PROJECT_AUDIT_2026-11-05.md`). Visual checks done without a probability sample, protocol or second interpreter (97% precision, 21/24 still standing) are not defensible; replaced by a design-based assessment (Phase 1, notebook 14).
+- Rejected as validation of completeness: bird-count agreement (ranges ~2x wide).
+- Stop improving the detector; measure it.
