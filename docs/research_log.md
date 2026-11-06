@@ -379,3 +379,9 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Rejected "minimum 5 per county" as a hard rule for S6W-A (14 counties, n 40: infeasible; the old trim loop drove a county to -1). Lowest minimum that fits instead.
 - Constant-stratum bound applied one stratum at a time with the others at their point estimates (protocol 10.4), only to sampled strata (a census has no sampling error).
 - Cells in S6 no longer count towards the total (v1.2: residual line), so the S6 photo's known layer adds western detections and S5 footprints before any cell is labelled.
+
+## 2026-11-06 — verification v1.1 frozen; addendum drawn
+
+- Western footprint candidates under the first rule were 8,854, mostly urban (Baltimore city 2,969); 4 random photos all rowhouses / strip mall, while 2 of 4 Eastern Shore candidates looked like poultry houses. A tighter shape rule barely helped (Baltimore city 1,657-2,901). Chosen: stratify by footprint density (< 100 per km2 rural) with a 30-item developed spot check reported as an assumption. Rejected for now: SDAT parcel codes and CBP land use (better separation, but a new download and more work); excluding developed land (blind spot).
+- Rejected widening the total's interval by S5WD's exact bound (~700 houses with 0 in 30): it would bury the result in an assumption the protocol states openly instead.
+- Naming collapsed to map v1 / verification v1.1 / map v2 at the user's request; draft SHA-256s kept.

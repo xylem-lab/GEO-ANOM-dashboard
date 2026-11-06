@@ -4,6 +4,17 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-06 -- Verification v1.1 frozen, addendum drawn (branch `research/accuracy-assessment-2026-11-05`)
+
+- **Names (user, 2026-11-06):** map v1 = release_v1 (frozen, never edited); **verification v1.1** = the accuracy assessment of map v1 (notebook 14); map v2 = improved map, only if verification shows it's needed. Older entries below say "protocol v1/v1.1/v1.2": those are drafts now merged into verification protocol v1.1 (Appendix A of `docs/TASK1_ACCURACY_PROTOCOL.md` keeps their SHA-256s).
+- **Protocol frozen:** SHA-256 e5a710851f8fa613223e4df7c0618bbdd42f72c0725259e7954a7ec97d3b5de2 (commit a4de373), before any label.
+- New in it: western footprint candidates split by building density (footprints in the 1 km cell): S5WR rural < 100 (N 1,497, n 170), S5WD developed (N 7,357, n 30, spot check of the stated assumption "developed land holds no poultry houses"; own rows, not in the total's interval). Allocation-minimum rule and covariate declaration written in.
+- **Addendum drawn once** (seed 20261106, commit a4de373): `Task1_results/accuracy_v1/frame_addendum.geojson` SHA-256 189f0a1aba458ab53df9091ab0b0686d6d96ebb2a89fbc47cdab31d9e183f2c3 + `sample_meta_addendum.json`. Samples: S5ES 150 of 1,501; S5WR 170 of 1,497; S5WD 30 of 7,357; S7 367 (all); S8 49 (all); S6WA 40 of 235; S6WB 60 of 1,068. k_f 1.003. Capture rates (geometry, 3,040 traced houses): q_ES 2.7% (2.2-3.4), q_W 4.7% (4.0-5.5).
+- Footprints: Microsoft US Building Footprints v2 Maryland (MD5-checked; SHA-256 98505895...; 1,657,199 raw, 13,100 pass the shape rule; `capture_dates_range` mostly empty). Local copy `data/raw/external/ms_buildings/` (gitignored).
+- First sample unchanged (`frame.geojson` d649666f...); `sample_meta.json` amendments: v1.1 0505a1fc, v1.2 7d589b11, verification v1.1 e5a71085. No labels exist.
+- PAPER_STANDARD v0.2 (naming; claim adds the developed-land assumption). Open: D1 (published-model outlines on the Eastern Shore are not in verification v1.1; adding them needs an amendment before main labelling).
+- **Next:** UA labels calibration (30) + pilot (75) per `docs/NB14_RUN_SHEET.md`; Monica the same; kappa gate.
+
 ## 2026-11-06 -- Notebook 14: protocol v1.2 implemented, ready for UA's calibration and pilot (branch `research/accuracy-assessment-2026-11-05`, includes `research/protocol-v1.2-statewide`)
 
 - `accuracy.py` (+ 19 tests; full suite 141 pass): `frames_west` (S7 367 western detections not on the map; S8 49 cells around the 6 western poultry permits: Washington 17, Carroll 16, Frederick 16; S6W-A 235 / S6W-B 1,068 western cells, n 40 / 60; 15,902 far western cells not sampled), `frames_footprints` + `load_footprints` + `shape_filter` (S5ES / S5W, k_f), `draw_addendum` (seed 20261106, refuses if a new key has a label), `known_layer` (cell photos: release + tracing + western detections + S5), `capture_rates`, v1.2 phases, list-frame estimators (houses on a list, recall MD/ES, roof), `residual_table`, `other_form_counts`, `agreement_with_final`.
