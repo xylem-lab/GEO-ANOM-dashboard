@@ -372,3 +372,10 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Footprints don't shrink a zero-hit cell bound (it depends only on n and N); they shrink what the cells need to find. v1's text implied otherwise.
 - Western prior from independent sources: ~0.2 M birds (Census 2017) of 59.5 M, 6 western poultry permits -> tens of houses; the west matters for coverage, not variance.
 
+
+## 2026-11-06 — v1.2 implementation (notebook 14)
+
+- Microsoft US Building Footprints: the `usbuildingdata.blob.core.windows.net` URL now answers 409 (public access off); the same Maryland file is served from `minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/` (README link). Pinned by the server MD5; SHA-256 recorded at draw time.
+- Rejected "minimum 5 per county" as a hard rule for S6W-A (14 counties, n 40: infeasible; the old trim loop drove a county to -1). Lowest minimum that fits instead.
+- Constant-stratum bound applied one stratum at a time with the others at their point estimates (protocol 10.4), only to sampled strata (a census has no sampling error).
+- Cells in S6 no longer count towards the total (v1.2: residual line), so the S6 photo's known layer adds western detections and S5 footprints before any cell is labelled.
