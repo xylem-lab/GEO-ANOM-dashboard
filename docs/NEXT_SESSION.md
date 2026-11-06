@@ -4,6 +4,17 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-06 -- Protocol v1.2: statewide scope approved (branch `research/protocol-v1.2-statewide`, on top of `research/accuracy-assessment-2026-11-05`)
+
+- Why: the paper claim must be about Maryland. v1.1 measured houses, recall and roof on the Eastern Shore only. Review + evidence: `docs/TASK1_PROTOCOL_v1.2_PROPOSAL.md`; rules: `docs/TASK1_ACCURACY_PROTOCOL.md` §10 (governs). Approved by the user 2026-11-06, **before any label** (`accuracy_v1/` holds only `frame.geojson` + `sample_meta.json`).
+- New strata (v1.1 frame/sample/seed unchanged; new draw seed 20261106 into `frame_v1.2.geojson`): S7 census of the 367 western notebook-05 detections not on the map; S8 census of ~49 cells near the 6 western poultry permits; S6W 40 + 60 western cells near known buildings; S5 Microsoft footprints **on** in both regions (download approved with v1.2, ~400 MB, ODbL).
+- Claim: T̂_L = houses on a list (map, tracing, western detections, permit cells, footprints) with CI; T2/T3 (±5%) apply to it. Houses on no list = residual line (cells + capture-rate model), never inside the CI. Reason: zero-hit cell strata have exact bounds of hundreds of houses (S6C ~160 cells); ±5% including them is not achievable statewide or on the Eastern Shore.
+- Facts found: western map = published model (step 0) + UA's by-eye confirmations; no road rule, no brightening/SAM in the west. "417 -> 36" = all detections outside the traced area (24 of them Eastern Shore); **west: 393 -> 26 confirmed, 359 rejected, 8 unsure (never decided)**. Comparable ES recall is 0.670 (published model), not 0.805. Notebook 05: all 15 western counties complete, no tile gaps (Harford 8 tiles without any NAIP); some edge tiles in Calvert, Anne Arundel, St. Mary's, Harford, Allegany, Garrett mosaic 2017-2022 items.
+- **Code gap found:** protocol §5 promises exact bounds for zero-error strata; `accuracy.estimate` gives them zero width. v1.2 §10.4 specifies the fix.
+- Labelling: ~4.6 h more per interpreter (~12.5 h each).
+- PAPER_STANDARD -> draft v0.1 (claim, P1/P2/P4, new P6, D4 decided).
+- **Next (notebook-14 chat, one writer):** implement §10 in `accuracy.py` + notebook 14 (frames_west, frames_footprints, draw_addendum, statewide estimators, constant-stratum bounds, cell known-layer), footprint download + SHA in `env.py`, add the v1.2 SHA to `sample_meta.json` `protocol_amendments`, tests. Then calibration -> pilot as before.
+
 ## 2026-11-05 -- Notebook 14: accuracy assessment set up, sample drawn (branch `research/accuracy-assessment-2026-11-05`, on top of `docs/fresh-start-2026-11-05`)
 
 - Protocol v1 approved and frozen: `docs/TASK1_ACCURACY_PROTOCOL.md` (SHA-256 461665a6...). Code `geo_anom/task1/accuracy.py` (+ 12 tests), notebook `14_accuracy_assessment.ipynb`.

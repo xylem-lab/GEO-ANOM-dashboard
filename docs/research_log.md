@@ -362,3 +362,13 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Rejected `tiles.build_mosaic` for display: warping whole bands takes 1-6 min per 1 km cell; windowed reads on the COG overviews take 3-7 s, same 2023 items.
 - Bootstrap must be finite-population corrected (rescaled), otherwise a census stratum (S3) shows sampling error; caught by a census test.
 - Dropped the "outline covers two houses" flag from the draft: it can't be judged blind. Instead: 2,450 S1 outlines touch 2,446 traced houses, so merged/split outlines nearly cancel (stated as an approximation).
+
+
+## 2026-11-06 — protocol v1.2: statewide scope
+
+- Rejected extending random 1 km cells across the west as the way to a statewide count: with near-zero houses, 100 cells in the ~15,900 western far cells give a zero-hit upper bound of ~470 cells (hundreds to >1,000 houses); one hit adds hundreds with a ±300-house CI. Bounding them to ~30 houses would need 1,500-4,500 cells.
+- Found the same limit on the Eastern Shore (S6C 100 of 5,476 -> ~160 cells), and that the code hides it (zero-width bootstrap for all-zero strata). So ±5% can only apply to houses on a list; houses on no list are a separate residual line.
+- Chose list frames: census of all 367 undecided western detections (also re-checks the single-reviewer rejection blind and gives the published model's western precision), census of permit cells, footprints (a different model on different imagery) for houses the detector never proposed.
+- Footprints don't shrink a zero-hit cell bound (it depends only on n and N); they shrink what the cells need to find. v1's text implied otherwise.
+- Western prior from independent sources: ~0.2 M birds (Census 2017) of 59.5 M, 6 western poultry permits -> tens of houses; the west matters for coverage, not variance.
+
