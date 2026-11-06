@@ -4,6 +4,13 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-06 -- Verification v1.1 amendment A1 (D1) drawn
+
+- User reversed D1 (scoring the published model's own outlines): included as **amendment A1**. S9 = the 30 notebook-05 (published model) outlines on the Eastern Shore touching no map v1 outline (Cecil 13, Worcester 6, Caroline 5, Wicomico 3, Somerset 1, Dorchester 1, Queen Anne's 1; none on a traced house). Census, seed 20261107, labelled with the addendum objects (~8 min per person).
+- Protocol with A1: SHA-256 168f5507b75acb6151062f7efcd651cde06c435e0b5b66009a43ac29556be3e3 (commit d30da1e); recorded in `sample_meta.json` amendments. Sample file `frame_a1.geojson` SHA-256 eabc4f183bdeca33... (full hash in `sample_meta_a1.json`). First sample and addendum unchanged.
+- The other 2,299 published outlines are linked to the map v1 outline they overlap most; step 9 adds the published model's precision and recall and the paired gains (T4a/T4c). S9 houses stay out of the list total (could overlap S5ES).
+- Dry run caught two bugs, fixed before any label: cell agreement ignored addendum cells; interval widening misaligned after the S5WD assumption rows.
+
 ## 2026-11-06 -- Verification v1.1 frozen, addendum drawn (branch `research/accuracy-assessment-2026-11-05`)
 
 - **Names (user, 2026-11-06):** map v1 = release_v1 (frozen, never edited); **verification v1.1** = the accuracy assessment of map v1 (notebook 14); map v2 = improved map, only if verification shows it's needed. Older entries below say "protocol v1/v1.1/v1.2": those are drafts now merged into verification protocol v1.1 (Appendix A of `docs/TASK1_ACCURACY_PROTOCOL.md` keeps their SHA-256s).

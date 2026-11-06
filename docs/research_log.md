@@ -385,3 +385,8 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Western footprint candidates under the first rule were 8,854, mostly urban (Baltimore city 2,969); 4 random photos all rowhouses / strip mall, while 2 of 4 Eastern Shore candidates looked like poultry houses. A tighter shape rule barely helped (Baltimore city 1,657-2,901). Chosen: stratify by footprint density (< 100 per km2 rural) with a 30-item developed spot check reported as an assumption. Rejected for now: SDAT parcel codes and CBP land use (better separation, but a new download and more work); excluding developed land (blind spot).
 - Rejected widening the total's interval by S5WD's exact bound (~700 houses with 0 in 30): it would bury the result in an assumption the protocol states openly instead.
 - Naming collapsed to map v1 / verification v1.1 / map v2 at the user's request; draft SHA-256s kept.
+
+## 2026-11-06 — amendment A1 (D1)
+
+- D1 briefly "left out", then included at the user's request (recall gain without precision isn't a credible method comparison). Only 30 published-model outlines on the Eastern Shore are off map v1, so a census is cheaper than any linkage argument for them; the other 2,299 reuse the map v1 labels through overlap linkage.
+- Kept S9 houses out of the list total rather than redrawing S5ES to exclude them (the addendum was already frozen).
