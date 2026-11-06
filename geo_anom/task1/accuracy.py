@@ -26,9 +26,13 @@ Replaces the single-reviewer 97% precision and the informal 21/24 still-standing
     draw_addendum(...)          new strata only, seed 20261106, refuses if a new key has a label
     known_layer(...)            every known building drawn on cell photos
     capture_rates(...)          q for the model residual (geometry only)
+  Amendment A1 (D1): frames_es_step0 -> S9 published-model (notebook-05 step-0) outlines on the Eastern
+    Shore touching no map v1 outline (census); step0_links -> how many published outlines each map v1
+    outline stands for, so the published model's precision and recall come from the same labels
 
 Keys: "map:<house_id>", "usgs:<row in the SHA-checked tracing>", "cell:<x>_<y>" (UTM 18N km),
-"w05:<candidate_id>" (western notebook-05 detection), "msfp:<row in the footprint file>".
+"w05:<candidate_id>" (western notebook-05 detection), "msfp:<row in the footprint file>",
+"e05:<candidate_id>" (Eastern Shore notebook-05 detection, S9).
 Everything that names a place is saved to the shared drive only (`acc_dir()`).
 """
 
@@ -60,7 +64,8 @@ V11_OBJECT = ["S1", "S2", "S3", "S4"]
 V11_CELL = ["S6A", "S6B", "S6C"]
 NEW_OBJECT = ["S5ES", "S5WR", "S5WD", "S7"]        # addendum
 NEW_CELL = ["S8", "S6WA", "S6WB"]                  # addendum
-OBJECT_STRATA = V11_OBJECT + NEW_OBJECT           # new strata last: the v1.1 draw consumes the same random numbers
+A1_OBJECT = ["S9"]                                 # amendment A1 (D1)
+OBJECT_STRATA = V11_OBJECT + NEW_OBJECT + A1_OBJECT   # new strata last: earlier draws consume the same random numbers
 CELL_STRATA = V11_CELL + NEW_CELL
 RESIDUAL_CELLS = ["S6A", "S6B", "S6C", "S6WA", "S6WB"]
 STRATUM_NAMES = {
@@ -71,13 +76,16 @@ STRATUM_NAMES = {
     "S5WD": "footprint candidate, west, developed",
     "S7": "western detection, not on the map", "S8": "western cell near a poultry permit",
     "S6WA": "western cell with a known building", "S6WB": "western cell within 1 km",
+    "S9": "published-model outline on the Eastern Shore, not on map v1",
 }
 # protocol sample sizes (None = all); n >= N -> all
 SIZES = {"S1": 100, "S2": 150, "S3": None, "S4": 150, "S6A": 150, "S6B": 150, "S6C": 100,
-         "S5ES": 150, "S5WR": 170, "S5WD": 30, "S7": None, "S8": None, "S6WA": 40, "S6WB": 60}
+         "S5ES": 150, "S5WR": 170, "S5WD": 30, "S7": None, "S8": None, "S6WA": 40, "S6WB": 60, "S9": None}
 RURAL_DENSITY = 100        # footprints per 1 km cell: below -> S5WR (rural), else S5WD (developed)
 ASSUMED_ZERO = ("S5WD",)   # protocol: developed land holds no poultry houses -- stated assumption, spot-checked
-SEED_V12 = 20261106
+SEED_V12 = 20261106        # addendum
+SEED_A1 = 20261107         # amendment A1
+PROTOCOL_LABEL = "verification v1.1 + amendment A1"     # recorded with the protocol SHA-256 in sample_meta.json
 REGISTRY = ROOT / "data" / "reference" / "mde_afo_registry_snapshot.json"
 POULTRY_PERMITS = ["chickens_not_laying_hens", "laying_hens_dry_manure", "turkeys", "ducks_liquid_manure"]
 FOOTPRINT_RULE = {"length_min": 60.0, "aspect_min": 4.0}
@@ -426,6 +434,33 @@ def capture_rates(traced_es: gpd.GeoDataFrame, fp: gpd.GeoDataFrame, release: gp
     return pd.DataFrame(rows).set_index("rate")
 
 
+def frames_es_step0(release: gpd.GeoDataFrame, step0_es: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """S9 (amendment A1): Eastern Shore notebook-05 (step-0, published model) outlines that touch no
+    map v1 outline. Census."""
+    m = release.to_crs(UTM)
+    d = step0_es.to_crs(UTM).reset_index(drop=True)
+    hit = set(gpd.sjoin(d[["geometry"]], m[["geometry"]], predicate="intersects").index)
+    x = d[~d.index.isin(hit)]
+    return _lonlat(gpd.GeoDataFrame({"key": "e05:" + x.candidate_id.astype(str), "stratum": "S9",
+                                     "county": x.county.values, "area_m2": rect_area(x.geometry.values)},
+                                    geometry=x.geometry.values, crs=UTM))
+
+
+def step0_links(release: gpd.GeoDataFrame, step0_es: gpd.GeoDataFrame) -> pd.Series:
+    """For each map v1 outline ('map:<house_id>'), the number of Eastern Shore published-model outlines
+    whose largest overlap is with it. Their sum = published outlines touching map v1 (the rest are S9).
+    The published model's precision then comes from the map v1 labels (protocol A1)."""
+    m = release.to_crs(UTM).reset_index(drop=True)
+    d = step0_es.to_crs(UTM).reset_index(drop=True)
+    j = gpd.sjoin(d[["geometry"]], m[["geometry"]], predicate="intersects")
+    if not len(j):
+        return pd.Series(dtype=int)
+    j["ov"] = [d.geometry[i].intersection(m.geometry[k]).area for i, k in zip(j.index, j.index_right)]
+    best = j.reset_index().sort_values("ov", ascending=False).drop_duplicates("index")
+    keys = "map:" + m.loc[best.index_right, "house_id"].astype(str)
+    return keys.value_counts()
+
+
 # ── sample ─────────────────────────────────────────────────────────────────────
 
 def allocate(counts: pd.Series, n: int | None, min_per: int = MIN_PER_COUNTY) -> pd.Series:
@@ -529,10 +564,23 @@ def draw_addendum(new_objects: gpd.GeoDataFrame, new_cells: gpd.GeoDataFrame, la
     return f
 
 
+def draw_amendment_a1(s9: gpd.GeoDataFrame, labelled_keys=(), seed: int = SEED_A1) -> gpd.GeoDataFrame:
+    """Amendment A1 (S9 only, census), own seed, no pilot or calibration; refuses if an S9 key has a label."""
+    bad = set(s9.key) & set(labelled_keys)
+    if bad:
+        raise RuntimeError(f"{len(bad)} S9 keys already have labels (e.g. {sorted(bad)[:3]})")
+    if set(s9.stratum) - set(A1_OBJECT):
+        raise ValueError("not amendment A1 strata")
+    empty = gpd.GeoDataFrame({"key": [], "stratum": [], "county": [], "area_m2": []}, geometry=[], crs=UTM)
+    f = draw(s9, empty, seed=seed, pilot={}, calibration={})
+    f["protocol"] = "v1.1 amendment A1"
+    return f
+
+
 def queue(frame: pd.DataFrame, reviewer: str, phase: str, seed: int = 20261105) -> pd.DataFrame:
     """Items for one interpreter and phase, in that interpreter's own random order.
     phase: 'calibration' | 'pilot' | 'main' (v1.1 sampled objects not in the pilot) | 'cells' (v1.1)
-           | 'addendum objects' (S5, S7) | 'addendum cells' (S8, S6W)."""
+           | 'addendum objects' (S5, S7, and S9 from amendment A1) | 'addendum cells' (S8, S6W)."""
     smp = frame.role == "sample"
     if phase == "calibration":
         q = frame[frame.role == "calibration"]
@@ -543,7 +591,7 @@ def queue(frame: pd.DataFrame, reviewer: str, phase: str, seed: int = 20261105) 
     elif phase == "cells":
         q = frame[smp & frame.stratum.isin(V11_CELL)]
     elif phase == "addendum objects":
-        q = frame[smp & frame.stratum.isin(NEW_OBJECT)]
+        q = frame[smp & frame.stratum.isin(NEW_OBJECT + A1_OBJECT)]
     elif phase == "addendum cells":
         q = frame[smp & frame.stratum.isin(NEW_CELL)]
     else:
@@ -868,7 +916,10 @@ def agreement(labels: pd.DataFrame, frame: pd.DataFrame, reviewers: list, keys=N
 
 def cell_agreement(labels: pd.DataFrame, reviewers: list) -> dict:
     a, b = reviewers
-    w = wide(labels[labels.phase == "cells"], reviewers).dropna()
+    L = labels[labels.key.astype(str).str.startswith("cell:")]      # S6, S6W and S8 cells, any phase
+    if L.empty or not set(reviewers) <= set(L.reviewer):
+        return {}
+    w = wide(L, reviewers).dropna()
     if not len(w):
         return {}
     num = lambda s: s.str.replace("+", "", regex=False).astype(int)
@@ -959,8 +1010,9 @@ def _cell_y(values: pd.Series) -> np.ndarray:
 
 def groups(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
            uc_as_house: bool = False) -> list:
-    """[(stratum, county, N, y array, area array)] for every (stratum, county) with labels.
-    For objects y = 1 if a standing house; for cells y = houses counted."""
+    """[(stratum, county, N, y array, area array, n_pub array)] for every (stratum, county) with labels.
+    For objects y = 1 if a standing house; for cells y = houses counted. n_pub = published-model outlines
+    the item stands for (frame column `n_pub`; 0 if absent)."""
     out = []
     lab = final.reindex(frame.key)
     f = frame.assign(value=lab.values)
@@ -970,15 +1022,21 @@ def groups(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
         if not len(s):
             continue
         y = _cell_y(s.value) if h in CELL_STRATA else _y(s.value, unsure_as_house, uc_as_house)
-        out.append((h, c, N, y, s.area_m2.values.astype(float)))
+        npub = s["n_pub"].fillna(0).values.astype(float) if "n_pub" in s else np.zeros(len(s))
+        out.append((h, c, N, y, s.area_m2.values.astype(float), npub))
     return out
 
 
 def _totals(M: list, k: dict, west: set, k_f: float = 1.0) -> dict:
-    """Totals from per-group means [(stratum, county, N, mean y, mean y*area)]."""
+    """Totals from per-group means [(stratum, county, N, mean y, mean y*area, mean y*n_pub, mean y*[n_pub>0])]."""
     t = dict.fromkeys(["C_es", "C_west", "C_off_es", "A_es", "A_west", "M", "A_M", "R_W", "A_R",
-                       "F_es", "F_w", "F_wr", "F_wd", "A_F_es", "A_F_w", "P_W", "Y", "Y_W"], 0.0)
-    for h, c, N, my, mya in M:
+                       "F_es", "F_w", "F_wr", "F_wd", "A_F_es", "A_F_w", "P_W", "Y", "Y_W",
+                       "C_pub", "H_pub"], 0.0)
+    for h, c, N, my, mya, mpub, mfound in M:
+        if h in ("S1", "S2", "S3", "S9") and c not in west:
+            t["C_pub"] += N * mpub                 # published outlines on a standing house
+            if h != "S9":
+                t["H_pub"] += N * mfound           # map v1 houses the published model also has
         if h in ("S1", "S2", "S3"):
             w = "west" if c in west else "es"
             t[f"C_{w}"] += N * my
@@ -1006,7 +1064,7 @@ def _totals(M: list, k: dict, west: set, k_f: float = 1.0) -> dict:
     return t
 
 
-def _derived(t: dict, mapped_es: int, mapped_all: int) -> dict:
+def _derived(t: dict, mapped_es: int, mapped_all: int, published_es: int = 0) -> dict:
     """Protocol 10.4 (list frames) and 10.5 (residual, own rows)."""
     T_L = t["C_es"] + t["C_west"] + t["M"] + t["R_W"] + t["F_es"] + t["F_w"] + t["P_W"]
     T_es = t["C_es"] + t["M"] + t["F_es"]
@@ -1014,7 +1072,14 @@ def _derived(t: dict, mapped_es: int, mapped_all: int) -> dict:
     roof_w_house = (t["A_west"] + t["A_R"]) / n_w if n_w > 0 else (t["A_M"] / t["M"] if t["M"] > 0 else 0.0)
     roof_es = t["A_es"] + t["A_M"] + t["A_F_es"]
     roof_md = roof_es + t["A_west"] + t["A_R"] + t["A_F_w"] + t["P_W"] * roof_w_house
-    return {
+    pub = {}
+    if published_es:
+        prec_pub, rec_pub = t["C_pub"] / published_es, (t["H_pub"] / T_es if T_es else np.nan)
+        pub = {"precision (published model, ES)": prec_pub,
+               "recall (published model, ES)": rec_pub,
+               "precision gain, map v1 - published (ES)": t["C_es"] / mapped_es - prec_pub,
+               "recall gain, map v1 - published (ES)": (t["C_es"] / T_es if T_es else np.nan) - rec_pub}
+    return {**{
         "precision (Maryland)": (t["C_es"] + t["C_west"]) / mapped_all,
         "precision (Eastern Shore)": t["C_es"] / mapped_es,
         "correct map houses (ES)": t["C_es"],
@@ -1037,7 +1102,7 @@ def _derived(t: dict, mapped_es: int, mapped_all: int) -> dict:
         "residual: cell expansion (ES)": t["Y"],
         "residual: cell expansion (west)": t["Y_W"],
         "residual: cell expansion (total)": t["Y"] + t["Y_W"],
-    }
+    }, **pub}
 
 
 def _cp_one_sided(n: int, all_house: bool) -> float:
@@ -1055,32 +1120,37 @@ def mean_per_positive_cell(G: list) -> float:
 
 def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bool = False,
              uc_as_house: bool = False, B: int = 2000, seed: int = 2, es: list | None = None,
-             k_f: float = 1.0) -> pd.DataFrame:
+             k_f: float = 1.0, published_es: int = 0) -> pd.DataFrame:
     """Stratified estimates, 95% CIs from a rescaled stratified bootstrap (resample within each
     stratum x county, finite-population corrected), widened for constant strata (protocol 10.4): a
     sampled (not census) stratum whose every y is equal moves to its exact one-sided 95% bound, one
     stratum at a time, the others at their point estimates; the wider interval is kept.
     Column `widened by` names the strata that set a bound. Strata in ASSUMED_ZERO (developed western
     footprints) are not widened: the protocol states that developed land holds no poultry houses and
-    reports their exact bound on its own row ('assumption check ...') instead."""
+    reports their exact bound on its own row ('assumption check ...') instead.
+    published_es (amendment A1): number of Eastern Shore published-model outlines; with the frame column
+    n_pub it adds the published model's precision and recall and the paired gains (same resamples)."""
     es = set(es or C.EASTERN_SHORE)
     obj = frame[frame.kind == "object"]
     mapped = obj[obj.stratum.isin(["S1", "S2", "S3"])]
     mapped_all, mapped_es = len(mapped), int(mapped.county.isin(es).sum())
     west = set(mapped.county) - es
     G = groups(frame, final, unsure_as_house, uc_as_house)
-    means = [(h, c, N, y.mean(), (y * area).mean()) for h, c, N, y, area in G]
-    point = _derived(_totals(means, k, west, k_f), mapped_es, mapped_all)
+    means = [(h, c, N, y.mean(), (y * area).mean(), (y * npub).mean(), (y * (npub > 0)).mean())
+             for h, c, N, y, area, npub in G]
+    D = lambda M_: _derived(_totals(M_, k, west, k_f), mapped_es, mapped_all, published_es)
+    point = D(means)
     rng = np.random.default_rng(seed)
     scale = [np.sqrt(max(0.0, 1 - len(y) / N) * len(y) / (len(y) - 1)) if len(y) > 1 else 0.0
-             for h, c, N, y, area in G]
+             for h, c, N, y, area, npub in G]
     boots = []
     for _ in range(B):
         Mb = []
-        for (h, c, N, y, area), (_, _, _, my, mya), f in zip(G, means, scale):
+        for (h, c, N, y, area, npub), (_, _, _, my, mya, mp, mf), f in zip(G, means, scale):
             i = rng.integers(0, len(y), len(y))
-            Mb.append((h, c, N, my + f * (y[i].mean() - my), mya + f * ((y[i] * area[i]).mean() - mya)))
-        boots.append(_derived(_totals(Mb, k, west, k_f), mapped_es, mapped_all))
+            Mb.append((h, c, N, my + f * (y[i].mean() - my), mya + f * ((y[i] * area[i]).mean() - mya),
+                       mp + f * ((y[i] * npub[i]).mean() - mp), mf + f * ((y[i] * (npub[i] > 0)).mean() - mf)))
+        boots.append(D(Mb))
     Bt = pd.DataFrame(boots)
     out = pd.DataFrame({"estimate": pd.Series(point), "low": Bt.quantile(0.025), "high": Bt.quantile(0.975)})
     out["widened by"] = ""
@@ -1103,18 +1173,20 @@ def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bo
             if ys.any():
                 continue
             val = (1.0 - 0.05 ** (1.0 / n)) * mpp        # houses per cell at the bound
-            swap = {(g[0], g[1]): (val, val * g[4].mean() if len(g[4]) else 0.0) for g in gh}
+            swap = {(g[0], g[1]): (val, val * g[4].mean() if len(g[4]) else 0.0, 0.0, 0.0) for g in gh}
         else:
             if not (ys.all() or not ys.any()):
                 continue
             b = _cp_one_sided(n, bool(ys.all()))
-            swap = {(g[0], g[1]): (b, b * g[4].mean()) for g in gh}
-        Ms = [(hh, c, N, *swap[(hh, c)]) if (hh, c) in swap else (hh, c, N, my, mya) for hh, c, N, my, mya in means]
-        alt = pd.Series(_derived(_totals(Ms, k, west, k_f), mapped_es, mapped_all))
-        lower, higher = alt < out["low"] - 1e-12, alt > out["high"] + 1e-12
-        out.loc[lower, "low"] = alt[lower]
-        out.loc[higher, "high"] = alt[higher]
-        out.loc[lower | higher, "widened by"] += (h + " ")
+            swap = {(g[0], g[1]): (b, b * g[4].mean(), b * g[5].mean(), b * (g[5] > 0).mean()) for g in gh}
+        Ms = [(m_[0], m_[1], m_[2], *swap[(m_[0], m_[1])]) if (m_[0], m_[1]) in swap else m_ for m_ in means]
+        alt = pd.Series(D(Ms))
+        cur = out.loc[alt.index]                         # assumption-check rows are not in `alt`
+        lower, higher = alt < cur["low"] - 1e-12, alt > cur["high"] + 1e-12
+        out.loc[lower[lower].index, "low"] = alt[lower]
+        out.loc[higher[higher].index, "high"] = alt[higher]
+        hit = (lower | higher)
+        out.loc[hit[hit].index, "widened by"] += (h + " ")
     out["widened by"] = out["widened by"].str.strip()
     return out
 

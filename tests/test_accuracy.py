@@ -329,3 +329,71 @@ def test_developed_footprints_are_an_assumption_not_widened():
     assert est.loc["houses on a list (Maryland)", "high"] == pytest.approx(50)        # not widened by S5WD
     assert est.loc["assumption check: S5WD exact 95% upper bound (houses)", "high"] == \
         pytest.approx(7000 * (1 - 0.05 ** (1 / 30)))
+
+
+# ── amendment A1 (D1): published-model outlines ───────────────────────────────
+
+def test_frames_es_step0_and_links():
+    rel, _, _ = world()
+    step0 = gpd.GeoDataFrame({"candidate_id": ["a", "b", "c", "d"], "county": "Somerset"}, geometry=[
+        house(1000, 1000, 70, 15), house(1080, 1000, 70, 15),     # two pieces of h1 -> both link to h1
+        house(1000, 1100),                                         # = h2
+        house(2500, 2500)], crs=UTM)                               # on nothing -> S9
+    s9 = A.frames_es_step0(rel, step0)
+    assert list(s9.key) == ["e05:d"]
+    links = A.step0_links(rel, step0)
+    assert links.to_dict() == {"map:h1": 2, "map:h2": 1}
+
+
+def test_published_model_precision_census():
+    """Census of everything: the published model's precision = correct published outlines / all of them;
+    its recall = map houses it also has / houses on a list."""
+    rows = [{"key": f"map:{i}", "stratum": "S1", "county": "Somerset", "area_m2": 1.0, "n_pub": [2, 1, 0, 1][i % 4]}
+            for i in range(40)]
+    rows += [{"key": f"e05:{i}", "stratum": "S9", "county": "Somerset", "area_m2": 1.0, "n_pub": 1} for i in range(10)]
+    f = pd.DataFrame(rows).assign(kind="object", role="sample", pilot=False, rank=0)
+    lab = pd.Series({k: ("house" if k.startswith("map:") else ("house" if k in ("e05:0", "e05:1") else "not a house"))
+                     for k in f.key})
+    n_pub = int(f[f.stratum == "S1"].n_pub.sum()) + 10                 # 40 + 10 = 50 published outlines
+    est = A.estimate(f, lab, k={}, B=20, published_es=n_pub)
+    e = est["estimate"]
+    assert e["precision (published model, ES)"] == pytest.approx((40 + 2) / 50)
+    assert e["recall (published model, ES)"] == pytest.approx(30 / 40)   # 10 map houses have no published outline
+    assert e["recall gain, map v1 - published (ES)"] == pytest.approx(1 - 30 / 40)
+    assert (est["high"] - est["low"]).abs().max() < 1e-9
+
+
+def test_draw_amendment_a1():
+    s9 = gpd.GeoDataFrame({"key": [f"e05:{i}" for i in range(30)], "stratum": "S9", "county": "Cecil",
+                           "area_m2": 1.0}, geometry=[box(0, 0, 1, 1)] * 30, crs=UTM)
+    f = A.draw_amendment_a1(s9)
+    assert (f.role == "sample").sum() == 30 and not f.pilot.any()
+    assert len(A.queue(f, "UA", "addendum objects")) == 30
+    with pytest.raises(RuntimeError):
+        A.draw_amendment_a1(s9, labelled_keys={"e05:4"})
+
+
+def test_cell_agreement_covers_addendum_cells_and_empty(tmp_path):
+    a, b = A.Store(tmp_path, "UA"), A.Store(tmp_path, "Monica")
+    a.add("cell:1_1", "0", "cells"); b.add("cell:1_1", "0", "cells")
+    a.add("cell:9_9", "2", "addendum cells"); b.add("cell:9_9", "1", "addendum cells")
+    r = A.cell_agreement(A.load_labels(tmp_path), ["UA", "Monica"])
+    assert r["cells"] == 2 and r["same count"] == pytest.approx(0.5)
+    a.add("map:1", "house", "main")
+    assert A.cell_agreement(A.load_labels(tmp_path).query("key == 'map:1'"), ["UA", "Monica"]) == {}
+
+
+def test_assumption_rows_then_constant_stratum():
+    """S5WD (assumption rows) sorts before S6A; the zero-hit S6A bound must still widen the residual."""
+    rows = [{"key": f"msfp:{i}", "stratum": "S5WD", "county": "Montgomery", "area_m2": 1000.0, "kind": "object",
+             "role": "sample" if i < 30 else "reserve", "pilot": False, "rank": i} for i in range(500)]
+    rows += [{"key": f"cell:{i}", "stratum": "S6A", "county": "Somerset", "area_m2": 1e6, "kind": "cell",
+              "role": "sample" if i < 50 else "not drawn", "pilot": False, "rank": i} for i in range(400)]
+    rows += [{"key": f"map:{i}", "stratum": "S1", "county": "Somerset", "area_m2": 2500.0, "kind": "object",
+              "role": "sample", "pilot": False, "rank": i} for i in range(20)]
+    f = pd.DataFrame(rows)
+    lab = pd.Series({k: ("house" if k.startswith("map:") else "0" if k.startswith("cell:") else "not a house")
+                     for k in f.key[f.role == "sample"]})
+    est = A.estimate(f, lab, k={}, B=20)
+    r = est.loc["residual: cell expansion (ES)"]
+    assert r.high == pytest.approx(400 * (1 - 0.05 ** (1 / 50)) * 3.0) and r["widened by"] == "S6A"

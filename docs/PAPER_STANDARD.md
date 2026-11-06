@@ -126,7 +126,7 @@ come out; there is no "good enough" bar on them.
 | T3 | CI half-width of roof ≤ 5% of roof | Notebook 14 §9 | as T2 | as T2 |
 | T4a | Recall gain of release_v1 over the published model, on the 2023 sample: 95% paired bootstrap CI excludes 0 | Same sampled units scored for both maps (resampled together) | "SAM repair and tone matching raised recall from […] to […] (gain […], 95% CI […])." | "Against the 2016/17 tracing recall rose from 0.670 to 0.805, but on the 2023 sample the gain was [not distinguishable from zero / smaller than interpreter disagreement]." The ladder is then presented as a comparison against the tracing only. |
 | T4b | Lower CI bound of that gain > interpreter spread, defined as \|recall(UA alone) − recall(Monica alone)\| for release_v1 | Sensitivity rows | (part of T4a) | (part of T4a) |
-| T4c | ~~Precision does not fall by more than 2 points from the published model to release_v1~~ Not tested: D1 left out (2026-11-06) | Same as T4a | "…with no loss of precision" | "Recall rose, but precision fell by […]" |
+| T4c | Precision does not fall by more than 2 points from the published model to release_v1 (amendment A1: S9 + linked map v1 labels; paired bootstrap) | Same as T4a | "…with no loss of precision" | "Recall rose, but precision fell by […]" |
 
 **Notes on T2 and T3, written down now so they are not a surprise later.**
 These are design facts, not results:
@@ -282,7 +282,7 @@ expert review."
 
 | ID | Decision | My recommendation | Who | Deadline |
 |---|---|---|---|---|
-| D1 | ~~Add a stratum of published-model outlines not in release_v1 on the Eastern Shore~~ → **not included in verification v1.1**: the published model is compared with map v1 on recall only (T4a/T4b); T4c (precision) is not tested | Decided by the user 2026-11-06: "Leave it out" | You | Done |
+| D1 | Score the published model's Eastern Shore outlines that are not on map v1, so its precision can be measured on 2023 | **Included: verification v1.1 amendment A1** (stratum S9, census of 30, seed 20261107). Briefly marked "left out" (8a770b9), reversed by the user 2026-11-06 before any label | You | Done |
 | D2 | Allow the one-time variance-driven top-up in §3 | Yes | You | Now |
 | D3 | Thresholds as in §3 (κ 0.8, ±5%, 2-point precision margin) | Yes | You | Now |
 | D4 | ~~Claim scoped to the Eastern Shore~~ → statewide list-frame claim + residual line (verification v1.1) | Decided by the user 2026-11-06; tell Prof. Nakalembe | You, then Prof. Nakalembe | Done |
@@ -293,4 +293,4 @@ expert review."
 |---|---|---|---|
 | v0 | 2026-11-05 | Draft for approval | No (no labels exist) |
 | v0.1 | 2026-11-06 | Claim, P1/P2/P4, new P6, §2.3, T2/T3 note and D4 follow protocol draft "v1.2" (statewide list frames + residual) | No (no labels exist) |
-| v0.2 | 2026-11-06 | Naming: map v1 / verification v1.1 / map v2; claim adds the developed-land assumption (S5WD); D1 decided: left out | No (no labels exist) |
+| v0.2 | 2026-11-06 | Naming: map v1 / verification v1.1 / map v2; claim adds the developed-land assumption (S5WD); D1 included (amendment A1), T4c reinstated | No (no labels exist) |

@@ -1,4 +1,4 @@
-# Verification protocol v1.1: accuracy assessment of map v1 (frozen 2026-11-06)
+# Verification protocol v1.1: accuracy assessment of map v1 (frozen 2026-11-06; amendment A1)
 
 | Name | What it is |
 |---|---|
@@ -10,7 +10,9 @@ Status: **frozen 2026-11-06, before any label existed.** This document consolida
 the drafts written on 2026-11-05 and 2026-11-06 (Appendix A keeps each one's
 SHA-256). Its own SHA-256 goes into `sample_meta.json`, `sample_meta_addendum.json`
 and every result of notebook 14. Any later change gets a new version, a date, a
-reason, and a note on whether it affects the sample.
+reason, and a note on whether it affects the sample. **Amendment A1** (end of
+this document, 2026-11-06, before any label) adds the published model's
+Eastern Shore outlines that are not on map v1 (stratum S9).
 
 Notebook: `notebooks/14_accuracy_assessment.ipynb`. Code: `geo_anom/task1/accuracy.py`.
 Samples and labels: shared drive `Task1_results/accuracy_v1/` (they name places;
@@ -267,10 +269,46 @@ of these steps.
 | "v1.1" | 2026-11-05 | 0505a1fc58c1 | Second interpreter: Monica |
 | "v1.2" | 2026-11-06 | 7d589b117021 | Statewide scope: S5 (both regions), S7, S8, S6W; list-frame total + residual; exact bounds for constant strata (missing in the first code). Design record: `docs/TASK1_PROTOCOL_v1.2_PROPOSAL.md` (branch `research/protocol-v1.2-statewide`, commit fdadf34) |
 | density split | 2026-11-06 | (this document) | S5W split into S5WR / S5WD by footprint density; developed land as a stated assumption; allocation minimum rule; covariate declaration |
-| **Verification v1.1** | 2026-11-06 | in `sample_meta*.json` | This consolidation; public naming: map v1 / verification v1.1 / map v2 |
+| **Verification v1.1** | 2026-11-06 | e5a710851f8f | This consolidation; public naming: map v1 / verification v1.1 / map v2. Frozen; addendum drawn under it |
+| Amendment A1 (D1) | 2026-11-06 | in `sample_meta_a1.json` | S9 published-model outlines on the Eastern Shore not on map v1 (census, seed 20261107); published model's precision and recall vs map v1. Briefly recorded as "left out" in PAPER_STANDARD (commit 8a770b9) and reversed by the user the same day, before any label |
 
 Changes made while building the first draft, before the first sample: calibration
 items from the tail of the random orders; pilot 25 each from S1, S2, S4 (S3 is a
 census with no reserve); no "outline covers two houses" flag (can't be judged
 blind); cells answered by count + note, centre-inside rule, 1.2 m; bootstrap
 finite-population corrected; every photo NAIP 2023 only.
+
+## Amendment A1 (2026-11-06, before any label): the published model on the Eastern Shore (D1)
+
+Why: the paper's method comparison (published model → map v1) needs the
+published model's **precision** on the 2023 sample, not only its recall
+(PAPER_STANDARD T4a/T4c). The 2016/17-tracing figures are what this verification
+replaces. Nothing else in this protocol changes; the first sample and the
+addendum stay as drawn.
+
+**Stratum S9.** Notebook-05 (step-0, published model) outlines in the 9 Eastern
+Shore counties that touch no map v1 outline: 30 on 2026-11-06 (Cecil 13,
+Worcester 6, Caroline 5, Wicomico 3, Somerset 1, Dorchester 1, Queen Anne's 1;
+none touches a traced house). **Census** (n = N), seed **20261107** (sets the
+order only), no pilot or calibration items, drawn once into
+`frame_a1.geojson` + `sample_meta_a1.json`; refused if any S9 key has a label.
+Labelled like every object (§2, blind, NAIP 2023), in the phase *addendum
+objects*. Keys `e05:<candidate_id>`. Extra labelling ≈ 30 × 15 s ≈ 8 min per
+interpreter.
+
+**Linking.** Each of the other Eastern Shore published-model outlines (2,299)
+is linked to the map v1 outline it overlaps most (`step0_links`); a map v1
+outline then stands for n_pub ≥ 0 published outlines, and its label serves for
+them. Stated as an approximation in the paper: map v1 outlines are mostly the
+same detections turned into rectangles (step 1 of notebook 11's ladder).
+
+**Estimators (Eastern Shore).**
+- Correct published outlines Ĉ_pub = Σ N·mean(y·n_pub) over S1, S2, S3 (Eastern
+  Shore) + Σ y over S9; **precision (published model)** = Ĉ_pub / 2,329.
+- **Recall (published model)** = Σ N·mean(y·[n_pub > 0]) over S1–S3 (Eastern Shore)
+  ÷ (Ĉ_ES + M̂ + F̂_ES), the same denominator as map v1's Eastern Shore recall.
+- Gains (map v1 − published) in precision and recall, from the same bootstrap
+  resamples (paired). Constant strata as §5.
+- S9 houses (if any) are **not** added to T̂_L: they may overlap footprint
+  candidates (S5ES was drawn without excluding them), so adding them could count
+  a house twice. They enter only the published model's precision.
