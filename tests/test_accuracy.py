@@ -136,10 +136,12 @@ def test_estimate_census_is_exact():
     assert e["correct map houses (ES)"] == pytest.approx(40 + 15 + 5)
     assert e["precision (Eastern Shore)"] == pytest.approx(60 / 80)
     assert e["missed traced houses standing"] == pytest.approx(24)
-    assert e["houses on neither source"] == pytest.approx(10)
-    assert e["recall (ES)"] == pytest.approx(60 / 94)
-    assert e["roof km2 (ES)"] == pytest.approx((60 + 24 + 10) * 2500 / 1e6)
+    assert e["houses on a list (ES)"] == pytest.approx(84)              # v1.2: cells are residual, not listed
+    assert e["residual: cell expansion (ES)"] == pytest.approx(10)
+    assert e["recall (ES)"] == pytest.approx(60 / 84)
+    assert e["roof km2 (ES)"] == pytest.approx((60 + 24) * 2500 / 1e6)
     assert (est["high"] - est["low"]).abs().max() < 1e-9
+    assert (est["widened by"] == "").all()                              # census strata are never widened
 
 
 def test_estimate_weights_by_county():
@@ -205,3 +207,96 @@ def test_final_labels_cells_take_larger_count(tmp_path):
     a.add("cell:1_2", "1", "cells"); b.add("cell:1_2", "1", "cells")
     fin = A.final_labels(A.load_labels(tmp_path), ["UA", "JH"])
     assert fin.to_dict() == {"cell:1_1": "2", "cell:1_2": "1"}
+
+
+# ── v1.2 ─────────────────────────────────────────────────────────────────────
+
+def test_frames_west():
+    rel, _, _ = world()
+    bw = {"Frederick": box(X0 - 60000, Y0 - 5000, X0 - 50000, Y0 + 5000)}
+    det = gpd.GeoDataFrame({"candidate_id": ["f/1", "f/2"], "county": "Frederick"},
+                           geometry=[house(-50000, 0), house(-58000, 3000)], crs=UTM)   # f/1 = on release w1
+    permits = gpd.GeoDataFrame({"county": ["Frederick"], "animal_type": ["turkeys"]},
+                               geometry=gpd.points_from_xy([X0 - 55500], [Y0 - 4500]), crs=UTM)
+    s7, cells, far = A.frames_west(rel, det, permits, boundaries=bw)
+    assert list(s7.key) == ["w05:f/2"] and s7.area_m2.iloc[0] == pytest.approx(150 * 15)
+    st = cells.stratum.value_counts()
+    assert st["S8"] >= 4 and st["S6WA"] >= 1 and st["S6WB"] >= 1
+    assert st.sum() + far == 100
+    assert not set(cells.stratum) - {"S8", "S6WA", "S6WB"}
+
+
+def test_shape_filter():
+    g = gpd.GeoDataFrame(geometry=[house(0, 0, 150, 15), house(0, 100, 50, 10), house(0, 200, 80, 40)], crs=UTM)
+    f = A.shape_filter(g)
+    assert len(f) == 1 and f.length_m.iloc[0] == pytest.approx(150)
+
+
+def test_frames_footprints_and_kf():
+    rel, traced, b = world()
+    fp = gpd.GeoDataFrame({"fid": [0, 1, 2]}, geometry=[
+        house(1000, 1000, 150, 16),              # on h1 (release and traced): not a candidate, used for k_f
+        house(4000, 4000, 160, 15),              # new long building in Somerset: S5ES
+        house(8000, 4000, 160, 15)], crs=UTM)    # Wicomico (also Eastern Shore)
+    s5, k_f = A.frames_footprints(fp, rel, traced, gpd.GeoDataFrame(geometry=[], crs=UTM), boundaries=b)
+    assert sorted(s5.key) == ["msfp:1", "msfp:2"] and set(s5.stratum) == {"S5ES"}
+    assert k_f == pytest.approx((150 * 15) / (150 * 16))
+
+
+def test_draw_addendum_refuses_labelled_and_has_no_pilot():
+    s7 = gpd.GeoDataFrame({"key": [f"w05:{i}" for i in range(30)], "stratum": "S7", "county": "Frederick",
+                           "area_m2": 1.0}, geometry=[box(0, 0, 1, 1)] * 30, crs=UTM)
+    cells = gpd.GeoDataFrame({"key": [f"cell:{i}" for i in range(300)], "stratum": ["S8"] * 20 + ["S6WA"] * 180 + ["S6WB"] * 100,
+                              "county": "Frederick", "area_m2": 1e6}, geometry=[box(0, 0, 1, 1)] * 300, crs=UTM)
+    f = A.draw_addendum(s7, cells)
+    n = f[f.role == "sample"].groupby("stratum").size().to_dict()
+    assert n == {"S7": 30, "S8": 20, "S6WA": 40, "S6WB": 60}
+    assert not f.pilot.any() and not (f.role == "calibration").any()
+    with pytest.raises(RuntimeError):
+        A.draw_addendum(s7, cells, labelled_keys={"w05:3"})
+    q = A.queue(f, "UA", "v1.2 objects")
+    assert len(q) == 30 and len(A.queue(f, "UA", "v1.2 cells")) == 120
+    assert len(A.queue(f, "UA", "main")) == 0
+
+
+def _sampled_frame(n_s1=100, N_s1=2450):
+    rows = [{"key": f"S1:{i}", "stratum": "S1", "county": "Somerset", "area_m2": 2500.0, "kind": "object",
+             "role": "sample" if i < n_s1 else "reserve", "pilot": False, "rank": i} for i in range(N_s1)]
+    rows += [{"key": f"S6A:{i}", "stratum": "S6A", "county": "Somerset", "area_m2": 1e6, "kind": "cell",
+              "role": "sample" if i < 150 else "not drawn", "pilot": False, "rank": i} for i in range(1000)]
+    return pd.DataFrame(rows)
+
+
+def test_constant_strata_get_exact_bounds():
+    """All 100 sampled S1 outlines correct: the bootstrap alone has zero width; the exact one-sided
+    bound (0.05^(1/100) = 0.9705) must set the lower end. Zero-hit cells: upper end of the residual."""
+    f = _sampled_frame()
+    lab = pd.Series({k: ("house" if k.startswith("S1") else "0") for k in f.key[f.role == "sample"]})
+    est = A.estimate(f, lab, k={}, B=50)
+    p = est.loc["precision (Eastern Shore)"]
+    assert p.estimate == pytest.approx(1.0)
+    assert p.low == pytest.approx(0.05 ** (1 / 100), abs=1e-9) and "S1" in p["widened by"]
+    r = est.loc["residual: cell expansion (ES)"]
+    assert r.estimate == 0 and r.high == pytest.approx(1000 * (1 - 0.05 ** (1 / 150)) * 3.0)
+    t = A.residual_table(f, lab, est)
+    assert t.loc["zero-hit bound S6A", "high"] == pytest.approx(1000 * (1 - 0.05 ** (1 / 150)) * 3.0)
+
+
+def test_other_form_counts(tmp_path):
+    a, b = A.Store(tmp_path, "UA"), A.Store(tmp_path, "Monica")
+    a.add("k1", "not a house", "main", note="poultry, other form; wide layer house"); b.add("k1", "not a house", "main")
+    a.add("k2", "not a house", "main"); b.add("k2", "not a house", "main")
+    L = A.load_labels(tmp_path)
+    fin = A.final_labels(L, ["UA", "Monica"])
+    fr = pd.DataFrame({"key": ["k1", "k2"], "stratum": ["S7", "S7"]})
+    assert A.other_form_counts(L, fin, fr).to_dict() == {"S7": 1}
+
+
+def test_allocate_many_counties_small_n():
+    """S6W-A in the real frame: 14 counties, n 40 -> the minimum drops to 2, nothing negative, sums to n."""
+    c = pd.Series({"Allegany": 1, "Anne Arundel": 25, "Baltimore County": 38, "Baltimore city": 15, "Carroll": 8,
+                   "Charles": 16, "Frederick": 56, "Garrett": 4, "Harford": 5, "Howard": 5, "Montgomery": 26,
+                   "Prince George's": 25, "St. Mary's": 1, "Washington": 10})
+    a = A.allocate(c, 40)
+    assert a.sum() == 40 and (a >= 1).all() and (a <= c).all()
+    assert (a[c >= 2] >= 2).all()

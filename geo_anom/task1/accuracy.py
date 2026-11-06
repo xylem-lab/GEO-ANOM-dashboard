@@ -18,7 +18,16 @@ Replaces the single-reviewer 97% precision and the informal 21/24 still-standing
     agreement / adjudication_queue / final_labels
     estimate(...)               stratified estimators, bootstrap 95% CIs
 
-Keys: "map:<house_id>", "usgs:<row in the SHA-checked tracing>", "cell:<x>_<y>" (UTM 18N km).
+  v1.2 (protocol section 10, statewide; drawn as an addendum with its own seed):
+    frames_west(...)            S7 western notebook-05 detections on no release outline (census),
+                                S8 cells around western poultry permits (census), S6W-A/B western cells
+    load_footprints / frames_footprints   S5 Microsoft footprint candidates (S5ES, S5W), k_f
+    draw_addendum(...)          new strata only, seed 20261106, refuses if a new key has a label
+    known_layer(...)            every known building drawn on cell photos
+    capture_rates(...)          q for the model residual (geometry only)
+
+Keys: "map:<house_id>", "usgs:<row in the SHA-checked tracing>", "cell:<x>_<y>" (UTM 18N km),
+"w05:<candidate_id>" (western notebook-05 detection), "msfp:<row in the footprint file>".
 Everything that names a place is saved to the shared drive only (`acc_dir()`).
 """
 
@@ -46,15 +55,29 @@ YEAR = "2023"
 
 LABELS = ["house", "gone", "under construction", "not a house", "unsure"]
 CELL_COUNTS = ["0", "1", "2", "3", "4", "5", "6+"]
-OBJECT_STRATA = ["S1", "S2", "S3", "S4"]
-CELL_STRATA = ["S6A", "S6B", "S6C"]
+V11_OBJECT = ["S1", "S2", "S3", "S4"]
+V11_CELL = ["S6A", "S6B", "S6C"]
+NEW_OBJECT = ["S5ES", "S5W", "S7"]                 # v1.2
+NEW_CELL = ["S8", "S6WA", "S6WB"]                  # v1.2
+OBJECT_STRATA = V11_OBJECT + NEW_OBJECT           # new strata last: the v1.1 draw consumes the same random numbers
+CELL_STRATA = V11_CELL + NEW_CELL
+RESIDUAL_CELLS = ["S6A", "S6B", "S6C", "S6WA", "S6WB"]
 STRATUM_NAMES = {
     "S1": "map outline on a traced house", "S2": "map outline, not traced", "S3": "map outline outside tracing",
     "S4": "traced house, not mapped", "S6A": "cell with a known house", "S6B": "cell within 1 km",
     "S6C": "cell farther than 1 km",
+    "S5ES": "footprint candidate, Eastern Shore", "S5W": "footprint candidate, west",
+    "S7": "western detection, not on the map", "S8": "western cell near a poultry permit",
+    "S6WA": "western cell with a known building", "S6WB": "western cell within 1 km",
 }
-# protocol v1 sample sizes (S3 = all); pilot items per object stratum; calibration items
-SIZES = {"S1": 100, "S2": 150, "S3": None, "S4": 150, "S6A": 150, "S6B": 150, "S6C": 100}
+# protocol sample sizes (None = all); v1.2: S5 all if <= 150 else 150 (ES) / 200 (W)
+SIZES = {"S1": 100, "S2": 150, "S3": None, "S4": 150, "S6A": 150, "S6B": 150, "S6C": 100,
+         "S5ES": 150, "S5W": 200, "S7": None, "S8": None, "S6WA": 40, "S6WB": 60}
+SEED_V12 = 20261106
+REGISTRY = ROOT / "data" / "reference" / "mde_afo_registry_snapshot.json"
+POULTRY_PERMITS = ["chickens_not_laying_hens", "laying_hens_dry_manure", "turkeys", "ducks_liquid_manure"]
+FOOTPRINT_RULE = {"length_min": 60.0, "aspect_min": 4.0}
+OTHER_FORM = "poultry, other form"
 PILOT = {"S1": 25, "S2": 25, "S4": 25}
 CALIBRATION = {"S1": 10, "S2": 10, "S4": 10}
 MIN_PER_COUNTY = 5
@@ -158,15 +181,243 @@ def frame_counts(objects: pd.DataFrame, cells: pd.DataFrame) -> pd.DataFrame:
     return f.groupby(["stratum", "county"]).size().rename("N").reset_index()
 
 
+# ── v1.2 frames: west of the Bay, footprints ───────────────────────────────────
+
+def west_counties() -> list:
+    return [n for n in C.county_names() if n not in C.EASTERN_SHORE]
+
+
+def load_detections(counties: list, root: Path | None = None) -> gpd.GeoDataFrame:
+    """Notebook-05 (published model, step 0) outlines of each county, centroid inside, UTM;
+    columns candidate_id, county, geometry."""
+    parts = []
+    for n in counties:
+        cty = region.county_boundary(n)
+        _, _, b = C.load_county_run(C.county_out(n, root))
+        b = C.county_buildings(b, cty)
+        if len(b):
+            cid = b["candidate_id"].astype(str) if "candidate_id" in b else pd.Series(
+                [f"{C.slug(n)}/{i}" for i in range(len(b))], index=b.index)
+            parts.append(gpd.GeoDataFrame({"candidate_id": cid.values, "county": n}, geometry=b.geometry.values, crs=UTM))
+    if not parts:
+        return gpd.GeoDataFrame({"candidate_id": [], "county": []}, geometry=[], crs=UTM)
+    return gpd.GeoDataFrame(pd.concat(parts, ignore_index=True), crs=UTM)
+
+
+def permit_points(registry: Path = REGISTRY, counties: list | None = None) -> gpd.GeoDataFrame:
+    """Poultry permits (protocol 10.2 types) in the given counties, UTM."""
+    sites = [s for s in json.load(open(registry))["sites"] if s["animal_type"] in POULTRY_PERMITS]
+    if counties is not None:
+        sites = [s for s in sites if s["county"] in counties]
+    return gpd.GeoDataFrame(pd.DataFrame(sites)[["county", "animal_type"]] if sites else
+                            pd.DataFrame({"county": [], "animal_type": []}),
+                            geometry=gpd.points_from_xy([s["lon"] for s in sites], [s["lat"] for s in sites]),
+                            crs=4326).to_crs(UTM)
+
+
+def _grid(boundaries: dict) -> gpd.GeoDataFrame:
+    """1 km cells (multiples of 1 km in UTM 18N) with centre inside each county."""
+    rows = []
+    for n, cu in boundaries.items():
+        x0, y0, x1, y1 = cu.bounds
+        xs = np.arange(np.floor(x0 / CELL_M) * CELL_M, x1, CELL_M)
+        ys = np.arange(np.floor(y0 / CELL_M) * CELL_M, y1, CELL_M)
+        cand = gpd.GeoDataFrame({"x": np.repeat(xs, len(ys)), "y": np.tile(ys, len(xs))},
+                                geometry=[box(x, y, x + CELL_M, y + CELL_M) for x in xs for y in ys], crs=UTM)
+        cand = cand[cand.centroid.within(cu)]
+        cand["county"] = n
+        rows.append(cand)
+    cells = gpd.GeoDataFrame(pd.concat(rows, ignore_index=True), crs=UTM)
+    cells["key"] = [f"cell:{int(x // 1000)}_{int(y // 1000)}" for x, y in zip(cells.x, cells.y)]
+    cells["area_m2"] = cells.geometry.area
+    return cells.drop(columns=["x", "y"])
+
+
+def rect_area(geoms) -> np.ndarray:
+    import shapely
+    return shapely.area(shapely.oriented_envelope(np.asarray(geoms)))
+
+
+def frames_west(release: gpd.GeoDataFrame, detections: gpd.GeoDataFrame, permits: gpd.GeoDataFrame,
+                boundaries: dict | None = None) -> tuple:
+    """(S7 objects, S8/S6WA/S6WB cells, n far cells not sampled) west of the Bay (protocol 10.2).
+
+    detections   western notebook-05 outlines (load_detections(west_counties()))
+    permits      western poultry permits (permit_points(counties=west_counties()))"""
+    if boundaries is None:
+        boundaries = {n: region.county_boundary(n).to_crs(UTM).unary_union for n in west_counties()}
+    m = release.to_crs(UTM)
+    d = detections.to_crs(UTM).reset_index(drop=True)
+    hit = set(gpd.sjoin(d[["geometry"]], m[["geometry"]], predicate="intersects").index)
+    s7 = d[~d.index.isin(hit)]
+    objects = gpd.GeoDataFrame({"key": "w05:" + s7.candidate_id.astype(str), "stratum": "S7", "county": s7.county.values,
+                                "area_m2": rect_area(s7.geometry.values)}, geometry=s7.geometry.values, crs=UTM)
+    cells = _grid(boundaries)
+    mw = m[m.county.isin(list(boundaries))] if "county" in m else m
+    known = gpd.GeoDataFrame(geometry=pd.concat([d.geometry, mw.geometry], ignore_index=True), crs=UTM)
+    near_p = gpd.GeoDataFrame(geometry=permits.to_crs(UTM).buffer(NEAR_M), crs=UTM)
+    s8 = set(gpd.sjoin(cells[["geometry"]], near_p, predicate="intersects").index) if len(near_p) else set()
+    a = set(gpd.sjoin(cells[["geometry"]], known, predicate="intersects").index) - s8 if len(known) else set()
+    kb = known.copy(); kb["geometry"] = kb.buffer(NEAR_M)
+    b = set(gpd.sjoin(cells[["geometry"]], kb, predicate="intersects").index) - s8 - a if len(known) else set()
+    cells["stratum"] = ["S8" if i in s8 else "S6WA" if i in a else "S6WB" if i in b else "far" for i in cells.index]
+    far = int((cells.stratum == "far").sum())
+    cells = cells[cells.stratum != "far"]
+    return _lonlat(objects), _lonlat(cells.copy()), far
+
+
+FOOTPRINTS = {
+    "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Maryland.geojson.zip",
+    "path": ROOT / "data" / "raw" / "external" / "ms_buildings" / "Maryland.geojson.zip",
+    "content_md5_b64": "qdjqLZKguh7Vhf0iYGaugg==",     # server Content-MD5 on 2026-11-06 (57,507,353 bytes)
+    "source": "Microsoft US Building Footprints v2, Maryland (ODbL)",
+}
+
+
+def ensure_footprints(download: bool = False) -> Path:
+    """The Microsoft Maryland footprint file (~57 MB zip, ~411 MB unzipped), checked against the
+    server's MD5; its SHA-256 is recorded in sample_meta_v1.2.json. download=False never fetches."""
+    import base64
+    p = FOOTPRINTS["path"]
+    if not p.exists():
+        on_drive = env.results_root() / "reference" / p.name
+        if on_drive.exists():
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(on_drive.read_bytes())
+        elif download:
+            import requests
+            p.parent.mkdir(parents=True, exist_ok=True)
+            tmp = p.with_suffix(".part")
+            with requests.get(FOOTPRINTS["url"], stream=True, timeout=120) as r:
+                r.raise_for_status()
+                with open(tmp, "wb") as f:
+                    for chunk in r.iter_content(1 << 20):
+                        f.write(chunk)
+            tmp.rename(p)
+        else:
+            raise FileNotFoundError(f"{p.name} not downloaded (set DOWNLOAD_FOOTPRINTS = True)")
+    md5 = hashlib.md5()
+    with open(p, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            md5.update(chunk)
+    if base64.b64encode(md5.digest()).decode() != FOOTPRINTS["content_md5_b64"]:
+        raise RuntimeError(f"{p} is not the file published on 2026-11-06 (MD5 mismatch)")
+    return p
+
+
+def shape_filter(gdf: gpd.GeoDataFrame, rule: dict = FOOTPRINT_RULE) -> gpd.GeoDataFrame:
+    """Footprints whose minimum rotated rectangle is >= length_min long with length/width >= aspect_min."""
+    import shapely
+    g = gdf.to_crs(UTM)
+    if not len(g):
+        return g.assign(length_m=[], width_m=[])
+    env_ = shapely.oriented_envelope(g.geometry.values)
+    c = shapely.get_coordinates(env_).reshape(len(g), 5, 2)          # closed rectangle: 5 corners
+    e1 = np.hypot(*(c[:, 1] - c[:, 0]).T)
+    e2 = np.hypot(*(c[:, 2] - c[:, 1]).T)
+    L, W = np.maximum(e1, e2), np.minimum(e1, e2)
+    keep = (L >= rule["length_min"]) & (L >= rule["aspect_min"] * np.maximum(W, 1e-6))
+    out = g[keep].copy()
+    out["length_m"], out["width_m"] = L[keep], W[keep]
+    return out
+
+
+def load_footprints(path: Path) -> gpd.GeoDataFrame:
+    """Shape-filtered footprints (UTM) with their row number in the file as `fid` and any capture-date
+    property the file carries."""
+    raw = gpd.read_file(f"zip://{path}")
+    raw["fid"] = np.arange(len(raw))
+    out = shape_filter(raw)
+    out.attrs["n_raw"] = len(raw)
+    out.attrs["date_columns"] = [c for c in raw.columns if "date" in c.lower() or "capture" in c.lower()]
+    return out
+
+
+def frames_footprints(fp: gpd.GeoDataFrame, release: gpd.GeoDataFrame, traced: gpd.GeoDataFrame,
+                      west_detections: gpd.GeoDataFrame, boundaries: dict | None = None) -> tuple:
+    """(S5 objects, k_f). S5 = shape-filtered footprints touching no release outline, no traced polygon
+    and (west) no notebook-05 detection; S5ES / S5W by the county holding the centroid.
+    k_f = release outline area / footprint area on S1-type pairs (release outline on a traced house
+    that also touches a footprint)."""
+    if boundaries is None:
+        boundaries = {n: region.county_boundary(n).to_crs(UTM).unary_union for n in C.county_names()}
+    f = fp.to_crs(UTM).reset_index(drop=True)
+    m, g, w = release.to_crs(UTM), traced.to_crs(UTM), west_detections.to_crs(UTM)
+    touch = set()
+    for layer in (m, g, w):
+        if len(layer):
+            touch |= set(gpd.sjoin(f[["geometry"]], layer[["geometry"]], predicate="intersects").index)
+    cand = f[~f.index.isin(touch)].copy()
+    cty = gpd.GeoDataFrame({"county": list(boundaries)}, geometry=list(boundaries.values()), crs=UTM)
+    cen = gpd.GeoDataFrame(geometry=cand.centroid.values, index=cand.index, crs=UTM)
+    j = gpd.sjoin(cen, cty, predicate="within")
+    cand = cand.loc[j.index]
+    cand["county"] = j["county"].values
+    es = cand.county.isin(C.EASTERN_SHORE)
+    keep = [c for c in cand.columns if "date" in c.lower() or "capture" in c.lower()]
+    objects = gpd.GeoDataFrame({"key": "msfp:" + cand.fid.astype(str), "stratum": np.where(es, "S5ES", "S5W"),
+                                "county": cand.county.values, "area_m2": cand.geometry.area.values,
+                                **{c: cand[c].values for c in keep}}, geometry=cand.geometry.values, crs=UTM)
+    # k_f on release outlines that touch both a traced house and a footprint
+    on = gpd.sjoin(m[["geometry"]], g[["geometry"]], predicate="intersects").index.unique()
+    mo = m.loc[on]
+    jj = gpd.sjoin(mo[["geometry"]], f[["geometry"]], predicate="intersects")
+    if len(jj):
+        fa = f.geometry.area
+        pair = jj.reset_index().drop_duplicates("index_right")
+        k_f = float(mo.loc[pair["index"].unique()].geometry.area.sum() / fa.loc[pair.index_right].sum())
+    else:
+        k_f = 1.0
+    return _lonlat(objects), k_f
+
+
+def known_layer(release, traced, west_detections=None, footprints_frame=None) -> gpd.GeoDataFrame:
+    """Every building drawn on cell photos (protocol 10.3): release outlines, traced polygons, western
+    notebook-05 detections and S5 frame footprints, one neutral colour."""
+    parts = [release.to_crs(UTM).geometry, traced.to_crs(UTM).geometry]
+    for x in (west_detections, footprints_frame):
+        if x is not None and len(x):
+            parts.append(x.to_crs(UTM).geometry)
+    return gpd.GeoDataFrame(geometry=pd.concat(parts, ignore_index=True), crs=UTM)
+
+
+def capture_rates(traced_es: gpd.GeoDataFrame, fp: gpd.GeoDataFrame, release: gpd.GeoDataFrame,
+                  step0: gpd.GeoDataFrame) -> pd.DataFrame:
+    """Model residual inputs (protocol 10.5): share of traced houses touched by
+    neither a (shape-filtered) footprint nor a release outline (q_ES), and by neither a footprint nor a
+    step-0 published-model detection (q_W). Geometry only; Clopper-Pearson 95%."""
+    from scipy.stats import beta
+    g = traced_es.to_crs(UTM).reset_index(drop=True)
+
+    def touched(layer):
+        return set(gpd.sjoin(g[["geometry"]], layer.to_crs(UTM)[["geometry"]], predicate="intersects").index) \
+            if len(layer) else set()
+    by_fp = touched(fp)
+    rows = []
+    for name, other in (("q_ES (no footprint, no release outline)", release),
+                        ("q_W (no footprint, no step-0 detection)", step0)):
+        miss = len(g) - len(by_fp | touched(other))
+        n = len(g)
+        rows.append({"rate": name, "missed": miss, "n": n, "q": miss / n,
+                     "low": beta.ppf(0.025, miss, n - miss + 1) if miss else 0.0,
+                     "high": beta.ppf(0.975, miss + 1, n - miss) if miss < n else 1.0})
+    return pd.DataFrame(rows).set_index("rate")
+
+
 # ── sample ─────────────────────────────────────────────────────────────────────
 
 def allocate(counts: pd.Series, n: int | None, min_per: int = MIN_PER_COUNTY) -> pd.Series:
     """Proportional allocation of n over counties (largest remainder), at least min_per per county
-    (or all its items if fewer); n=None = take everything (census)."""
+    (or all its items if fewer); n=None = take everything (census). If the minimums alone exceed n
+    (many counties, small n: e.g. S6W-A, 14 counties, n 40), the minimum is lowered one step at a time
+    until they fit; no county is ever trimmed below it."""
     counts = counts[counts > 0]
     if n is None or n >= counts.sum():
         return counts.copy()
     floor_ = np.minimum(counts, min_per)
+    while floor_.sum() > n and min_per > 0:
+        min_per -= 1
+        floor_ = np.minimum(counts, min_per)
     raw = counts / counts.sum() * n
     out = np.maximum(np.floor(raw), floor_).astype(int)
     out = np.minimum(out, counts)
@@ -179,6 +430,8 @@ def allocate(counts: pd.Series, n: int | None, min_per: int = MIN_PER_COUNTY) ->
                 out[c] += 1
     while out.sum() > n:                                   # minimums pushed it over: trim the largest
         c = (out - floor_).idxmax()
+        if out[c] <= floor_[c]:
+            raise RuntimeError("allocation can't meet its minimums")       # unreachable after the loop above
         out[c] -= 1
     return out.astype(int)
 
@@ -237,17 +490,40 @@ def replace_pilot(frame: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     return f
 
 
+def draw_addendum(new_objects: gpd.GeoDataFrame, new_cells: gpd.GeoDataFrame, labelled_keys=(),
+                  seed: int = SEED_V12, sizes: dict = SIZES) -> gpd.GeoDataFrame:
+    """v1.2 strata only (S5ES, S5W, S7, S8, S6WA, S6WB), own seed, no pilot or calibration.
+    Refuses if any of their keys already has a label (protocol 10.2)."""
+    keys = set(new_objects.key) | set(new_cells.key)
+    bad = keys & set(labelled_keys)
+    if bad:
+        raise RuntimeError(f"{len(bad)} v1.2 keys already have labels (e.g. {sorted(bad)[:3]}): the addendum "
+                           "can't be drawn after labelling has seen them")
+    strata = set(new_objects.stratum) | set(new_cells.stratum)
+    if not strata <= set(NEW_OBJECT + NEW_CELL):
+        raise ValueError(f"not v1.2 strata: {strata - set(NEW_OBJECT + NEW_CELL)}")
+    f = draw(new_objects, new_cells, sizes=sizes, seed=seed, pilot={}, calibration={})
+    f["protocol"] = "v1.2"
+    return f
+
+
 def queue(frame: pd.DataFrame, reviewer: str, phase: str, seed: int = 20261105) -> pd.DataFrame:
     """Items for one interpreter and phase, in that interpreter's own random order.
-    phase: 'calibration' | 'pilot' | 'main' (sampled objects not in the pilot) | 'cells'."""
+    phase: 'calibration' | 'pilot' | 'main' (v1.1 sampled objects not in the pilot) | 'cells' (v1.1)
+           | 'v1.2 objects' (S5, S7) | 'v1.2 cells' (S8, S6W)."""
+    smp = frame.role == "sample"
     if phase == "calibration":
         q = frame[frame.role == "calibration"]
     elif phase == "pilot":
-        q = frame[(frame.role == "sample") & frame.pilot]
+        q = frame[smp & frame.pilot]
     elif phase == "main":
-        q = frame[(frame.role == "sample") & ~frame.pilot & (frame.kind == "object")]
+        q = frame[smp & ~frame.pilot & frame.stratum.isin(V11_OBJECT)]
     elif phase == "cells":
-        q = frame[(frame.role == "sample") & (frame.kind == "cell")]
+        q = frame[smp & frame.stratum.isin(V11_CELL)]
+    elif phase == "v1.2 objects":
+        q = frame[smp & frame.stratum.isin(NEW_OBJECT)]
+    elif phase == "v1.2 cells":
+        q = frame[smp & frame.stratum.isin(NEW_CELL)]
     else:
         raise ValueError(phase)
     h = int(hashlib.sha256(f"{seed}:{reviewer.strip().lower()}:{phase}".encode()).hexdigest()[:8], 16)
@@ -460,6 +736,7 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
     img = W.Image(format="png", layout=W.Layout(width="100%", max_width="1040px"))
     status = W.HTML()
     low = W.Checkbox(description="low confidence", indent=False)
+    other = W.Checkbox(description=OTHER_FORM + " (with not a house)", indent=False)
     note = W.Text(placeholder="note (optional: why, Google Earth date used, where in the cell)",
                   layout=W.Layout(width="600px"))
     buttons = [W.Button(description=v, layout=W.Layout(width="130px" if len(values) < 6 else "60px")) for v in values]
@@ -467,7 +744,7 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
 
     def show():
         p = state["pos"]
-        low.value, note.value = False, ""
+        low.value, other.value, note.value = False, False, ""
         if p >= len(todo):
             img.value = b""
             status.value = f"<b>All done</b>: {len(todo)} labelled in this phase by {store.reviewer}."
@@ -486,7 +763,8 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
         def f(_):
             if state["pos"] >= len(todo):
                 return
-            store.add(items.iloc[todo[state["pos"]]]["key"], v, phase, low.value, note.value)
+            txt = "; ".join(x for x in ((OTHER_FORM if other.value else ""), note.value) if x)
+            store.add(items.iloc[todo[state["pos"]]]["key"], v, phase, low.value, txt)
             state["history"].append(state["pos"])
             state["pos"] += 1
             show()
@@ -500,7 +778,8 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
     for b, v in zip(buttons, values):
         b.on_click(on(v))
     back.on_click(on_back)
-    ui = W.VBox([status, img, W.HBox([low, note]), W.HBox(buttons + [back])])
+    extras = [low, other, note] if values == LABELS else [low, note]
+    ui = W.VBox([status, img, W.HBox(extras), W.HBox(buttons + [back])])
     show()
     display(ui)
     return ui
@@ -512,11 +791,11 @@ def label_ui(items: pd.DataFrame, store: Store, phase: str):
                "(protocol §2; left 500 m, right close-up)")
 
 
-def cell_ui(items: pd.DataFrame, store: Store, known: gpd.GeoDataFrame):
+def cell_ui(items: pd.DataFrame, store: Store, known: gpd.GeoDataFrame, phase: str = "cells"):
     def fn(r):
         kk = known[known.intersects(r["geometry"].buffer(150))]
         return render_cell(chip2023(r["lon"], r["lat"], CELL_M + 200, res=1.2), r["geometry"], kk)
-    return _ui(items, store, "cells", CELL_COUNTS, fn,
+    return _ui(items, store, phase, CELL_COUNTS, fn,
                "How many standing poultry houses have their centre inside the "
                "<b>dashed square</b> and <b>no</b> <span style='color:#00b8cc'>outline</span>? "
                "(say where in the note)")
@@ -590,6 +869,28 @@ def adjudication_queue(labels: pd.DataFrame, reviewers: list) -> pd.DataFrame:
     return out.reset_index()
 
 
+def agreement_with_final(labels: pd.DataFrame, final: pd.Series, reviewer: str, frame: pd.DataFrame) -> pd.DataFrame:
+    """One interpreter vs the adjudicated label, per object stratum (protocol 10.3: Monica on S7)."""
+    mine = labels[labels.reviewer == reviewer].set_index("key").value
+    st = frame.set_index("key").stratum
+    rows = []
+    for h in OBJECT_STRATA:
+        k = [x for x in final.index if st.get(x) == h and x in mine.index]
+        if k:
+            a, b = mine.reindex(k), final.reindex(k)
+            rows.append({"stratum": h, "n": len(k), "same label": float((a.values == b.values).mean()),
+                         "kappa (house / not)": cohen_kappa(binary(a.values), binary(b.values))})
+    return pd.DataFrame(rows)
+
+
+def other_form_counts(labels: pd.DataFrame, final: pd.Series, frame: pd.DataFrame) -> pd.Series:
+    """Per stratum: final 'not a house' items any interpreter noted as a poultry building of another
+    form (protocol 10.3; a separate row, never in the totals)."""
+    noted = set(labels[labels.note.fillna("").str.lower().str.contains(OTHER_FORM)].key)
+    k = [x for x in final.index if final[x] == "not a house" and x in noted]
+    return frame.set_index("key").stratum.reindex(k).value_counts().rename("poultry, other form")
+
+
 ADJ_COLS = ["key", "value", "reason", "decided_by", "decided_at"]
 
 
@@ -651,43 +952,89 @@ def groups(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
     return out
 
 
-def _totals(M: list, k: dict, west: set) -> dict:
-    """Point estimates from per-group means [(stratum, county, N, mean y, mean y*area)]."""
-    t = {"C_es": 0.0, "C_west": 0.0, "A_es": 0.0, "A_west": 0.0, "M": 0.0, "A_M": 0.0, "Y": 0.0}
+def _totals(M: list, k: dict, west: set, k_f: float = 1.0) -> dict:
+    """Totals from per-group means [(stratum, county, N, mean y, mean y*area)]."""
+    t = dict.fromkeys(["C_es", "C_west", "C_off_es", "A_es", "A_west", "M", "A_M", "R_W", "A_R",
+                       "F_es", "F_w", "A_F_es", "A_F_w", "P_W", "Y", "Y_W"], 0.0)
     for h, c, N, my, mya in M:
         if h in ("S1", "S2", "S3"):
             w = "west" if c in west else "es"
             t[f"C_{w}"] += N * my
             t[f"A_{w}"] += N * mya
+            if w == "es" and h in ("S2", "S3"):
+                t["C_off_es"] += N * my
         elif h == "S4":
             t["M"] += N * my
             t["A_M"] += N * mya * k.get(c, 1.0)
-        else:
+        elif h == "S7":
+            t["R_W"] += N * my
+            t["A_R"] += N * mya
+        elif h in ("S5ES", "S5W"):
+            r = "es" if h == "S5ES" else "w"
+            t[f"F_{r}"] += N * my
+            t[f"A_F_{r}"] += N * mya * k_f
+        elif h == "S8":
+            t["P_W"] += N * my
+        elif h in ("S6A", "S6B", "S6C"):
             t["Y"] += N * my
+        elif h in ("S6WA", "S6WB"):
+            t["Y_W"] += N * my
     return t
 
 
 def _derived(t: dict, mapped_es: int, mapped_all: int) -> dict:
-    T = t["C_es"] + t["M"] + t["Y"]
-    a_m = t["A_M"] / t["M"] if t["M"] > 0 else np.nan          # mean roof of a missed standing house
-    a_y = t["Y"] * a_m if t["Y"] > 0 else 0.0
+    """Protocol 10.4 (list frames) and 10.5 (residual, own rows)."""
+    T_L = t["C_es"] + t["C_west"] + t["M"] + t["R_W"] + t["F_es"] + t["F_w"] + t["P_W"]
+    T_es = t["C_es"] + t["M"] + t["F_es"]
+    n_w = t["C_west"] + t["R_W"]
+    roof_w_house = (t["A_west"] + t["A_R"]) / n_w if n_w > 0 else (t["A_M"] / t["M"] if t["M"] > 0 else 0.0)
+    roof_es = t["A_es"] + t["A_M"] + t["A_F_es"]
+    roof_md = roof_es + t["A_west"] + t["A_R"] + t["A_F_w"] + t["P_W"] * roof_w_house
     return {
         "precision (Maryland)": (t["C_es"] + t["C_west"]) / mapped_all,
         "precision (Eastern Shore)": t["C_es"] / mapped_es,
         "correct map houses (ES)": t["C_es"],
+        "correct map houses (west)": t["C_west"],
         "missed traced houses standing": t["M"],
-        "houses on neither source": t["Y"],
-        "houses standing (ES)": T,
-        "recall (ES)": t["C_es"] / T if T else np.nan,
-        "roof km2 (ES)": (t["A_es"] + t["A_M"] + a_y) / 1e6,
-        "roof km2 (Maryland)": (t["A_es"] + t["A_west"] + t["A_M"] + a_y) / 1e6,
+        "western detections not on map, houses (S7)": t["R_W"],
+        "footprint houses (ES)": t["F_es"],
+        "footprint houses (west)": t["F_w"],
+        "permit-cell houses (west, S8)": t["P_W"],
+        "houses on a list (Maryland)": T_L,
+        "houses on a list (ES)": T_es,
+        "recall (Maryland)": (t["C_es"] + t["C_west"]) / T_L if T_L else np.nan,
+        "recall (ES)": t["C_es"] / T_es if T_es else np.nan,
+        "roof km2 (Maryland)": roof_md / 1e6,
+        "roof km2 (ES)": roof_es / 1e6,
+        "list houses off the tracing (ES), L_ES": t["C_off_es"] + t["F_es"],
+        "list houses (west), L_W": t["C_west"] + t["R_W"] + t["F_w"] + t["P_W"],
+        "residual: cell expansion (ES)": t["Y"],
+        "residual: cell expansion (west)": t["Y_W"],
+        "residual: cell expansion (total)": t["Y"] + t["Y_W"],
     }
 
 
+def _cp_one_sided(n: int, all_house: bool) -> float:
+    """Exact one-sided 95% bound when all n sampled items are houses (lower) or none are (upper)."""
+    b = 0.05 ** (1.0 / n)
+    return b if all_house else 1.0 - b
+
+
+def mean_per_positive_cell(G: list) -> float:
+    """Mean house count per positive cell over S6, S6W and S8 (3 if there are none: an assumption)."""
+    ys = np.concatenate([g[3] for g in G if g[0] in RESIDUAL_CELLS + ["S8"]] or [np.array([])])
+    pos = ys[ys > 0]
+    return float(pos.mean()) if len(pos) else 3.0
+
+
 def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bool = False,
-             uc_as_house: bool = False, B: int = 2000, seed: int = 2, es: list | None = None) -> pd.DataFrame:
-    """Stratified estimates with 95% CIs from a rescaled stratified bootstrap (resample within each
-    stratum x county, finite-population corrected)."""
+             uc_as_house: bool = False, B: int = 2000, seed: int = 2, es: list | None = None,
+             k_f: float = 1.0) -> pd.DataFrame:
+    """Stratified estimates, 95% CIs from a rescaled stratified bootstrap (resample within each
+    stratum x county, finite-population corrected), widened for constant strata (protocol 10.4): a
+    sampled (not census) stratum whose every y is equal moves to its exact one-sided 95% bound, one
+    stratum at a time, the others at their point estimates; the wider interval is kept.
+    Column `widened by` names the strata that set a bound."""
     es = set(es or C.EASTERN_SHORE)
     obj = frame[frame.kind == "object"]
     mapped = obj[obj.stratum.isin(["S1", "S2", "S3"])]
@@ -695,10 +1042,8 @@ def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bo
     west = set(mapped.county) - es
     G = groups(frame, final, unsure_as_house, uc_as_house)
     means = [(h, c, N, y.mean(), (y * area).mean()) for h, c, N, y, area in G]
-    point = _derived(_totals(means, k, west), mapped_es, mapped_all)
+    point = _derived(_totals(means, k, west, k_f), mapped_es, mapped_all)
     rng = np.random.default_rng(seed)
-    # rescaled bootstrap: a resampled mean's deviation is scaled by sqrt((1 - n/N) n/(n-1)), so the
-    # spread matches the without-replacement variance (a census, n = N, has none)
     scale = [np.sqrt(max(0.0, 1 - len(y) / N) * len(y) / (len(y) - 1)) if len(y) > 1 else 0.0
              for h, c, N, y, area in G]
     boots = []
@@ -707,9 +1052,69 @@ def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bo
         for (h, c, N, y, area), (_, _, _, my, mya), f in zip(G, means, scale):
             i = rng.integers(0, len(y), len(y))
             Mb.append((h, c, N, my + f * (y[i].mean() - my), mya + f * ((y[i] * area[i]).mean() - mya)))
-        boots.append(_derived(_totals(Mb, k, west), mapped_es, mapped_all))
+        boots.append(_derived(_totals(Mb, k, west, k_f), mapped_es, mapped_all))
     Bt = pd.DataFrame(boots)
-    return pd.DataFrame({"estimate": pd.Series(point), "low": Bt.quantile(0.025), "high": Bt.quantile(0.975)})
+    out = pd.DataFrame({"estimate": pd.Series(point), "low": Bt.quantile(0.025), "high": Bt.quantile(0.975)})
+    out["widened by"] = ""
+    mpp = mean_per_positive_cell(G)
+    for h in sorted({g[0] for g in G}):
+        gh = [g for g in G if g[0] == h]
+        n = sum(len(g[3]) for g in gh)
+        if all(len(g[3]) == g[2] for g in gh):            # census: no sampling error
+            continue
+        ys = np.concatenate([g[3] for g in gh])
+        if h in CELL_STRATA:
+            if ys.any():
+                continue
+            val = (1.0 - 0.05 ** (1.0 / n)) * mpp        # houses per cell at the bound
+            swap = {(g[0], g[1]): (val, val * g[4].mean() if len(g[4]) else 0.0) for g in gh}
+        else:
+            if not (ys.all() or not ys.any()):
+                continue
+            b = _cp_one_sided(n, bool(ys.all()))
+            swap = {(g[0], g[1]): (b, b * g[4].mean()) for g in gh}
+        Ms = [(hh, c, N, *swap[(hh, c)]) if (hh, c) in swap else (hh, c, N, my, mya) for hh, c, N, my, mya in means]
+        alt = pd.Series(_derived(_totals(Ms, k, west, k_f), mapped_es, mapped_all))
+        lower, higher = alt < out["low"] - 1e-12, alt > out["high"] + 1e-12
+        out.loc[lower, "low"] = alt[lower]
+        out.loc[higher, "high"] = alt[higher]
+        out.loc[lower | higher, "widened by"] += (h + " ")
+    out["widened by"] = out["widened by"].str.strip()
+    return out
+
+
+def residual_table(frame: pd.DataFrame, final: pd.Series, est: pd.DataFrame, q: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Protocol 10.5, its own table (never inside the CI of houses on a list).
+    Design: cell expansion with its bootstrap CI (from `est`), plus, for each zero-hit cell stratum,
+    its exact one-sided 95% bound in houses (cells x mean count per positive cell).
+    Model: R = L q / (1 - q) per region, q from capture_rates (with its CI)."""
+    G = groups(frame, final)
+    mpp = mean_per_positive_cell(G)
+    rows = []
+    for r in ("ES", "west", "total"):
+        e = est.loc[f"residual: cell expansion ({r})"]
+        rows.append({"residual": f"cell expansion ({r})", "estimate": e.estimate, "low": e.low, "high": e.high,
+                     "note": "S6A/B/C" if r == "ES" else "S6W-A/B; far western cells not covered" if r == "west" else ""})
+    for h in RESIDUAL_CELLS:
+        gh = [g for g in G if g[0] == h]
+        if not gh:
+            continue
+        N, n = sum(g[2] for g in gh), sum(len(g[3]) for g in gh)
+        if not any(g[3].any() for g in gh):
+            cells_ = N * (1 - 0.05 ** (1.0 / n))
+            rows.append({"residual": f"zero-hit bound {h}", "estimate": 0.0, "low": 0.0, "high": cells_ * mpp,
+                         "note": f"{cells_:.0f} cells x {mpp:.2f} houses per positive cell"
+                                 + (" (assumed: no positive cell yet)" if mpp == 3.0 else "")})
+    if q is not None:
+        for region_, Lrow, qrow in (("ES", "list houses off the tracing (ES), L_ES", "q_ES (no footprint, no release outline)"),
+                                    ("west", "list houses (west), L_W", "q_W (no footprint, no step-0 detection)")):
+            L = est.loc[Lrow, "estimate"]
+            qq = q.loc[qrow]
+            f = lambda x: L * x / (1 - x) if x < 1 else np.inf
+            rows.append({"residual": f"model ({region_})", "estimate": f(qq.q), "low": f(qq.low), "high": f(qq.high),
+                         "note": "assumes traced houses represent houses off the tracing"
+                                 + ("; and that ES capture rates transfer west" if region_ == "west" else "")})
+    return pd.DataFrame(rows).set_index("residual")
 
 
 def stratum_table(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
@@ -737,6 +1142,8 @@ def stratum_table(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool =
             r["exact high"] = beta.ppf(0.975, kk + 1, n - kk) if kk < n else 1.0
         else:
             r["houses in sample"] = int(sum(g[3].sum() for g in gh))
+            if r["houses in sample"] == 0 and n < N:
+                r["exact high"] = N * (1 - 0.05 ** (1.0 / n))     # positive cells, one-sided 95%
         rows.append(r)
     return pd.DataFrame(rows).set_index("stratum")
 
