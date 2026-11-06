@@ -1,4 +1,4 @@
-# Notebook 14: run sheet (labelling)
+# Notebook 14: run sheet (verification v1.1 of map v1)
 
 Branch `research/accuracy-assessment-2026-11-05`. Notebook `notebooks/14_accuracy_assessment.ipynb`.
 Interpreters read `docs/TASK1_LABELLING_GUIDE.md` first.
@@ -9,7 +9,7 @@ Interpreters read `docs/TASK1_LABELLING_GUIDE.md` first.
 2. Open notebook 14. Kernel: Python 3.9 (`/Library/Developer/CommandLineTools/usr/bin/python3`).
 3. In **Settings**, set `INTERPRETER = "UA"`. Leave `INTERPRETERS = ["UA", "Monica"]`.
 4. Run, top to bottom: **Setup**, **Settings**, **1. Frames** (2 cells), **2. Draw the sample**
-   (2 cells; it only loads the saved sample), **2b. v1.2 addendum** (1 cell; see below).
+   (2 cells; it only loads the saved sample), **2b. Addendum** (1 cell; it only loads the saved addendum).
 5. **3. Calibration**: run the first code cell. 30 photos with buttons. Label all 30.
 6. **4. Pilot**: run the first code cell. 75 photos. Label all 75.
 7. Stop there: don't run 5, 5b, 6 or 6b until the pilot passes the kappa check (step 4's second cell).
@@ -17,11 +17,8 @@ Interpreters read `docs/TASK1_LABELLING_GUIDE.md` first.
 Photos stream from Planetary Computer: ~5–10 s for the first one, then the next ones load while you
 look. If you stop, rerun the same cell: it skips what you've labelled.
 
-**Step 2b and the footprints.** Calibration and pilot don't need it. Until the Microsoft footprint
-file is downloaded (`DOWNLOAD_FOOTPRINTS = True`, once, 57 MB), 2b prints "addendum not drawn
-yet" and that's expected. The v1.2 objects (5b) and **every** square (6, 6b) wait for it, because the
-squares must show the footprint candidates. Draw it before anyone labels a v1.2 item; the notebook
-refuses otherwise.
+**Step 2b.** The addendum (western detections, cells around western permits, western cells and the
+Microsoft footprint candidates) was drawn once on 2026-11-06; 2b only loads it. Nothing to download.
 
 ## Where the labels go
 

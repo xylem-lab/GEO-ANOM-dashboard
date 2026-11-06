@@ -234,7 +234,7 @@ def test_shape_filter():
 
 def test_frames_footprints_and_kf():
     rel, traced, b = world()
-    fp = gpd.GeoDataFrame({"fid": [0, 1, 2]}, geometry=[
+    fp = gpd.GeoDataFrame({"fid": [0, 1, 2], "density": [5, 5, 5]}, geometry=[
         house(1000, 1000, 150, 16),              # on h1 (release and traced): not a candidate, used for k_f
         house(4000, 4000, 160, 15),              # new long building in Somerset: S5ES
         house(8000, 4000, 160, 15)], crs=UTM)    # Wicomico (also Eastern Shore)
@@ -254,8 +254,8 @@ def test_draw_addendum_refuses_labelled_and_has_no_pilot():
     assert not f.pilot.any() and not (f.role == "calibration").any()
     with pytest.raises(RuntimeError):
         A.draw_addendum(s7, cells, labelled_keys={"w05:3"})
-    q = A.queue(f, "UA", "v1.2 objects")
-    assert len(q) == 30 and len(A.queue(f, "UA", "v1.2 cells")) == 120
+    q = A.queue(f, "UA", "addendum objects")
+    assert len(q) == 30 and len(A.queue(f, "UA", "addendum cells")) == 120
     assert len(A.queue(f, "UA", "main")) == 0
 
 
@@ -300,3 +300,32 @@ def test_allocate_many_counties_small_n():
     a = A.allocate(c, 40)
     assert a.sum() == 40 and (a >= 1).all() and (a <= c).all()
     assert (a[c >= 2] >= 2).all()
+
+
+def test_west_footprints_split_by_density():
+    bw = {"Frederick": box(X0 - 60000, Y0 - 5000, X0 - 50000, Y0 + 5000)}
+    rel = gpd.GeoDataFrame({"house_id": [], "county": []}, geometry=[], crs=UTM)
+    fp = gpd.GeoDataFrame({"fid": [0, 1], "density": [12, 450]},
+                          geometry=[house(-58000, 0), house(-55000, 2000)], crs=UTM)
+    s5, _ = A.frames_footprints(fp, rel, gpd.GeoDataFrame(geometry=[], crs=UTM),
+                                gpd.GeoDataFrame(geometry=[], crs=UTM), boundaries=bw)
+    assert s5.set_index("key").stratum.to_dict() == {"msfp:0": "S5WR", "msfp:1": "S5WD"}
+
+
+def test_footprint_density_counts_same_cell():
+    allg = gpd.GeoSeries([house(10, 10), house(300, 300), house(1500, 10)], crs=UTM)
+    d = A.footprint_density(allg, gpd.GeoSeries([house(500, 500)], crs=UTM))
+    assert list(d) == [2]
+
+
+def test_developed_footprints_are_an_assumption_not_widened():
+    rows = [{"key": f"msfp:{i}", "stratum": "S5WD", "county": "Montgomery", "area_m2": 1000.0, "kind": "object",
+             "role": "sample" if i < 30 else "reserve", "pilot": False, "rank": i} for i in range(7000)]
+    rows += [{"key": f"map:{i}", "stratum": "S1", "county": "Somerset", "area_m2": 2500.0, "kind": "object",
+              "role": "sample", "pilot": False, "rank": i} for i in range(50)]
+    f = pd.DataFrame(rows)
+    lab = pd.Series({k: ("house" if k.startswith("map:") else "not a house") for k in f.key[f.role == "sample"]})
+    est = A.estimate(f, lab, k={}, B=20)
+    assert est.loc["houses on a list (Maryland)", "high"] == pytest.approx(50)        # not widened by S5WD
+    assert est.loc["assumption check: S5WD exact 95% upper bound (houses)", "high"] == \
+        pytest.approx(7000 * (1 - 0.05 ** (1 / 30)))

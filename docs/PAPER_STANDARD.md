@@ -1,4 +1,8 @@
-# Task 1 paper: research standard (draft v0.1, 2026-11-06, for approval)
+# Task 1 paper: research standard (draft v0.2, 2026-11-06, for approval)
+
+Names: **map v1** = release_v1 (frozen, never edited); **verification v1.1** =
+the accuracy assessment of map v1 (`docs/TASK1_ACCURACY_PROTOCOL.md`); **map v2**
+= an improved map, only if verification v1.1 shows it's needed.
 
 Status: **draft, not approved.** Once approved it is frozen: its SHA-256 goes
 into `sample_meta.json` and the paper's manifest, and it is not edited after
@@ -11,7 +15,7 @@ any accuracy result.
 
 ## 0. How this relates to the protocol
 
-- `docs/TASK1_ACCURACY_PROTOCOL.md` (v1.1, frozen) governs **how** we measure:
+- `docs/TASK1_ACCURACY_PROTOCOL.md` (verification protocol v1.1, frozen 2026-11-06) governs **how** we measure:
   frames, sample, labels, interpreters, adjudication, estimators. This document
   does not change any of that.
 - This document governs **what the paper may claim** from those measurements:
@@ -22,12 +26,14 @@ any accuracy result.
 
 ### Changes from the brief, and why
 
-1. **Scope of the claim (v0.1).** Protocol v1.2 (§10, approved 2026-11-06)
+1. **Scope of the claim (v0.1).** Verification protocol v1.1 (frozen 2026-11-06)
    makes houses, recall and roof statewide over **list frames** (map, tracing,
    western detector output, western permit cells, footprints). Houses on no
    list are a separate residual line with its own bound, not inside the CI.
    So the claim is "Maryland had N houses on these lists (CI), plus at most R
-   on none". (v0 scoped it to the Eastern Shore because v1.1 measured
+   on none", with developed land west of the Bay assumed to hold no poultry
+   houses (a 30-item spot check, protocol §4). (v0 scoped it to the Eastern
+   Shore because the first protocol draft measured
    nothing west of the Bay except precision.) §1.
 2. **Per-county figures are secondary.** The sample has as few as 5 items per
    county in some strata. County CIs will be wide; no threshold applies to them.
@@ -57,6 +63,8 @@ Template (gaps filled only from frozen notebook 14 outputs):
 > covering [NB14:roof] km² of roof (95% CI [NB14:roof_lo]–[NB14:roof_hi]).
 > Houses on none of these are estimated at [NB14:R] (95% upper bound
 > [NB14:R_u]). [NB14:T_west] of the houses are west of the Chesapeake Bay.
+> Developed land west of the Bay is assumed to hold no poultry houses
+> ([NB14:S5WD_found] found in a spot check of 30 footprint candidates there).
 > The map finds [NB14:recall] of them (95% CI […]); [NB14:prec_all] of the
 > 2,833 mapped outlines sit on a standing poultry house (95% CI […]).
 
@@ -274,14 +282,15 @@ expert review."
 
 | ID | Decision | My recommendation | Who | Deadline |
 |---|---|---|---|---|
-| D1 | Add a stratum of published-model outlines not in release_v1 (protocol v1.2) so its precision can be scored on 2023. Needs an amendment and changes to notebook 14 (the other chat) **before main labelling starts** | Yes, if that set is small enough to label in under an hour; otherwise compare recall only and say so | You (+ notebook 14 chat) | Before main labelling |
+| D1 | Add a stratum of published-model outlines not in release_v1 on the Eastern Shore (not in verification v1.1; the west is covered by S7) so its precision can be scored on 2023. Needs an amendment and changes to notebook 14 (the other chat) **before main labelling starts** | Yes, if that set is small enough to label in under an hour; otherwise compare recall only and say so | You (+ notebook 14 chat) | Before main labelling |
 | D2 | Allow the one-time variance-driven top-up in §3 | Yes | You | Now |
 | D3 | Thresholds as in §3 (κ 0.8, ±5%, 2-point precision margin) | Yes | You | Now |
-| D4 | ~~Claim scoped to the Eastern Shore~~ → statewide list-frame claim + residual line (protocol v1.2) | Decided by the user 2026-11-06; tell Prof. Nakalembe | You, then Prof. Nakalembe | Done |
+| D4 | ~~Claim scoped to the Eastern Shore~~ → statewide list-frame claim + residual line (verification v1.1) | Decided by the user 2026-11-06; tell Prof. Nakalembe | You, then Prof. Nakalembe | Done |
 
 ## 10. Versions
 
 | Version | Date | Change | Labels or estimates seen? |
 |---|---|---|---|
 | v0 | 2026-11-05 | Draft for approval | No (no labels exist) |
-| v0.1 | 2026-11-06 | Claim, P1/P2/P4, new P6, §2.3, T2/T3 note and D4 follow protocol v1.2 (statewide list frames + residual) | No (no labels exist) |
+| v0.1 | 2026-11-06 | Claim, P1/P2/P4, new P6, §2.3, T2/T3 note and D4 follow protocol draft "v1.2" (statewide list frames + residual) | No (no labels exist) |
+| v0.2 | 2026-11-06 | Naming: map v1 / verification v1.1 / map v2; claim adds the developed-land assumption (S5WD) | No (no labels exist) |

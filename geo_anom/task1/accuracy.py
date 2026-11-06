@@ -18,10 +18,11 @@ Replaces the single-reviewer 97% precision and the informal 21/24 still-standing
     agreement / adjudication_queue / final_labels
     estimate(...)               stratified estimators, bootstrap 95% CIs
 
-  v1.2 (protocol section 10, statewide; drawn as an addendum with its own seed):
+  Addendum (verification protocol v1.1, statewide; drawn after the first sample, own seed):
     frames_west(...)            S7 western notebook-05 detections on no release outline (census),
                                 S8 cells around western poultry permits (census), S6W-A/B western cells
-    load_footprints / frames_footprints   S5 Microsoft footprint candidates (S5ES, S5W), k_f
+    load_footprints / frames_footprints   S5 Microsoft footprint candidates: S5ES, and west split by
+                                building density into S5WR (rural) and S5WD (developed); k_f
     draw_addendum(...)          new strata only, seed 20261106, refuses if a new key has a label
     known_layer(...)            every known building drawn on cell photos
     capture_rates(...)          q for the model residual (geometry only)
@@ -57,8 +58,8 @@ LABELS = ["house", "gone", "under construction", "not a house", "unsure"]
 CELL_COUNTS = ["0", "1", "2", "3", "4", "5", "6+"]
 V11_OBJECT = ["S1", "S2", "S3", "S4"]
 V11_CELL = ["S6A", "S6B", "S6C"]
-NEW_OBJECT = ["S5ES", "S5W", "S7"]                 # v1.2
-NEW_CELL = ["S8", "S6WA", "S6WB"]                  # v1.2
+NEW_OBJECT = ["S5ES", "S5WR", "S5WD", "S7"]        # addendum
+NEW_CELL = ["S8", "S6WA", "S6WB"]                  # addendum
 OBJECT_STRATA = V11_OBJECT + NEW_OBJECT           # new strata last: the v1.1 draw consumes the same random numbers
 CELL_STRATA = V11_CELL + NEW_CELL
 RESIDUAL_CELLS = ["S6A", "S6B", "S6C", "S6WA", "S6WB"]
@@ -66,13 +67,16 @@ STRATUM_NAMES = {
     "S1": "map outline on a traced house", "S2": "map outline, not traced", "S3": "map outline outside tracing",
     "S4": "traced house, not mapped", "S6A": "cell with a known house", "S6B": "cell within 1 km",
     "S6C": "cell farther than 1 km",
-    "S5ES": "footprint candidate, Eastern Shore", "S5W": "footprint candidate, west",
+    "S5ES": "footprint candidate, Eastern Shore", "S5WR": "footprint candidate, west, rural",
+    "S5WD": "footprint candidate, west, developed",
     "S7": "western detection, not on the map", "S8": "western cell near a poultry permit",
     "S6WA": "western cell with a known building", "S6WB": "western cell within 1 km",
 }
-# protocol sample sizes (None = all); v1.2: S5 all if <= 150 else 150 (ES) / 200 (W)
+# protocol sample sizes (None = all); n >= N -> all
 SIZES = {"S1": 100, "S2": 150, "S3": None, "S4": 150, "S6A": 150, "S6B": 150, "S6C": 100,
-         "S5ES": 150, "S5W": 200, "S7": None, "S8": None, "S6WA": 40, "S6WB": 60}
+         "S5ES": 150, "S5WR": 170, "S5WD": 30, "S7": None, "S8": None, "S6WA": 40, "S6WB": 60}
+RURAL_DENSITY = 100        # footprints per 1 km cell: below -> S5WR (rural), else S5WD (developed)
+ASSUMED_ZERO = ("S5WD",)   # protocol: developed land holds no poultry houses -- stated assumption, spot-checked
 SEED_V12 = 20261106
 REGISTRY = ROOT / "data" / "reference" / "mde_afo_registry_snapshot.json"
 POULTRY_PERMITS = ["chickens_not_laying_hens", "laying_hens_dry_manure", "turkeys", "ducks_liquid_manure"]
@@ -181,7 +185,7 @@ def frame_counts(objects: pd.DataFrame, cells: pd.DataFrame) -> pd.DataFrame:
     return f.groupby(["stratum", "county"]).size().rename("N").reset_index()
 
 
-# ── v1.2 frames: west of the Bay, footprints ───────────────────────────────────
+# ── addendum frames: west of the Bay, footprints ───────────────────────────────────
 
 def west_counties() -> list:
     return [n for n in C.county_names() if n not in C.EASTERN_SHORE]
@@ -276,7 +280,7 @@ FOOTPRINTS = {
 
 def ensure_footprints(download: bool = False) -> Path:
     """The Microsoft Maryland footprint file (~57 MB zip, ~411 MB unzipped), checked against the
-    server's MD5; its SHA-256 is recorded in sample_meta_v1.2.json. download=False never fetches."""
+    server's MD5; its SHA-256 is recorded in sample_meta_addendum.json. download=False never fetches."""
     import base64
     p = FOOTPRINTS["path"]
     if not p.exists():
@@ -328,15 +332,31 @@ def load_footprints(path: Path) -> gpd.GeoDataFrame:
     raw = gpd.read_file(f"zip://{path}")
     raw["fid"] = np.arange(len(raw))
     out = shape_filter(raw)
+    out["density"] = footprint_density(raw.geometry, out.geometry)
     out.attrs["n_raw"] = len(raw)
     out.attrs["date_columns"] = [c for c in raw.columns if "date" in c.lower() or "capture" in c.lower()]
     return out
 
 
+def _cell_ids(geoms: gpd.GeoSeries) -> np.ndarray:
+    """1 km grid cell id of each geometry's centre (geometries in UTM)."""
+    import shapely
+    c = shapely.get_coordinates(geoms.centroid.values)
+    return (c[:, 0] // CELL_M).astype(np.int64) * 100000 + (c[:, 1] // CELL_M).astype(np.int64)
+
+
+def footprint_density(all_geoms: gpd.GeoSeries, geoms: gpd.GeoSeries) -> np.ndarray:
+    """Number of footprints (all of them, before the shape rule) whose centre is in the same 1 km grid
+    cell as each of `geoms` (the protocol's rural / developed split for western candidates)."""
+    counts = pd.Series(_cell_ids(all_geoms.to_crs(UTM))).value_counts()
+    return counts.reindex(_cell_ids(geoms.to_crs(UTM))).fillna(0).astype(int).values
+
+
 def frames_footprints(fp: gpd.GeoDataFrame, release: gpd.GeoDataFrame, traced: gpd.GeoDataFrame,
                       west_detections: gpd.GeoDataFrame, boundaries: dict | None = None) -> tuple:
     """(S5 objects, k_f). S5 = shape-filtered footprints touching no release outline, no traced polygon
-    and (west) no notebook-05 detection; S5ES / S5W by the county holding the centroid.
+    and (west) no notebook-05 detection; S5ES by the county holding the centroid; western ones split
+    by `density` (footprints in their 1 km cell): S5WR < RURAL_DENSITY <= S5WD.
     k_f = release outline area / footprint area on S1-type pairs (release outline on a traced house
     that also touches a footprint)."""
     if boundaries is None:
@@ -354,8 +374,10 @@ def frames_footprints(fp: gpd.GeoDataFrame, release: gpd.GeoDataFrame, traced: g
     cand = cand.loc[j.index]
     cand["county"] = j["county"].values
     es = cand.county.isin(C.EASTERN_SHORE)
-    keep = [c for c in cand.columns if "date" in c.lower() or "capture" in c.lower()]
-    objects = gpd.GeoDataFrame({"key": "msfp:" + cand.fid.astype(str), "stratum": np.where(es, "S5ES", "S5W"),
+    rural = cand["density"].values < RURAL_DENSITY
+    stratum = np.where(es, "S5ES", np.where(rural, "S5WR", "S5WD"))
+    keep = [c for c in cand.columns if "date" in c.lower() or "capture" in c.lower() or c == "density"]
+    objects = gpd.GeoDataFrame({"key": "msfp:" + cand.fid.astype(str), "stratum": stratum,
                                 "county": cand.county.values, "area_m2": cand.geometry.area.values,
                                 **{c: cand[c].values for c in keep}}, geometry=cand.geometry.values, crs=UTM)
     # k_f on release outlines that touch both a traced house and a footprint
@@ -492,25 +514,25 @@ def replace_pilot(frame: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
 def draw_addendum(new_objects: gpd.GeoDataFrame, new_cells: gpd.GeoDataFrame, labelled_keys=(),
                   seed: int = SEED_V12, sizes: dict = SIZES) -> gpd.GeoDataFrame:
-    """v1.2 strata only (S5ES, S5W, S7, S8, S6WA, S6WB), own seed, no pilot or calibration.
-    Refuses if any of their keys already has a label (protocol 10.2)."""
+    """Addendum strata only (S5ES, S5WR, S5WD, S7, S8, S6WA, S6WB), own seed, no pilot or calibration.
+    Refuses if any of their keys already has a label."""
     keys = set(new_objects.key) | set(new_cells.key)
     bad = keys & set(labelled_keys)
     if bad:
-        raise RuntimeError(f"{len(bad)} v1.2 keys already have labels (e.g. {sorted(bad)[:3]}): the addendum "
+        raise RuntimeError(f"{len(bad)} addendum keys already have labels (e.g. {sorted(bad)[:3]}): the addendum "
                            "can't be drawn after labelling has seen them")
     strata = set(new_objects.stratum) | set(new_cells.stratum)
     if not strata <= set(NEW_OBJECT + NEW_CELL):
-        raise ValueError(f"not v1.2 strata: {strata - set(NEW_OBJECT + NEW_CELL)}")
+        raise ValueError(f"not addendum strata: {strata - set(NEW_OBJECT + NEW_CELL)}")
     f = draw(new_objects, new_cells, sizes=sizes, seed=seed, pilot={}, calibration={})
-    f["protocol"] = "v1.2"
+    f["protocol"] = "v1.1 addendum"
     return f
 
 
 def queue(frame: pd.DataFrame, reviewer: str, phase: str, seed: int = 20261105) -> pd.DataFrame:
     """Items for one interpreter and phase, in that interpreter's own random order.
     phase: 'calibration' | 'pilot' | 'main' (v1.1 sampled objects not in the pilot) | 'cells' (v1.1)
-           | 'v1.2 objects' (S5, S7) | 'v1.2 cells' (S8, S6W)."""
+           | 'addendum objects' (S5, S7) | 'addendum cells' (S8, S6W)."""
     smp = frame.role == "sample"
     if phase == "calibration":
         q = frame[frame.role == "calibration"]
@@ -520,9 +542,9 @@ def queue(frame: pd.DataFrame, reviewer: str, phase: str, seed: int = 20261105) 
         q = frame[smp & ~frame.pilot & frame.stratum.isin(V11_OBJECT)]
     elif phase == "cells":
         q = frame[smp & frame.stratum.isin(V11_CELL)]
-    elif phase == "v1.2 objects":
+    elif phase == "addendum objects":
         q = frame[smp & frame.stratum.isin(NEW_OBJECT)]
-    elif phase == "v1.2 cells":
+    elif phase == "addendum cells":
         q = frame[smp & frame.stratum.isin(NEW_CELL)]
     else:
         raise ValueError(phase)
@@ -955,7 +977,7 @@ def groups(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
 def _totals(M: list, k: dict, west: set, k_f: float = 1.0) -> dict:
     """Totals from per-group means [(stratum, county, N, mean y, mean y*area)]."""
     t = dict.fromkeys(["C_es", "C_west", "C_off_es", "A_es", "A_west", "M", "A_M", "R_W", "A_R",
-                       "F_es", "F_w", "A_F_es", "A_F_w", "P_W", "Y", "Y_W"], 0.0)
+                       "F_es", "F_w", "F_wr", "F_wd", "A_F_es", "A_F_w", "P_W", "Y", "Y_W"], 0.0)
     for h, c, N, my, mya in M:
         if h in ("S1", "S2", "S3"):
             w = "west" if c in west else "es"
@@ -969,10 +991,12 @@ def _totals(M: list, k: dict, west: set, k_f: float = 1.0) -> dict:
         elif h == "S7":
             t["R_W"] += N * my
             t["A_R"] += N * mya
-        elif h in ("S5ES", "S5W"):
+        elif h in ("S5ES", "S5WR", "S5WD"):
             r = "es" if h == "S5ES" else "w"
             t[f"F_{r}"] += N * my
             t[f"A_F_{r}"] += N * mya * k_f
+            if h != "S5ES":
+                t["F_wr" if h == "S5WR" else "F_wd"] += N * my
         elif h == "S8":
             t["P_W"] += N * my
         elif h in ("S6A", "S6B", "S6C"):
@@ -999,6 +1023,8 @@ def _derived(t: dict, mapped_es: int, mapped_all: int) -> dict:
         "western detections not on map, houses (S7)": t["R_W"],
         "footprint houses (ES)": t["F_es"],
         "footprint houses (west)": t["F_w"],
+        "footprint houses (west, rural)": t["F_wr"],
+        "footprint houses (west, developed)": t["F_wd"],
         "permit-cell houses (west, S8)": t["P_W"],
         "houses on a list (Maryland)": T_L,
         "houses on a list (ES)": T_es,
@@ -1034,7 +1060,9 @@ def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bo
     stratum x county, finite-population corrected), widened for constant strata (protocol 10.4): a
     sampled (not census) stratum whose every y is equal moves to its exact one-sided 95% bound, one
     stratum at a time, the others at their point estimates; the wider interval is kept.
-    Column `widened by` names the strata that set a bound."""
+    Column `widened by` names the strata that set a bound. Strata in ASSUMED_ZERO (developed western
+    footprints) are not widened: the protocol states that developed land holds no poultry houses and
+    reports their exact bound on its own row ('assumption check ...') instead."""
     es = set(es or C.EASTERN_SHORE)
     obj = frame[frame.kind == "object"]
     mapped = obj[obj.stratum.isin(["S1", "S2", "S3"])]
@@ -1061,6 +1089,14 @@ def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bo
         gh = [g for g in G if g[0] == h]
         n = sum(len(g[3]) for g in gh)
         if all(len(g[3]) == g[2] for g in gh):            # census: no sampling error
+            continue
+        if h in ASSUMED_ZERO:
+            ys = np.concatenate([g[3] for g in gh]); Nh = sum(g[2] for g in gh)
+            k_ = int(ys.sum())
+            out.loc[f"assumption check: {h} houses found in sample", ["estimate", "low", "high"]] = [k_, k_, k_]
+            out.loc[f"assumption check: {h} exact 95% upper bound (houses)", ["estimate", "low", "high"]] = \
+                [np.nan, 0.0, Nh * (1 - 0.05 ** (1.0 / n)) if k_ == 0 else np.nan]
+            out.loc[out.index.str.startswith("assumption check"), "widened by"] = ""
             continue
         ys = np.concatenate([g[3] for g in gh])
         if h in CELL_STRATA:
