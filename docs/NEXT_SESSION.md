@@ -12,7 +12,7 @@ below it, which is kept for history.
 - **Addendum drawn once** (seed 20261106, commit a4de373): `Task1_results/accuracy_v1/frame_addendum.geojson` SHA-256 189f0a1aba458ab53df9091ab0b0686d6d96ebb2a89fbc47cdab31d9e183f2c3 + `sample_meta_addendum.json`. Samples: S5ES 150 of 1,501; S5WR 170 of 1,497; S5WD 30 of 7,357; S7 367 (all); S8 49 (all); S6WA 40 of 235; S6WB 60 of 1,068. k_f 1.003. Capture rates (geometry, 3,040 traced houses): q_ES 2.7% (2.2-3.4), q_W 4.7% (4.0-5.5).
 - Footprints: Microsoft US Building Footprints v2 Maryland (MD5-checked; SHA-256 98505895...; 1,657,199 raw, 13,100 pass the shape rule; `capture_dates_range` mostly empty). Local copy `data/raw/external/ms_buildings/` (gitignored).
 - First sample unchanged (`frame.geojson` d649666f...); `sample_meta.json` amendments: v1.1 0505a1fc, v1.2 7d589b11, verification v1.1 e5a71085. No labels exist.
-- PAPER_STANDARD v0.2 (naming; claim adds the developed-land assumption). Open: D1 (published-model outlines on the Eastern Shore are not in verification v1.1; adding them needs an amendment before main labelling).
+- PAPER_STANDARD v0.2 (naming; claim adds the developed-land assumption). **D1 decided (user, 2026-11-06): left out** -- published-model outlines on the Eastern Shore are not in verification v1.1; the published model is compared with map v1 on recall only, T4c (precision) not tested. Docs only: protocol hash and sample unchanged.
 - **Next:** UA labels calibration (30) + pilot (75) per `docs/NB14_RUN_SHEET.md`; Monica the same; kappa gate.
 
 ## 2026-11-06 -- Notebook 14: protocol v1.2 implemented, ready for UA's calibration and pilot (branch `research/accuracy-assessment-2026-11-05`, includes `research/protocol-v1.2-statewide`)
