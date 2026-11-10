@@ -160,17 +160,21 @@ def test_final_labels_and_adjudication(tmp_path):
     a, b = A.Store(tmp_path, "UA"), A.Store(tmp_path, "JH")
     a.add("k1", "house", "main"); b.add("k1", "house", "main")
     a.add("k2", "house", "main"); b.add("k2", "gone", "main")
-    a.add("k3", "unsure", "main"); b.add("k3", "house", "main")
+    a.add("k3", A.CANT_TELL, "main"); b.add("k3", "house", "main")
+    a.add("k5", "house", "main", check_later=True); b.add("k5", "house", "main")
     a.add("k4", "house", "main"); b.add("k4", "not a house", "main")
     L = A.load_labels(tmp_path)
     q = A.adjudication_queue(L, ["UA", "JH"])
-    assert set(q.key) == {"k2", "k3", "k4"}
+    assert set(q.key) == {"k2", "k3", "k4", "k5"}           # k5: agreed but flagged check later
+    assert bool(q.set_index("key").loc["k5", "check later"])
     adj = tmp_path / "adjudicated.csv"
     A.adjudicate(adj, "k2", "gone", "roof missing on 2023 photo", "UA+JH")
     with pytest.raises(ValueError):
         A.adjudicate(adj, "k3", "house", "", "UA")
+    A.adjudicate(adj, "kept1", "house", "round-1 pilot item kept in the sample", "UA+JH")
     fin = A.final_labels(L, ["UA", "JH"], pd.read_csv(adj))
-    assert fin.to_dict() == {"k1": "house", "k2": "gone", "k3": "unsure", "k4": "unsure"}
+    assert fin.to_dict() == {"k1": "house", "k2": "gone", "k3": A.CANT_TELL, "k4": A.CANT_TELL, "k5": "house",
+                             "kept1": "house"}
 
 
 def test_store_latest_wins_and_rejects_unknown(tmp_path):
@@ -397,3 +401,59 @@ def test_assumption_rows_then_constant_stratum():
     est = A.estimate(f, lab, k={}, B=20)
     r = est.loc["residual: cell expansion (ES)"]
     assert r.high == pytest.approx(400 * (1 - 0.05 ** (1 / 50)) * 3.0) and r["widened by"] == "S6A"
+
+
+def test_start_round2_replaces_and_keeps_where_no_reserve():
+    obj, cells = fake_frame()
+    f = A.draw(obj, cells, seed=3)
+    # one tiny fully sampled county in S2 whose only item is a pilot item
+    i = f.index[(f.stratum == "S2") & f.pilot][0]
+    f.loc[i, "county"] = "Tiny"
+    used = set(f.key[f.pilot & (f.role == "sample")]) | set(f.key[f.role == "calibration"])
+    g = A.start_round2(f, used)
+    assert g.at[i, "round2"] == A.KEPT and g.at[i, "role"] == "sample" and not g.at[i, "pilot"]
+    assert (g.role == "discarded pilot").sum() == 74
+    assert (g.role == "used calibration").sum() == 30 and (g.role == "calibration").sum() == 30
+    new = set(g.key[(g.role == "calibration") | (g.pilot & (g.role == "sample"))])
+    assert not new & used
+    assert (g.role == "sample").sum() == (f.role == "sample").sum()
+    for ph in ("calibration", "pilot", "main"):
+        assert not set(A.queue(g, "UA", ph).key) & used          # KEPT is in no queue
+    with pytest.raises(RuntimeError):
+        A.start_round2(f, used | new)
+
+
+def test_gate_flag_and_pace(tmp_path):
+    a, b = A.Store(tmp_path, "UA"), A.Store(tmp_path, "M")
+    keys = [f"k{i}" for i in range(20)]
+    for i, k in enumerate(keys):
+        a.add(k, "house" if i < 10 else "not a house", "pilot", check_later=(i == 0), note="why" if i == 0 else "")
+        b.add(k, "house" if i < 10 else "not a house", "pilot")
+    fr = pd.DataFrame({"key": keys, "stratum": "S1"})
+    L = A.load_labels(tmp_path)
+    g = A.gate(L, fr, ["UA", "M"], keys)
+    assert g["verdict"] == "PASS" and g["kappa"] == pytest.approx(1)
+    assert A.gate(L, fr, ["UA", "M"], keys + ["missing"])["verdict"] == "not complete"
+    b.add("k11", A.CANT_TELL, "pilot"); b.add("k12", A.CANT_TELL, "pilot"); b.add("k13", A.CANT_TELL, "pilot")
+    g2 = A.gate(A.load_labels(tmp_path), fr, ["UA", "M"], keys)
+    assert g2["verdict"].startswith("STOP")                    # 3 of 40 labels = 7.5% > 5%
+    fl = A.agreement_by_flag(L, ["UA", "M"]).set_index("photos")
+    assert fl.loc["flagged", "n"] == 1 and fl.loc["not flagged", "n"] == 19
+    p = A.pace(A.load_raw(tmp_path)).set_index("interpreter")
+    assert p.loc["UA", "notes"] == 1 and p.loc["UA", "check later"] == 1 and p.loc["M", "labels"] == 23
+
+
+def test_house_vs_cant_tell_is_a_disagreement():
+    L = pd.DataFrame({"key": ["x", "y", "z", "x", "y", "z"], "reviewer": list("aaabbb"),
+                      "value": ["house", "not a house", "house", A.CANT_TELL, "not a house", "house"],
+                      "phase": "pilot", "note": ""})
+    fr = pd.DataFrame({"key": ["x", "y", "z"], "stratum": "S4"})
+    t = A.agreement(L, fr, ["a", "b"], B=20).set_index("items")
+    assert t.loc["all objects", "kappa (house / not)"] < 1
+
+
+def test_render_closeup_without_network():
+    from rasterio.transform import from_origin
+    img = (np.random.default_rng(0).random((300, 300, 3)) * 255).astype(np.uint8)
+    png = A.render_closeup((img, from_origin(X0, Y0, 1, 1), "EPSG:32618", "2023-06-02"), caption="E01: house")
+    assert png[:4] == b"\x89PNG"

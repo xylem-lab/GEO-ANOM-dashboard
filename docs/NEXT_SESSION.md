@@ -4,6 +4,16 @@ Read this file first in any new session working on GEO-ANOM. It's the
 single pointer to everything else. This supersedes the 2026-09-02 version
 below it, which is kept for history.
 
+## 2026-11-10 -- Pilot 1 failed; verification v1.1 revision 2, round 2 drawn (branch `research/accuracy-assessment-2026-11-05`)
+
+- **Pilot 1 failed the gate** (notebook 14, round 1): kappa house / not house **0.58** (95% CI 0.37-0.77) on 75; same house / not 83%. S1 92% / S2 88% (κ 0.80) / S4 48% (κ 0.36) same label. 13 house / not disagreements, mostly Monica `unsure` vs UA `house` (10) or `gone` (3). `unsure` = house would give κ 0.77 (sensitivity only, not a gate rule). Pace: UA 1.3-1.5 s per photo, Monica 2.6-6.1 s; no notes, no low-confidence ticks. Record: `Task1_results/accuracy_v1/labels/archive_round1/pilot1_record.json` (labels archived there, SHA-256 checked, nothing deleted).
+- **Diagnosis (user):** `unsure` was used to mean "check this later". **Revision 2 (approved by the user 2026-11-10):** forced choice house / gone / under construction / not a house / `can't tell` (button "can't tell: photo unreadable": cloud, blur, tile edge, no photo only); a **check later** tick (replaces low confidence; label still counts; adjudicated jointly); gate = κ ≥ 0.8 and can't tell ≤ 5% of pilot labels; pace warning under 3 s per photo; flagged vs unflagged agreement reported.
+- **Protocol consolidated** (addendum + A1 + revision 2, three-line history): SHA-256 e13356a75347ceb7dc6aa332c9c5bfd6920ef1e7ee2b5aff84c500a264f3047d. Name stays "verification v1.1"; this is revision 2.
+- **Round 2 drawn** (`A.start_round2`, no new random numbers: seed-20261105 ranks): `frame_r2.geojson` SHA-256 c7add298991699eb492a787e18342fa3afd70a433b86a196224c77dbe682bebd + `sample_meta_r2.json`; `frame.geojson` untouched. New calibration 30 (tail of the reserve), pilot **74** (72 from the reserve; S2 Dorchester's 2 remaining sampled items). 3 round-1 pilot items in fully sampled counties (S2 Cecil census of 1, S2 Dorchester 2) stay in the sample, out of every queue, label by adjudication only. None of the 105 round-1 photos is in round 2; main sample unchanged.
+- **Notebook 14 rebuilt:** interpreter path first (1 name, 2 how to decide + example gallery, 3 calibration, 4 compare, 5 pilot, 6 gate, 7 main, 8 squares), coordinator steps C1-C7 below. Gallery renders confirmed rows of `accuracy_v1/guide_examples.csv` at run time (never committed). 34 candidates (every round-1 disagreement + agreed examples) and `guide_examples_contact_sheet.png` on the drive; **none confirmed yet**. Round 1 had no unreadable photo, so that case has no real example.
+- Tests 31 in `tests/test_accuracy.py`; Restart -> Run All passes (twice: draw, then load).
+- **Next:** user + PIs settle each candidate example's label (status = confirmed); then UA and Monica: calibration -> discuss -> pilot -> gate.
+
 ## 2026-11-06 -- Verification v1.1 amendment A1 (D1) drawn
 
 - User reversed D1 (scoring the published model's own outlines): included as **amendment A1**. S9 = the 30 notebook-05 (published model) outlines on the Eastern Shore touching no map v1 outline (Cecil 13, Worcester 6, Caroline 5, Wicomico 3, Somerset 1, Dorchester 1, Queen Anne's 1; none on a traced house). Census, seed 20261107, labelled with the addendum objects (~8 min per person).

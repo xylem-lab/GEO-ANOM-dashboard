@@ -390,3 +390,10 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 
 - D1 briefly "left out", then included at the user's request (recall gain without precision isn't a credible method comparison). Only 30 published-model outlines on the Eastern Shore are off map v1, so a census is cheaper than any linkage argument for them; the other 2,299 reuse the map v1 labels through overlap linkage.
 - Kept S9 houses out of the list total rather than redrawing S5ES to exclude them (the addendum was already frozen).
+
+## 2026-11-10 — pilot 1 failed; revision 2
+
+- Pilot 1 κ 0.58 (needs 0.8). Not a guide-wording problem alone: `unsure` was a label and a "check later" note at once, and both interpreters went at 1.5-2.6 s a photo with no notes. Split the flag from the label instead of rewording `unsure`.
+- Rejected switching the gate to "unsure = house" after the fact (κ 0.77): post-hoc rule change; kept as a sensitivity number only.
+- Rejected relabelling round-1 photos or redrawing with a new seed: the protocol pre-specified replacement from the reserve, and the seed-20261105 ranks already give a random order. Where a county had no reserve (S2 Cecil N 1, S2 Dorchester N 4), kept the 3 round-1 items in the sample with adjudicated labels rather than dropping them (dropping would leave Cecil's S2 stratum with no item).
+- Example gallery rendered at run time from the drive, not committed (public repo; photos locate farms).

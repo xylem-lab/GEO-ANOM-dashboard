@@ -30,6 +30,11 @@ Replaces the single-reviewer 97% precision and the informal 21/24 still-standing
     Shore touching no map v1 outline (census); step0_links -> how many published outlines each map v1
     outline stands for, so the published model's precision and recall come from the same labels
 
+  Revision 2 (2026-11-10, after pilot 1 failed): labels with CANT_TELL (photo unreadable only) and a
+    'check later' flag (FLAG); start_round2 -> new calibration and pilot from the reserve (no new random
+    numbers), load_samples, gate, agreement_by_flag, pace, guide examples (example_candidates,
+    contact_sheet, show_examples; rendered from the shared drive at run time)
+
 Keys: "map:<house_id>", "usgs:<row in the SHA-checked tracing>", "cell:<x>_<y>" (UTM 18N km),
 "w05:<candidate_id>" (western notebook-05 detection), "msfp:<row in the footprint file>",
 "e05:<candidate_id>" (Eastern Shore notebook-05 detection, S9).
@@ -58,7 +63,11 @@ PROTOCOL = ROOT / "docs" / "TASK1_ACCURACY_PROTOCOL.md"
 VERSION = "accuracy_v1"
 YEAR = "2023"
 
-LABELS = ["house", "gone", "under construction", "not a house", "unsure"]
+CANT_TELL = "can't tell"           # photo unreadable at the crosshair (cloud, blur, tile edge, no 2023 photo); revision 2
+LABELS = ["house", "gone", "under construction", "not a house", CANT_TELL]
+BUTTON_TEXT = {CANT_TELL: "can't tell: photo unreadable"}
+FLAG = "check_later"               # revision 2: a tick next to the label ("not sure / look again"), never a label
+SLOW_S = 3.0                       # a gentle warning when the last photos took less than this each (median)
 CELL_COUNTS = ["0", "1", "2", "3", "4", "5", "6+"]
 V11_OBJECT = ["S1", "S2", "S3", "S4"]
 V11_CELL = ["S6A", "S6B", "S6C"]
@@ -85,7 +94,8 @@ RURAL_DENSITY = 100        # footprints per 1 km cell: below -> S5WR (rural), el
 ASSUMED_ZERO = ("S5WD",)   # protocol: developed land holds no poultry houses -- stated assumption, spot-checked
 SEED_V12 = 20261106        # addendum
 SEED_A1 = 20261107         # amendment A1
-PROTOCOL_LABEL = "verification v1.1 + amendment A1"     # recorded with the protocol SHA-256 in sample_meta.json
+PROTOCOL_LABEL = "verification v1.1, revision 2"     # recorded with the protocol SHA-256 in sample_meta_r2.json
+ROUND = 2                          # labelling round; round 1 (pilot failed, 2026-11-10) is in labels/archive_round1/
 REGISTRY = ROOT / "data" / "reference" / "mde_afo_registry_snapshot.json"
 POULTRY_PERMITS = ["chickens_not_laying_hens", "laying_hens_dry_manure", "turkeys", "ducks_liquid_manure"]
 FOOTPRINT_RULE = {"length_min": 60.0, "aspect_min": 4.0}
@@ -577,11 +587,95 @@ def draw_amendment_a1(s9: gpd.GeoDataFrame, labelled_keys=(), seed: int = SEED_A
     return f
 
 
+KEPT = "round-1 pilot kept: label by adjudication"
+
+
+def start_round2(frame: gpd.GeoDataFrame, used_keys) -> gpd.GeoDataFrame:
+    """Round 2 after the failed pilot (protocol: replace, never relabel). No new random numbers: every
+    choice follows the ranks drawn with seed 20261105.
+    - pilot: as replace_pilot -- each round-1 pilot item becomes 'discarded pilot' and the next reserve item
+      of its stratum and county (lowest rank) takes its place in the sample and the pilot; where the county
+      has no reserve (fully sampled), its unseen sampled item with the lowest rank joins the pilot instead
+      the round-1 item stays in the sample, out of every labelling queue, and gets its label by
+      adjudication (KEPT); the county's unseen sampled item with the lowest rank, if any, joins the pilot;
+    - calibration: each round-1 calibration item becomes 'used calibration' and the reserve item with the
+      highest rank in its stratum and county becomes calibration (from the other end of the order, so it
+      never meets the pilot replacements).
+    Refuses if any new calibration or pilot item is in `used_keys` (every key labelled in round 1)."""
+    f = frame.copy()
+    f["round2"] = ""
+    for i in f.index[f.pilot & (f.role == "sample")]:
+        h, c = f.at[i, "stratum"], f.at[i, "county"]
+        same = (f.stratum == h) & (f.county == c)
+        res = f[same & (f.role == "reserve")].sort_values("rank")
+        if len(res):
+            f.at[i, "role"], f.at[i, "pilot"] = "discarded pilot", False
+            j = res.index[0]
+            f.at[j, "role"], f.at[j, "pilot"], f.at[j, "round2"] = "sample", True, "pilot from reserve"
+            continue
+        # county fully sampled: dropping the item would leave the county short (S2 Cecil is a census of 1),
+        # so it stays in the sample with its label decided by adjudication (KEPT), and the county's unseen
+        # sampled item with the lowest rank, if any, joins the pilot in its place
+        f.at[i, "pilot"], f.at[i, "round2"] = False, KEPT
+        cand = f[same & (f.role == "sample") & ~f.pilot & (f.round2 == "") & ~f.key.isin(set(used_keys))]
+        if len(cand):
+            j = cand.sort_values("rank").index[0]
+            f.at[j, "pilot"], f.at[j, "round2"] = True, "pilot from the sample (no reserve in county)"
+    for i in f.index[f.role == "calibration"]:
+        h, c = f.at[i, "stratum"], f.at[i, "county"]
+        res = f[(f.stratum == h) & (f.county == c) & (f.role == "reserve")].sort_values("rank")
+        how = "calibration from reserve"
+        if not len(res):            # no reserve in the county: the stratum's reserve with the highest rank anywhere
+            res = f[(f.stratum == h) & (f.role == "reserve")].sort_values(["rank", "county"])
+            how = "calibration from reserve (other county)"
+        if not len(res):
+            raise RuntimeError(f"no reserve left for calibration in {h}")
+        f.at[i, "role"] = "used calibration"
+        j = res.index[-1]
+        f.at[j, "role"], f.at[j, "round2"] = "calibration", how
+    new = set(f.key[(f.role == "calibration") | (f.pilot & (f.role == "sample"))])
+    bad = new & set(used_keys)
+    if bad:
+        raise RuntimeError(f"{len(bad)} round-2 items were labelled in round 1 (e.g. {sorted(bad)[:3]})")
+    seen = set(f.key[(f.role == "sample") & (f.round2 != KEPT)]) & set(used_keys)
+    if seen:
+        raise RuntimeError(f"{len(seen)} sampled items were labelled in round 1 (e.g. {sorted(seen)[:3]})")
+    return f
+
+
+SAMPLE_FILES = {"round 2": ("frame_r2.geojson", "sample_meta_r2.json"),
+                "addendum": ("frame_addendum.geojson", "sample_meta_addendum.json"),
+                "S9": ("frame_a1.geojson", "sample_meta_a1.json")}
+
+
+def load_samples(acc: Path) -> tuple:
+    """(frame_all, metas) from the saved draws -- loads only, never draws; each file's SHA-256 is checked
+    against its meta. frame_all = round-2 first sample + addendum + S9. (None, {}) if round 2 isn't drawn yet."""
+    acc = Path(acc)
+    if not (acc / SAMPLE_FILES["round 2"][0]).exists():
+        return None, {}
+    parts, metas = [], {}
+    for name, (f, m) in SAMPLE_FILES.items():
+        meta_ = json.load(open(acc / m))
+        if sha256_file(acc / f) != meta_["frame_sha256"]:
+            raise RuntimeError(f"{f} changed since it was drawn")
+        parts.append(gpd.read_file(acc / f).to_crs(UTM))
+        metas[name] = meta_
+    if sha256_file(PROTOCOL) != metas["round 2"]["protocol_sha256"]:
+        print("WARNING: the protocol differs from the one round 2 was drawn under -- tell the coordinator")
+    fa = gpd.GeoDataFrame(pd.concat(parts, ignore_index=True), geometry="geometry", crs=UTM)
+    fa["pilot"] = fa["pilot"].astype(bool)
+    fa["round2"] = fa["round2"].fillna("") if "round2" in fa else ""
+    return fa, metas
+
+
 def queue(frame: pd.DataFrame, reviewer: str, phase: str, seed: int = 20261105) -> pd.DataFrame:
     """Items for one interpreter and phase, in that interpreter's own random order.
     phase: 'calibration' | 'pilot' | 'main' (v1.1 sampled objects not in the pilot) | 'cells' (v1.1)
            | 'addendum objects' (S5, S7, and S9 from amendment A1) | 'addendum cells' (S8, S6W)."""
     smp = frame.role == "sample"
+    if "round2" in frame:
+        smp = smp & (frame.round2.fillna("") != KEPT)          # labelled in round 1: adjudication only
     if phase == "calibration":
         q = frame[frame.role == "calibration"]
     elif phase == "pilot":
@@ -745,7 +839,7 @@ def render_cell(got, cell_geom, known: gpd.GeoDataFrame, px: int = 900) -> bytes
 class Store:
     """Append-only CSV of one interpreter's labels (last one per key wins)."""
 
-    cols = ["key", "value", "low_confidence", "note", "reviewer", "phase", "labelled_at"]
+    cols = ["key", "value", FLAG, "note", "reviewer", "phase", "labelled_at"]
 
     def __init__(self, folder: Path, reviewer: str):
         if not reviewer or not reviewer.strip():
@@ -756,10 +850,10 @@ class Store:
         if not self.path.exists():
             pd.DataFrame(columns=self.cols).to_csv(self.path, index=False)
 
-    def add(self, key: str, value: str, phase: str, low_confidence: bool = False, note: str = ""):
+    def add(self, key: str, value: str, phase: str, check_later: bool = False, note: str = ""):
         if value not in LABELS + CELL_COUNTS:
             raise ValueError(f"unknown label {value!r}")
-        rec = {"key": key, "value": value, "low_confidence": bool(low_confidence), "note": note,
+        rec = {"key": key, "value": value, FLAG: bool(check_later), "note": note,
                "reviewer": self.reviewer, "phase": phase,
                "labelled_at": datetime.now(timezone.utc).isoformat(timespec="microseconds")}
         pd.DataFrame([rec], columns=self.cols).to_csv(self.path, mode="a", header=False, index=False)
@@ -785,7 +879,9 @@ def load_labels(folder: Path) -> pd.DataFrame:
 
 
 def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, prompt: str, prefetch: int = 3):
-    """Photo, label buttons, 'low confidence' tick and a note box. Skips what this interpreter has done."""
+    """Photo, label buttons, a 'check later' tick and a note box. Skips what this interpreter has done.
+    Shows a gentle warning when the last 10 photos took less than SLOW_S seconds each (median)."""
+    import time
     from concurrent.futures import ThreadPoolExecutor
 
     import ipywidgets as W
@@ -793,7 +889,7 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
 
     done = store.done()
     todo = [i for i, k in enumerate(items["key"]) if k not in done]
-    state = {"pos": 0, "history": []}
+    state = {"pos": 0, "history": [], "clicks": []}
     pool = ThreadPoolExecutor(max_workers=3)
     futures = {}
 
@@ -805,11 +901,15 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
 
     img = W.Image(format="png", layout=W.Layout(width="100%", max_width="1040px"))
     status = W.HTML()
-    low = W.Checkbox(description="low confidence", indent=False)
+    low = W.Checkbox(description="check later (not sure / look again: your label still counts)", indent=False,
+                     layout=W.Layout(width="420px"))
     other = W.Checkbox(description=OTHER_FORM + " (with not a house)", indent=False)
-    note = W.Text(placeholder="note (optional: why, Google Earth date used, where in the cell)",
+    note = W.Text(placeholder="note: why (always when you tick check later), Google Earth date used, where in the cell",
                   layout=W.Layout(width="600px"))
-    buttons = [W.Button(description=v, layout=W.Layout(width="130px" if len(values) < 6 else "60px")) for v in values]
+    buttons = [W.Button(description=BUTTON_TEXT.get(v, v),
+                        layout=W.Layout(width=("210px" if v in BUTTON_TEXT else "130px") if len(values) < 6 else "60px"))
+               for v in values]
+    pace = W.HTML()
     back = W.Button(description="← back", layout=W.Layout(width="90px"))
 
     def show():
@@ -826,7 +926,8 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
         try:
             img.value = futures[todo[p]].result()
         except Exception as e:
-            status.value += f"<br><span style='color:red'>could not load photo: {e} (label unsure and note it)</span>"
+            status.value += (f"<br><span style='color:red'>could not load photo: {e} "
+                             f"(label {CANT_TELL!r} if it's the photo, and note it)</span>")
             img.value = b""
 
     def on(v):
@@ -835,6 +936,12 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
                 return
             txt = "; ".join(x for x in ((OTHER_FORM if other.value else ""), note.value) if x)
             store.add(items.iloc[todo[state["pos"]]]["key"], v, phase, low.value, txt)
+            state["clicks"].append(time.time())
+            gaps = np.diff(state["clicks"][-11:])
+            pace.value = ("" if len(gaps) < 10 or np.median(gaps) >= SLOW_S else
+                          f"<span style='color:#b35900'>Your last 10 photos took about {np.median(gaps):.1f} s each. "
+                          "Slow down: about 10 s a photo is normal. Use the close-up, and write a note when you "
+                          "tick check later.</span>")
             state["history"].append(state["pos"])
             state["pos"] += 1
             show()
@@ -849,7 +956,7 @@ def _ui(items: pd.DataFrame, store: Store, phase: str, values: list, render_fn, 
         b.on_click(on(v))
     back.on_click(on_back)
     extras = [low, other, note] if values == LABELS else [low, note]
-    ui = W.VBox([status, img, W.HBox(extras), W.HBox(buttons + [back])])
+    ui = W.VBox([status, img, W.HBox(extras), W.HBox(buttons + [back]), pace])
     show()
     display(ui)
     return ui
@@ -869,6 +976,120 @@ def cell_ui(items: pd.DataFrame, store: Store, known: gpd.GeoDataFrame, phase: s
                "How many standing poultry houses have their centre inside the "
                "<b>dashed square</b> and <b>no</b> <span style='color:#00b8cc'>outline</span>? "
                "(say where in the note)")
+
+
+# ── guide examples (round-1 photos; rendered at run time from the shared drive, never committed) ─────
+
+EXAMPLE_COLS = ["example", "key", "case", "label", "why", "status", "round1_UA", "round1_Monica"]
+EXAMPLE_CASES = ["house", "gone", "under construction", "not a house (look-alike)", "can't tell: photo unreadable",
+                 "S4: hard cases from round 1"]
+
+
+def example_candidates(archived: pd.DataFrame, frame: pd.DataFrame, reviewers: list, per_label: int = 3,
+                       seed: int = 1) -> pd.DataFrame:
+    """Candidate gallery photos from round 1 (all excluded from round 2, so showing them is fine): every
+    house / not-house disagreement and every 5-label disagreement, plus up to `per_label` photos per label
+    both interpreters agreed on. `label` is left empty: the coordinator decides it with the PIs, then
+    sets status = confirmed. Only confirmed rows are ever shown to interpreters."""
+    a, b = reviewers
+    w = wide(archived, reviewers).dropna()
+    st = frame.set_index("key").stratum
+    dis = w[w[a] != w[b]]
+    agree = w[w[a] == w[b]]
+    rng = np.random.default_rng(seed)
+    pick = []
+    for v in LABELS + ["unsure"]:
+        k = agree.index[agree[a] == v]
+        pick += list(rng.choice(k, size=min(per_label, len(k)), replace=False))
+    rows = []
+    for key in list(dis.index) + pick:
+        case = ("S4: hard cases from round 1" if key in dis.index and st.get(key) == "S4"
+                else "disagreement" if key in dis.index else f"agreed: {w.at[key, a]}")
+        rows.append({"key": key, "case": case, "label": "", "why": "", "status": "proposed",
+                     "round1_UA": w.at[key, a], "round1_Monica": w.at[key, b]})
+    out = pd.DataFrame(rows)
+    out.insert(0, "example", [f"E{i + 1:02d}" for i in range(len(out))])
+    return out[EXAMPLE_COLS]
+
+
+def render_closeup(got, zoom_m: float = 160, px: int = 380, caption: str = "") -> bytes:
+    """Close-up only, crosshair, scale bar and an optional caption: no date, place or file name."""
+    from geo_anom.task1.viz import stretch
+    fig = _fig(px, px + (28 if caption else 0))
+    ax = fig.add_axes([0, 28 / (px + 28) if caption else 0, 1, px / (px + (28 if caption else 0))])
+    ax.set_axis_off()
+    if got is None:
+        ax.text(0.5, 0.5, f"no {YEAR} photo", ha="center")
+    else:
+        img, t, _, _ = got
+        h, w = img.shape[:2]
+        res, half = abs(t.a), zoom_m / abs(t.a) / 2
+        ax.imshow(stretch(img, 1, 99.7))
+        g, L = half * 0.06, half * 0.18
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            ax.plot([w / 2 + dx * g, w / 2 + dx * L], [h / 2 + dy * g, h / 2 + dy * L], color="#ff2bd6", lw=2)
+        ax.set_xlim(w / 2 - half, w / 2 + half); ax.set_ylim(h / 2 + half, h / 2 - half)
+        _scale_bar(ax, w, h, half, res)
+    if caption:
+        fig.text(0.02, 0.01, caption, fontsize=10, va="bottom")
+    return _png(fig)
+
+
+def contact_sheet(ex: pd.DataFrame, frame: pd.DataFrame, path: Path, cols: int = 6) -> Path:
+    """One PNG of every candidate example (close-up, number, stratum and both round-1 labels) for the
+    coordinator and PIs to settle each one's correct label. Saved to the shared drive only."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from PIL import Image
+    loc = frame.drop_duplicates("key").set_index("key")
+    def one(r):
+        got = chip2023(loc.at[r.key, "lon"], loc.at[r.key, "lat"], 300)
+        cap = f"{r.example} {loc.at[r.key, 'stratum']}  UA: {r.round1_UA} | M: {r.round1_Monica}"
+        return Image.open(io.BytesIO(render_closeup(got, px=300, caption=cap)))
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        ims = list(pool.map(one, [r for _, r in ex.iterrows()]))
+    w, h = ims[0].size
+    sheet = Image.new("RGB", (cols * w, -(-len(ims) // cols) * h), "white")
+    for i, im in enumerate(ims):
+        sheet.paste(im.convert("RGB"), ((i % cols) * w, (i // cols) * h))
+    sheet.save(path)
+    return Path(path)
+
+
+def show_examples(path: Path, frame: pd.DataFrame, cases: list | None = None, cols: int = 4):
+    """The 'How to decide' gallery: confirmed examples only, grouped by case, close-ups with the right
+    label and a one-line reason. Rendered from the shared drive at run time (photos are streamed)."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    import ipywidgets as W
+    from IPython.display import display
+    path = Path(path)
+    if not path.exists():
+        print("no guide examples on the shared drive yet (coordinator: step C4)"); return None
+    ex = pd.read_csv(path, dtype=str).fillna("")
+    ex = ex[ex.status.str.lower() == "confirmed"]
+    if ex.empty:
+        print("guide examples not confirmed yet: use the written rules above"); return None
+    loc = frame.drop_duplicates("key").set_index("key")[["lon", "lat"]]
+    ex = ex[ex.key.isin(loc.index)]
+    def one(r):
+        got = chip2023(loc.at[r.key, "lon"], loc.at[r.key, "lat"], 300)
+        return render_closeup(got, caption=f"{r.example}: {r.label}")
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        pngs = list(pool.map(one, [r for _, r in ex.iterrows()]))
+    ex = ex.assign(png=pngs)
+    boxes = []
+    for case in (cases or EXAMPLE_CASES):
+        g = ex[ex.case == case]
+        if g.empty:
+            continue
+        tiles = [W.VBox([W.Image(value=r.png, format="png", layout=W.Layout(width="230px")),
+                         W.HTML(f"<div style='width:230px;font-size:12px'>{r.why}</div>")]) for _, r in g.iterrows()]
+        rows = [W.HBox(tiles[i:i + cols]) for i in range(0, len(tiles), cols)]
+        boxes.append(W.VBox([W.HTML(f"<h4 style='margin:10px 0 2px'>{case}</h4>")] + rows))
+    ui = W.VBox(boxes)
+    display(ui)
+    return ui
 
 
 # ── agreement and adjudication ─────────────────────────────────────────────────
@@ -914,6 +1135,74 @@ def agreement(labels: pd.DataFrame, frame: pd.DataFrame, reviewers: list, keys=N
     return pd.DataFrame(rows)
 
 
+def flagged(labels: pd.DataFrame, reviewers: list) -> pd.Series:
+    """Per key: True if either interpreter ticked check later."""
+    L = labels[labels.reviewer.isin(reviewers)]
+    if FLAG not in L:
+        return pd.Series(False, index=pd.Index(L.key.unique()))
+    return L.assign(f=L[FLAG].astype(str).str.lower().isin(["true", "1"])).groupby("key").f.any()
+
+
+def gate(labels: pd.DataFrame, frame: pd.DataFrame, reviewers: list, keys, bar: float = 0.8,
+         max_cant_tell: float = 0.05) -> dict:
+    """Pilot gate (protocol §7): Cohen's kappa on house / not house (can't tell counts as not house, so
+    house vs can't tell is a disagreement) >= bar on the complete pilot, and can't tell on at most
+    max_cant_tell of the labels -- above it, stop and look before going on."""
+    keys = set(keys)
+    ag = agreement(labels, frame, reviewers, keys=keys)
+    if ag.empty:
+        return {"n": 0, "of": len(keys), "verdict": "not started"}
+    row = ag.set_index("items").loc["all objects"]
+    L = labels[labels.key.isin(keys) & labels.reviewer.isin(reviewers)]
+    ct = float((L.value == CANT_TELL).mean())
+    n, k = int(row["n"]), float(row["kappa (house / not)"])
+    verdict = ("not complete" if n < len(keys) else "STOP: can't tell above 5%, look before going on"
+               if ct > max_cant_tell else "PASS" if k >= bar else "FAIL")
+    return {"n": n, "of": len(keys), "kappa": k, "kappa low": float(row["kappa low"]),
+            "kappa high": float(row["kappa high"]), "same (house / not)": float(
+                (binary(wide(L, reviewers).dropna()[reviewers[0]]).values ==
+                 binary(wide(L, reviewers).dropna()[reviewers[1]]).values).mean()),
+            "can't tell share": ct, "verdict": verdict}
+
+
+def agreement_by_flag(labels: pd.DataFrame, reviewers: list, keys=None) -> pd.DataFrame:
+    """Agreement on photos either interpreter flagged 'check later' vs the rest (flagged photos are
+    still scored on their label; this only shows whether the flag marks the hard ones)."""
+    a, b = reviewers
+    L = labels if keys is None else labels[labels.key.isin(set(keys))]
+    w = wide(L, reviewers).dropna()
+    fl = flagged(L, reviewers).reindex(w.index).fillna(False)
+    rows = []
+    for name, g in (("flagged", w[fl.values]), ("not flagged", w[~fl.values])):
+        rows.append({"photos": name, "n": len(g),
+                     "same label": float((g[a] == g[b]).mean()) if len(g) else np.nan,
+                     "kappa (house / not)": cohen_kappa(binary(g[a]), binary(g[b])) if len(g) else np.nan})
+    return pd.DataFrame(rows)
+
+
+def load_raw(folder: Path) -> pd.DataFrame:
+    """Every click (not just the latest per key), for the pace table."""
+    files = sorted(Path(folder).glob("labels_*.csv"))
+    raw = [pd.read_csv(f, dtype={"value": str, "note": str}) for f in files]
+    return pd.concat(raw, ignore_index=True) if raw else pd.DataFrame(columns=Store.cols)
+
+
+def pace(raw: pd.DataFrame) -> pd.DataFrame:
+    """Per interpreter and phase: labels, median seconds between clicks, notes written, check later ticked."""
+    if raw.empty:
+        return pd.DataFrame()
+    r = raw.assign(t=pd.to_datetime(raw.labelled_at, format="ISO8601", utc=True))
+    rows = []
+    for (who, ph), g in r.groupby(["reviewer", "phase"]):
+        d = g.t.sort_values().diff().dt.total_seconds().dropna()
+        d = d[d < 600]                                      # a break is not a slow photo
+        rows.append({"interpreter": who, "phase": ph, "labels": len(g),
+                     "median s per photo": round(float(d.median()), 1) if len(d) else np.nan,
+                     "notes": int(g.note.fillna("").str.strip().ne("").sum()),
+                     "check later": int(g.get(FLAG, pd.Series(False)).astype(str).str.lower().isin(["true", "1"]).sum())})
+    return pd.DataFrame(rows)
+
+
 def cell_agreement(labels: pd.DataFrame, reviewers: list) -> dict:
     a, b = reviewers
     L = labels[labels.key.astype(str).str.startswith("cell:")]      # S6, S6W and S8 cells, any phase
@@ -929,14 +1218,16 @@ def cell_agreement(labels: pd.DataFrame, reviewers: list) -> dict:
 
 
 def adjudication_queue(labels: pd.DataFrame, reviewers: list) -> pd.DataFrame:
-    """Keys where the two interpreters differ (with both labels and notes) -- or where either
-    said unsure, which also goes to a joint look."""
+    """Keys where the two interpreters differ (with both labels and notes) -- or where either said
+    can't tell or ticked check later, which also go to a joint look."""
     a, b = reviewers
     L = labels[labels.reviewer.isin(reviewers)]
     v = L.pivot(index="key", columns="reviewer", values="value").dropna()
     n = L.pivot(index="key", columns="reviewer", values="note").reindex(v.index)
-    out = v[(v[a] != v[b]) | (v[a] == "unsure") | (v[b] == "unsure")].copy()
+    fl = flagged(L, reviewers).reindex(v.index).fillna(False)
+    out = v[(v[a] != v[b]) | (v[a] == CANT_TELL) | (v[b] == CANT_TELL) | fl].copy()
     out.columns = [f"label {c}" for c in out.columns]
+    out["check later"] = fl.reindex(out.index)
     for c in reviewers:
         out[f"note {c}"] = n[c].reindex(out.index)
     return out.reset_index()
@@ -981,26 +1272,26 @@ def adjudicate(path: Path, key: str, value: str, reason: str, decided_by: str):
 
 
 def final_labels(labels: pd.DataFrame, reviewers: list, adjudicated: pd.DataFrame | None = None) -> pd.Series:
-    """Agreed label, else the latest adjudicated one. Still split: objects -> 'unsure';
+    """Agreed label, else the latest adjudicated one. Still split: objects -> "can't tell";
     cells -> the larger of the two counts (conservative: more missed houses, lower recall)."""
     a, b = reviewers
     v = wide(labels, reviewers).dropna()
     out = v[a].where(v[a] == v[b])
     if adjudicated is not None and len(adjudicated):
         adj = adjudicated.astype({"value": str}).sort_values("decided_at").groupby("key").value.last()
-        out = adj.reindex(out.index).combine_first(out)
+        out = adj.reindex(out.index.union(adj.index)).combine_first(out.reindex(out.index.union(adj.index)))
     cell = out.index.str.startswith("cell:") & out.isna()
     if cell.any():
         num = lambda s: s.str.replace("+", "", regex=False).astype(int)
         big = np.maximum(num(v.loc[cell, a]), num(v.loc[cell, b]))
         out[cell] = [CELL_COUNTS[min(x, 6)] for x in big]
-    return out.fillna("unsure")
+    return out.fillna(CANT_TELL)
 
 
 # ── estimators ─────────────────────────────────────────────────────────────────
 
-def _y(values: pd.Series, unsure_as_house: bool, uc_as_house: bool) -> np.ndarray:
-    ok = {"house"} | ({"unsure"} if unsure_as_house else set()) | ({"under construction"} if uc_as_house else set())
+def _y(values: pd.Series, cant_tell_as_house: bool, uc_as_house: bool) -> np.ndarray:
+    ok = {"house"} | ({CANT_TELL} if cant_tell_as_house else set()) | ({"under construction"} if uc_as_house else set())
     return values.isin(ok).astype(float).values
 
 
@@ -1008,7 +1299,7 @@ def _cell_y(values: pd.Series) -> np.ndarray:
     return values.astype(str).str.replace("+", "", regex=False).astype(float).values
 
 
-def groups(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
+def groups(frame: pd.DataFrame, final: pd.Series, cant_tell_as_house: bool = False,
            uc_as_house: bool = False) -> list:
     """[(stratum, county, N, y array, area array, n_pub array)] for every (stratum, county) with labels.
     For objects y = 1 if a standing house; for cells y = houses counted. n_pub = published-model outlines
@@ -1021,7 +1312,7 @@ def groups(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
         s = g[(g.role == "sample") & g.value.notna()]
         if not len(s):
             continue
-        y = _cell_y(s.value) if h in CELL_STRATA else _y(s.value, unsure_as_house, uc_as_house)
+        y = _cell_y(s.value) if h in CELL_STRATA else _y(s.value, cant_tell_as_house, uc_as_house)
         npub = s["n_pub"].fillna(0).values.astype(float) if "n_pub" in s else np.zeros(len(s))
         out.append((h, c, N, y, s.area_m2.values.astype(float), npub))
     return out
@@ -1118,7 +1409,7 @@ def mean_per_positive_cell(G: list) -> float:
     return float(pos.mean()) if len(pos) else 3.0
 
 
-def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bool = False,
+def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, cant_tell_as_house: bool = False,
              uc_as_house: bool = False, B: int = 2000, seed: int = 2, es: list | None = None,
              k_f: float = 1.0, published_es: int = 0) -> pd.DataFrame:
     """Stratified estimates, 95% CIs from a rescaled stratified bootstrap (resample within each
@@ -1135,7 +1426,7 @@ def estimate(frame: pd.DataFrame, final: pd.Series, k: dict, unsure_as_house: bo
     mapped = obj[obj.stratum.isin(["S1", "S2", "S3"])]
     mapped_all, mapped_es = len(mapped), int(mapped.county.isin(es).sum())
     west = set(mapped.county) - es
-    G = groups(frame, final, unsure_as_house, uc_as_house)
+    G = groups(frame, final, cant_tell_as_house, uc_as_house)
     means = [(h, c, N, y.mean(), (y * area).mean(), (y * npub).mean(), (y * (npub > 0)).mean())
              for h, c, N, y, area, npub in G]
     D = lambda M_: _derived(_totals(M_, k, west, k_f), mapped_es, mapped_all, published_es)
@@ -1225,14 +1516,14 @@ def residual_table(frame: pd.DataFrame, final: pd.Series, est: pd.DataFrame, q: 
     return pd.DataFrame(rows).set_index("residual")
 
 
-def stratum_table(frame: pd.DataFrame, final: pd.Series, unsure_as_house: bool = False,
+def stratum_table(frame: pd.DataFrame, final: pd.Series, cant_tell_as_house: bool = False,
                   uc_as_house: bool = False) -> pd.DataFrame:
     """Per stratum: N, n labelled, share standing house (objects; Wilson + exact 95%) or houses per cell."""
     from scipy.stats import beta
 
     from geo_anom.task1.review import wilson
     rows = []
-    G = groups(frame, final, unsure_as_house, uc_as_house)
+    G = groups(frame, final, cant_tell_as_house, uc_as_house)
     for h in OBJECT_STRATA + CELL_STRATA:
         gh = [g for g in G if g[0] == h]
         N = int((frame.stratum == h).sum())

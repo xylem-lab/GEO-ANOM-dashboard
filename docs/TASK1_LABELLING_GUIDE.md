@@ -1,70 +1,78 @@
-# Labelling guide for notebook 14 (one page)
+# Labelling guide for notebook 14 (revision 2, 2026-11-10)
 
-For the two interpreters (Umesh Adari "UA", Monica "Monica"). Made from the protocol
-(`docs/TASK1_ACCURACY_PROTOCOL.md` §2, §10.3). If this page and the protocol disagree, the
-protocol wins: tell the other interpreter and Umesh, don't guess.
+For the two interpreters (Umesh Adari "UA", Monica "Monica"). The same text, with
+example photos, is in notebook 14 under **How to decide**. If this page and the
+protocol (`docs/TASK1_ACCURACY_PROTOCOL.md` §2) disagree, the protocol wins.
+
+**Slow down.** About 10 seconds a photo is normal. Look at the close-up and write a
+note whenever you tick *check later*. In round 1 we averaged 1.5–2.6 s a photo,
+and the pilot failed.
 
 ## What you see
 
-- **Buildings:** two views of a 2023 aerial photo. Left: 500 m around a point. Right: a close-up.
-  A **pink crosshair** marks the point. You are not told where the point came from (our map, the
-  USGS tracing, another dataset), on purpose.
-- **Squares (cells):** a 1 km square (white dashes) with every building we already know about
-  outlined in **cyan**.
-- The photo date is printed top-left. It's always 2023.
+- **Buildings:** a 2023 aerial photo, 500 m around a point (left) and a close-up
+  (right). A **pink crosshair** marks the point. You aren't told where the point
+  came from, on purpose.
+- **Squares (cells):** a 1 km square (white dashes) with every building we already
+  know about outlined in **cyan**.
 
 ## The question
 
-**Buildings:** *What is at the crosshair on the 2023 photo?* Judge the building the crosshair sits
-on (or the nearest one if it's between two).
+**Buildings:** *What is at the crosshair on the 2023 photo?* Judge the building the
+crosshair sits on (or the nearest one if it's between two).
 
-**Squares:** *How many standing poultry houses have their centre inside the dashed square and no
-cyan outline?* Most squares are 0. In the note, say where (e.g. "NE ninth, 3 houses").
+**Squares:** *How many standing poultry houses have their centre inside the dashed
+square and no cyan outline?* Most squares are 0. In the note, say where (e.g. "NE
+ninth, 3 houses").
 
-## What counts as a standing poultry house
+## A standing poultry house has all three
 
-All three:
-1. **Shape:** long, narrow, single-storey; about 12–20 m wide and 100–200 m long; at least 5 times
-   longer than wide (use the scale bar).
+1. **Shape:** long, narrow, single-storey; about 12–20 m wide and 100–200 m long; at
+   least 5 times longer than wide (use the scale bar).
 2. **Roof complete** on the 2023 photo.
-3. **At least one poultry cue:** fans or doors on an end, feed bins along a side, two or more
-   identical houses side by side, a manure shed or composter nearby.
+3. **At least one poultry cue:** fans or doors on an end, feed bins along a side,
+   two or more identical houses side by side, a manure shed or composter nearby.
 
-Count it even if it looks idle or the roof is rusty (we can't tell idle from a photo).
-Turkey and layer houses count.
+Idle or rusty houses count. Turkey and layer houses count.
 
-## The five labels
+## Pick one label (always)
 
 | Label | Use when |
 |---|---|
-| **house** | It meets all three points above |
-| **gone** | A house was clearly here but is demolished, roofless, or only a bare slab is left |
-| **under construction** | A house frame or an unfinished roof (this counts as **not standing** in 2023) |
-| **not a house** | Anything else: dairy barn, warehouse, shed, greenhouse/hoop house, road, field, nothing |
-| **unsure** | You can't decide even after a careful look |
+| **house** | All three points above |
+| **gone** | A house was clearly here: bare slab, scar or roofless frame |
+| **under construction** | Frame or unfinished roof |
+| **not a house** | Anything else, including look-alikes: equipment sheds, greenhouses / hoop houses, manure sheds, long barns with no poultry cues, dairy barns, warehouses, roads, fields |
+| **can't tell: photo unreadable** | The photo doesn't show the ground at the crosshair: cloud or haze, heavy blur, black or cut-off tile edge, no 2023 photo loaded |
 
-- **Low confidence:** tick it when you chose a label but aren't sure.
-- **Poultry, other form:** tick it (with **not a house**) for a poultry building that doesn't fit
-  the shape rule, e.g. a wide or multi-storey layer house or a short duck house.
-- **Note:** optional. If you checked Google Earth Pro, write the image date you used.
+**If you can see the building but can't decide what it is, "can't tell" is the
+wrong label.** Pick the label you think is most likely and tick **check later**.
+
+## Ticks and note
+
+- **Check later:** tick if you're not sure, or want this photo looked at again. It
+  doesn't change your label; your label still counts. Say why in the note.
+- **Poultry, other form:** tick it (with **not a house**) for a poultry building
+  that doesn't fit the shape rule, e.g. a wide or multi-storey layer house or a
+  short duck house.
+- **Note:** why you ticked check later; the Google Earth date if you used it.
 
 ## Common look-alikes
 
-- **Dairy free-stall barn:** wider (often 30 m or more), open sides, silos, feed lanes, a lagoon
-  nearby → **not a house**.
-- **Long red- or green-roofed barn with no poultry cues** → **not a house**, or **unsure** with a note.
-- **Warehouse or industrial building:** large, near roads or towns, parking lots → **not a house**.
-- **Dark 2023 photo:** some flights are dark. Use the close-up; if still unclear, check Google Earth
-  near 2023, note its date, and tick low confidence.
+- **Dairy free-stall barn:** wider (often 30 m or more), open sides, silos, feed
+  lanes, a lagoon → **not a house**.
+- **Long barn with no poultry cues** → **not a house**; tick check later if unsure.
+- **Bare rectangle where a house stood** → **gone**.
+- **Dark 2023 photo:** use the close-up. If the building is visible, label it; if
+  the ground really can't be seen, **can't tell**.
 
 ## Rules that keep the result valid
 
-1. **Don't talk about labels** with the other interpreter until you have both finished a phase
-   (calibration, then pilot, then the rest).
-2. **Don't look up the item** in our map, the KMZ or notebook 07. Judge only from the photo
-   (and Google Earth if needed).
-3. **Use "← back"** if you clicked the wrong button. The last label you give counts.
-4. **Take breaks.** You can stop any time: rerun the cell and it continues where you left off.
+1. **Don't talk about labels** with the other interpreter until you've both
+   finished a phase.
+2. **Don't look up the item** in our map, the KMZ or notebook 07.
+3. **Use "← back"** if you clicked the wrong button. Your last label counts.
+4. **Take breaks.** Rerun the cell and it continues where you left off.
 
-Order of work: calibration (30) → discuss with the other interpreter → pilot (75) → agreement
-check (kappa must be ≥ 0.8) → the rest of the buildings → squares.
+Order: calibration (30) → discuss → pilot (74) → gate (kappa ≥ 0.8) → the rest →
+squares.
