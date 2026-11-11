@@ -353,3 +353,47 @@ Grid run over all of Somerset (365 tiles). Vs USGS hand tracing (all houses, reg
 - Audit of all work vs the LOI (`docs/PROJECT_AUDIT_2026-11-05.md`). Visual checks done without a probability sample, protocol or second interpreter (97% precision, 21/24 still standing) are not defensible; replaced by a design-based assessment (Phase 1, notebook 14).
 - Rejected as validation of completeness: bird-count agreement (ranges ~2x wide).
 - Stop improving the detector; measure it.
+
+## 2026-11-05 — accuracy assessment design (notebook 14)
+
+- Chose a stratified design over a plain random sample of outlines: precision is dominated by S1 (87% of outlines), which the 88.2% figure simply assumed correct, so S1 gets its own 100-item sample; S2 and S4 carry most of the uncertainty and get 150 each.
+- Random 1 km cells alone are a weak way to find houses on neither source (rare; ~0.6% of cells): with 0 hits in 150 cells the 95% bound is still ~60 houses. Proposed an independent footprint candidate stratum (Microsoft footprints, S5) instead of more cells; on hold until the download is approved.
+- Rejected showing the outline in the blind photos (as 07 did): a traced polygon and a detection rectangle look different, which would unblind the stratum. Crosshair only.
+- Rejected `tiles.build_mosaic` for display: warping whole bands takes 1-6 min per 1 km cell; windowed reads on the COG overviews take 3-7 s, same 2023 items.
+- Bootstrap must be finite-population corrected (rescaled), otherwise a census stratum (S3) shows sampling error; caught by a census test.
+- Dropped the "outline covers two houses" flag from the draft: it can't be judged blind. Instead: 2,450 S1 outlines touch 2,446 traced houses, so merged/split outlines nearly cancel (stated as an approximation).
+
+
+## 2026-11-06 — protocol v1.2: statewide scope
+
+- Rejected extending random 1 km cells across the west as the way to a statewide count: with near-zero houses, 100 cells in the ~15,900 western far cells give a zero-hit upper bound of ~470 cells (hundreds to >1,000 houses); one hit adds hundreds with a ±300-house CI. Bounding them to ~30 houses would need 1,500-4,500 cells.
+- Found the same limit on the Eastern Shore (S6C 100 of 5,476 -> ~160 cells), and that the code hides it (zero-width bootstrap for all-zero strata). So ±5% can only apply to houses on a list; houses on no list are a separate residual line.
+- Chose list frames: census of all 367 undecided western detections (also re-checks the single-reviewer rejection blind and gives the published model's western precision), census of permit cells, footprints (a different model on different imagery) for houses the detector never proposed.
+- Footprints don't shrink a zero-hit cell bound (it depends only on n and N); they shrink what the cells need to find. v1's text implied otherwise.
+- Western prior from independent sources: ~0.2 M birds (Census 2017) of 59.5 M, 6 western poultry permits -> tens of houses; the west matters for coverage, not variance.
+
+
+## 2026-11-06 — v1.2 implementation (notebook 14)
+
+- Microsoft US Building Footprints: the `usbuildingdata.blob.core.windows.net` URL now answers 409 (public access off); the same Maryland file is served from `minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/` (README link). Pinned by the server MD5; SHA-256 recorded at draw time.
+- Rejected "minimum 5 per county" as a hard rule for S6W-A (14 counties, n 40: infeasible; the old trim loop drove a county to -1). Lowest minimum that fits instead.
+- Constant-stratum bound applied one stratum at a time with the others at their point estimates (protocol 10.4), only to sampled strata (a census has no sampling error).
+- Cells in S6 no longer count towards the total (v1.2: residual line), so the S6 photo's known layer adds western detections and S5 footprints before any cell is labelled.
+
+## 2026-11-06 — verification v1.1 frozen; addendum drawn
+
+- Western footprint candidates under the first rule were 8,854, mostly urban (Baltimore city 2,969); 4 random photos all rowhouses / strip mall, while 2 of 4 Eastern Shore candidates looked like poultry houses. A tighter shape rule barely helped (Baltimore city 1,657-2,901). Chosen: stratify by footprint density (< 100 per km2 rural) with a 30-item developed spot check reported as an assumption. Rejected for now: SDAT parcel codes and CBP land use (better separation, but a new download and more work); excluding developed land (blind spot).
+- Rejected widening the total's interval by S5WD's exact bound (~700 houses with 0 in 30): it would bury the result in an assumption the protocol states openly instead.
+- Naming collapsed to map v1 / verification v1.1 / map v2 at the user's request; draft SHA-256s kept.
+
+## 2026-11-06 — amendment A1 (D1)
+
+- D1 briefly "left out", then included at the user's request (recall gain without precision isn't a credible method comparison). Only 30 published-model outlines on the Eastern Shore are off map v1, so a census is cheaper than any linkage argument for them; the other 2,299 reuse the map v1 labels through overlap linkage.
+- Kept S9 houses out of the list total rather than redrawing S5ES to exclude them (the addendum was already frozen).
+
+## 2026-11-10 — pilot 1 failed; revision 2
+
+- Pilot 1 κ 0.58 (needs 0.8). Not a guide-wording problem alone: `unsure` was a label and a "check later" note at once, and both interpreters went at 1.5-2.6 s a photo with no notes. Split the flag from the label instead of rewording `unsure`.
+- Rejected switching the gate to "unsure = house" after the fact (κ 0.77): post-hoc rule change; kept as a sensitivity number only.
+- Rejected relabelling round-1 photos or redrawing with a new seed: the protocol pre-specified replacement from the reserve, and the seed-20261105 ranks already give a random order. Where a county had no reserve (S2 Cecil N 1, S2 Dorchester N 4), kept the 3 round-1 items in the sample with adjudicated labels rather than dropping them (dropping would leave Cecil's S2 stratum with no item).
+- Example gallery rendered at run time from the drive, not committed (public repo; photos locate farms).

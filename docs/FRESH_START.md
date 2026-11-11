@@ -76,7 +76,7 @@ review before writing code.
 - Lagoons: close Task 1 on poultry only, or a short lagoon step? (Nakalembe)
 - N/P lb in the paper, or litter tons only? (Lansing / Rafi)
 - Include Delaware cropland? Include the 26 houses west of the Bay (currently excluded in Task 2)?
-- Second interpreter for Phase 1: Jenny Ha or Pradeep?
+- Second interpreter for Phase 1: ~~Jenny Ha or Pradeep?~~ Monica (decided 2026-11-05).
 - Coefficient sheet v1 date with Rafi.
 
 ## Do not trust / do not quote
